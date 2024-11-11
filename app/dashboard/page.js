@@ -7,6 +7,10 @@ const Dashboard = () => {
     <div className={styles.container}>
       <h1>Dashboard</h1>
       <p>This is the Dashboard.</p>
+      <p>This is the Dashboard.</p>
+      <p>This is the Dashboard.</p>
+      <p>This is the Dashboard.</p>
+      <p>This is the Dashboard.</p>
       <Link href="/">Go back to Home</Link>
     </div>
   );
