@@ -39,7 +39,7 @@ const Login = () => {
     };
   
     try {
-      const response = await axios.post(apiURL, options);
+      const response = await axios.post(apiURL, { username, password, submit });
       console.log("respo:"+ response);
       // if (!response.ok) {
       //   const errorData = await response.error();
