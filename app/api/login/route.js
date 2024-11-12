@@ -1,4 +1,4 @@
-import { serialize } from 'cookie';
+
 
 export async function POST(request) {
   const { username, password, submit } = await request.json();
@@ -13,7 +13,7 @@ export async function POST(request) {
       'Cache-Control': 'max-age=0',
       'Connection': 'keep-alive',
       'Content-Type': 'application/x-www-form-urlencoded',
-      'host':'serviceease.techser.com',
+    //   'host':'serviceease.techser.com',
       'Origin': 'http://serviceease.techser.com',
       'Referer': 'http://serviceease.techser.com/live/',
       'Upgrade-Insecure-Requests': '1',
@@ -28,31 +28,22 @@ export async function POST(request) {
 
   try {
     const response = await fetch(apiURL, options);
-
+console.log("respo:"+ response);
     if (!response.ok) {
       const errorData = await response.text();
       throw new Error(`Network response was not ok: ${response.statusText} - ${errorData}`);
     }
 
     const cookies = response.headers.get('set-cookie');
+    console.log("cookies: "+ cookies);
+    return cookies;
 
     if (!cookies) {
       throw new Error('No cookies found in the response');
     }
 
-    const cookie = serialize('auth', cookies, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      maxAge: 60 * 60 * 24,
-      path: '/',
-    });
 
-    return new Response(JSON.stringify({ message: 'Login successful' }), {
-      headers: {
-        'Set-Cookie': cookie,
-        'Content-Type': 'application/json',
-      },
-    });
+   
   } catch (error) {
     console.error('Error during authentication:', error);
     return new Response(JSON.stringify({ error: error.message }), {

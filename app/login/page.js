@@ -14,7 +14,7 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const apiURL = '/api/proxy'; // Use the proxy API route
+    const apiURL = '/api/login'; // Use the proxy API route
 
     const options = {
       method: 'POST',
@@ -24,7 +24,7 @@ const Login = () => {
 
     try {
       const response = await fetch(apiURL, options);
-
+      console.log(response);
       if (!response.ok) {
         const errorData = await response.text();
         throw new Error(`Network response was not ok: ${response.statusText} - ${errorData}`);
