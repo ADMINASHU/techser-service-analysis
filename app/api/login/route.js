@@ -1,5 +1,5 @@
 
-
+import axios from 'axios';
 export async function POST(request) {
   const { username, password, submit } = await request.json();
   const apiURL = 'http://serviceease.techser.com/live/index.php/login';
@@ -27,12 +27,12 @@ export async function POST(request) {
   };
 
   try {
-    const response = await fetch(apiURL, options);
-console.log("respo:"+ response);
-    if (!response.ok) {
-      const errorData = await response.text();
-      throw new Error(`Network response was not ok: ${response.statusText} - ${errorData}`);
-    }
+    const response = await axios.post(apiURL, options);
+    console.log("respo:"+ response);
+    // if (!response.ok) {
+    //   const errorData = await response.error();
+    //   throw new Error(`Network response was not ok: ${response.statusText} - ${errorData}`);
+    // }
 
     const cookies = response.headers.get('set-cookie');
     console.log("cookies: "+ cookies);
@@ -45,10 +45,10 @@ console.log("respo:"+ response);
 
    
   } catch (error) {
-    console.error('Error during authentication:', error);
-    return new Response(JSON.stringify({ error: error.message }), {
-      headers: { 'Content-Type': 'application/json' },
-      status: 500,
-    });
+    // console.error('Error during authentication:', error);
+    // return new Response(JSON.stringify({ error: error.message }), {
+    //   headers: { 'Content-Type': 'application/json' },
+    //   status: 500,
+    // });
   }
 }
