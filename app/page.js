@@ -1,8 +1,19 @@
-import Image from "next/image";
+"use client"
+import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
 import styles from "./page.module.css";
 
-export default function Home() {
+
+const Home = () => {
+
+
+
+
   return (
-  <p>Home Page</p>
+    <div>
+      <h1>Home page</h1>
+    </div>
   );
-}
+};
+
+export default Home;
