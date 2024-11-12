@@ -13,52 +13,24 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Submitting login form...');
-    
-    const url = 'http://serviceease.techser.com/live/index.php/login';
+    const apiURL = '/api/proxy'; // Use the proxy API route
+
     const options = {
       method: 'POST',
-      headers: {
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
-        'Accept-Encoding': 'gzip, deflate',
-        'Accept-Language': 'en-US,en;q=0.9',
-        'Cache-Control': 'max-age=0',
-        'Connection': 'keep-alive',
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Origin': 'http://serviceease.techser.com',
-        'Referer': 'http://serviceease.techser.com/live/',
-        'Upgrade-Insecure-Requests': '1',
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'
-      },
-      body: new URLSearchParams({
-        'username': username,
-        'password': password,
-        'submit': '',
-      })
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password }),
     };
 
     try {
-      console.log('Sending fetch request with options:', options);
-      const response = await fetch(url, options);
-      console.log('Fetch response received:', response);
+      const response = await fetch(apiURL, options);
 
       if (!response.ok) {
         const errorData = await response.text();
-        console.error('Fetch response error:', errorData);
         throw new Error(`Network response was not ok: ${response.statusText} - ${errorData}`);
       }
 
-      console.log('Parsing cookies from response headers...');
-      const cookies = response.headers.get('set-cookie');
-      console.log('Cookies received:', cookies);
-
-      if (!cookies) {
-        console.error('No cookies found in the response');
-        throw new Error('No cookies found in the response');
-      }
-
-      console.log('Setting cookies state...');
-      setCookie(cookies);
+      const result = await response.json();
+      setCookie(result.cookies);
 
     } catch (error) {
       console.error('Error during authentication:', error);
