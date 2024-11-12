@@ -13,6 +13,7 @@ export async function POST(request) {
       'Cache-Control': 'max-age=0',
       'Connection': 'keep-alive',
       'Content-Type': 'application/x-www-form-urlencoded',
+      'host':'serviceease.techser.com',
       'Origin': 'http://serviceease.techser.com',
       'Referer': 'http://serviceease.techser.com/live/',
       'Upgrade-Insecure-Requests': '1',
