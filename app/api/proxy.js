@@ -1,7 +1,7 @@
 import { serialize } from 'cookie';
 
 export async function POST(request) {
-  const { username, password } = await request.json();
+  const { username, password, submit } = await request.json();
   const apiURL = 'http://serviceease.techser.com/live/index.php/login';
 
   const options = {
@@ -21,7 +21,7 @@ export async function POST(request) {
     body: new URLSearchParams({
       'username': username,
       'password': password,
-      'submit': '',
+      'submit': submit,
     })
   };
 

@@ -9,6 +9,7 @@ const Login = () => {
   const [username, setUsername] = useState('');
   const [cookie, setCookie] = useState('no cookies');
   const [password, setPassword] = useState('');
+  const [submit, setSubmit] = useState('');
   const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
@@ -18,7 +19,7 @@ const Login = () => {
     const options = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password }),
+      body: JSON.stringify({ username, password, submit }),
     };
 
     try {
