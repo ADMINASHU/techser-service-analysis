@@ -1,4 +1,3 @@
-// app/api/fetch-data/route.js
 import axios from 'axios';
 import { NextResponse } from 'next/server';
 
