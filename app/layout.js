@@ -34,6 +34,9 @@ export default function RootLayout({ children }) {
               <Link href="/sheets">Sheets</Link>
             </li>
             <li>
+              <Link href="/cookies">Cookies</Link>
+            </li>
+            <li>
               <Link href="/dashboard">Dashboard</Link>
             </li>
           </ul>
