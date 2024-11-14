@@ -36,7 +36,7 @@ const Cookies = () => {
       try {
         const response2 = await axios.post(apiURL2, send);
         setResult(response2.data);
-        // console.log("page: "+result);
+        console.log("page: "+result);
       } catch (err) {
         setError("Error fetching data from the server");
         console.error(err);
@@ -50,7 +50,7 @@ const Cookies = () => {
       <h1>Server Data</h1>
       {error && <p>{error}</p>}
       {result ? <DataTable data={result} /> : <p>Loading data...</p>}
-{/* {result} */}
+
       <h2>Cookies</h2>
       {cookie.length > 0 && (
         <div>

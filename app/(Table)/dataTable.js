@@ -2,11 +2,16 @@ import React from 'react';
 
 const DataTable = ({ data }) => {
   // Select specific columns: 2, 3, and 4 (index 1, 2, 3)
-  const selectedColumns = [1,3,4,11];
+  const selectedColumns = [1, 3, 4,5, 11];
+
+  // Ensure data is available and has the correct format
+  if (!data || !Array.isArray(data) || data.length === 0 || !Array.isArray(data[0])) {
+    return <p>Loading data...</p>;
+  }
 
   const formatData = (row) => {
     return selectedColumns.map((colIndex) => (
-      <td key={colIndex}>{row[colIndex]}</td>
+      <td key={colIndex}>{row[colIndex] !== undefined ? row[colIndex] : ""}</td>
     ));
   };
 
