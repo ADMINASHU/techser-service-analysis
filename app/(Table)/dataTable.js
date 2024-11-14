@@ -1,8 +1,13 @@
 import React from 'react';
 
 const DataTable = ({ data }) => {
+  // Select specific columns: 2, 3, and 4 (index 1, 2, 3)
+  const selectedColumns = [1,3,4,11];
+
   const formatData = (row) => {
-    return row.split(/[\t\n]/)?.map((item, index) => <td key={index}>{item.trim()}</td>);
+    return selectedColumns.map((colIndex) => (
+      <td key={colIndex}>{row[colIndex]}</td>
+    ));
   };
 
   return (
@@ -11,17 +16,15 @@ const DataTable = ({ data }) => {
       <table border="1" cellPadding="5">
         <thead>
           <tr>
-            {data[0]?.map((header, index) => (
-              <th key={index}>{header}</th>
+            {selectedColumns.map((colIndex) => (
+              <th key={colIndex}>{data[0][colIndex]}</th>
             ))}
           </tr>
         </thead>
         <tbody>
-          {data.slice(1)?.map((row, rowIndex) => (
+          {data.slice(1).map((row, rowIndex) => (
             <tr key={rowIndex}>
-              {row.map((cell, cellIndex) => (
-                <td key={cellIndex}>{cell}</td>
-              ))}
+              {formatData(row)}
             </tr>
           ))}
         </tbody>
