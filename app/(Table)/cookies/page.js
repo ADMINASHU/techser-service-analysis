@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import DataTable from "../dataTable";
 
 const Cookies = () => {
   const [result, setResult] = useState([]);
@@ -9,26 +10,6 @@ const Cookies = () => {
   const [cookie, setCookie] = useState("");
 
   useEffect(() => {
-    // const parseHTMLTable = (html) => {
-    //     var data = [];
-    //     var tableRegex = /<table[^>]*>(.*?)<\/table>/s;  // Changed to stop after the first table
-    //     var rowRegex = /<tr[^>]*>(.*?)<\/tr>/gs;
-    //     var cellRegex = /<t[dh][^>]*>(.*?)<\/t[dh]>/gs;
-    //     var tableMatch = tableRegex.exec(html);
-    //     if (tableMatch) {
-    //       var rows = tableMatch[1].match(rowRegex);
-    //       rows.forEach(function(row) {
-    //         var cells = row.match(cellRegex);
-    //         var rowData = cells.map(function(cell) {
-    //           return cell.replace(/<.*?>/g, '').trim();
-    //         });
-    //         data.push(rowData);
-    //       });
-    //     }
-    //     return data;
-    //   }
-
-
     const fetchCookies = async () => {
       const apiURL = "/api/webapp";
       try {
@@ -54,9 +35,8 @@ const Cookies = () => {
       const send = { payload, cookies };
       try {
         const response2 = await axios.post(apiURL2, send);
-        // const table = parseHTMLTable(response2.data);
-        console.log(response2.data);
         setResult(response2.data);
+        // console.log("page: "+result);
       } catch (err) {
         setError("Error fetching data from the server");
         console.error(err);
@@ -69,9 +49,8 @@ const Cookies = () => {
     <div>
       <h1>Server Data</h1>
       {error && <p>{error}</p>}
-      {/* {result ? <pre>{JSON.stringify(result, null, 2)}</pre> : <p>Loading data...</p>} */}
-      {result}
-
+      {result ? <DataTable data={result} /> : <p>Loading data...</p>}
+{/* {result} */}
       <h2>Cookies</h2>
       {cookie.length > 0 && (
         <div>

@@ -41,7 +41,8 @@ export async function POST(request) {
       }
     );
     const table = parseHTMLTable(response.data);
-    return NextResponse.json(JSON.stringify(table, null, 2));
+    return NextResponse.json(table);
+    // return NextResponse.json(JSON.stringify(table, null, 2));
   } catch (error) {
     return NextResponse.json({ error: "Error fetching data from the server" }, { status: 500 });
   }
