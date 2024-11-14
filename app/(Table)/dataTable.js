@@ -63,7 +63,6 @@ const DataTable = ({ data }) => {
 
   return (
     <div>
-      <h1>Formatted Data Table</h1>
       <table border="1" cellPadding="5">
         <thead>
           <tr>
