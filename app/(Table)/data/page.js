@@ -58,7 +58,7 @@ const DataPage = () => {
 
   return (
     <div>
-      <h1>Data Extraction and Table Display</h1>
+      <h1>Complaint Data</h1>
       <DataExtractor data={data} onDataProcessed={setProcessedData} />
       <TableDisplayAndFilters
         processedData={processedData}
