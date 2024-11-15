@@ -2,6 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { parse, differenceInHours, format } from 'date-fns';
 
 const DataExtractor = ({ data, onDataProcessed }) => {
+  const regionList = [
+    'AP & TELANGANA',
+    'CHATTISGARH',
+    'GOA',
+    'KALKA',
+    'KARNATAKA',
+    'KERALA',
+    'MADHYA PRADESH',
+    'MUMBAI',
+    'RAJASTHAN',
+    'TAMIL NADU',
+    'West Bengal'
+  ];
+
   useEffect(() => {
     if (!data || !Array.isArray(data) || data.length === 0 || !Array.isArray(data[0])) {
       return;

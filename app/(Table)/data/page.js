@@ -30,7 +30,6 @@ const DataPage = () => {
         // setCookie(response.data);
         return response.data;
       } catch (err) {
-        setError("Error fetching data from the server");
         console.error(err);
       }
     };
@@ -49,9 +48,8 @@ const DataPage = () => {
       try {
         const response2 = await axios.post(apiURL2, send);
         setData(response2.data);
-        console.log("page: " + result);
+        // console.log("page: " + data);
       } catch (err) {
-        setError("Error fetching data from the server");
         console.error(err);
       }
     };

@@ -1,8 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 const TableDisplayAndFilters = ({ processedData, filters, handleFilterChange }) => {
-  const selectedColumns = [1,3]; // Columns to display
+  const selectedColumns = [3]; // Columns to display
+
   const formatData = (row) => {
+    if (!row || row.length < 12) {
+      console.error('Row data is incomplete:', row);
+      return null;
+    }
     return selectedColumns.map((colIndex) => (
       <td key={colIndex}>{row[colIndex] !== undefined ? row[colIndex] : ''}</td>
     )).concat(
@@ -22,6 +27,10 @@ const TableDisplayAndFilters = ({ processedData, filters, handleFilterChange }) 
   };
 
   const filteredData = processedData.filter(row => {
+    if (!row || row.length < 12) {
+      console.error('Row data is incomplete for filtering:', row);
+      return false;
+    }
     return (
       (filters.year === '' || row[row.length - 1] === filters.year) &&
       (filters.month === '' || row[row.length - 2] === filters.month) &&
@@ -38,49 +47,42 @@ const TableDisplayAndFilters = ({ processedData, filters, handleFilterChange }) 
       <div className="filters">
         <select name="year" value={filters.year} onChange={handleFilterChange}>
           <option value="">Select Year</option>
-          {/* Add year options dynamically */}
           {Array.from(new Set(processedData.slice(1).map(row => row[row.length - 1]))).map(year => (
             <option key={year} value={year}>{year}</option>
           ))}
         </select>
         <select name="month" value={filters.month} onChange={handleFilterChange}>
           <option value="">Select Month</option>
-          {/* Add month options dynamically */}
           {Array.from(new Set(processedData.slice(1).map(row => row[row.length - 2]))).map(month => (
             <option key={month} value={month}>{month}</option>
           ))}
         </select>
         <select name="region" value={filters.region} onChange={handleFilterChange}>
           <option value="">Select Region</option>
-          {/* Add region options dynamically */}
           {Array.from(new Set(processedData.slice(1).map(row => row[row.length - 4]))).map(region => (
             <option key={region} value={region}>{region}</option>
           ))}
         </select>
         <select name="branch" value={filters.branch} onChange={handleFilterChange}>
           <option value="">Select Branch</option>
-          {/* Add branch options dynamically */}
           {Array.from(new Set(processedData.slice(1).map(row => row[row.length - 3]))).map(branch => (
             <option key={branch} value={branch}>{branch}</option>
           ))}
         </select>
         <select name="natureOfComplaint" value={filters.natureOfComplaint} onChange={handleFilterChange}>
           <option value="">Select Nature of Complaint</option>
-          {/* Add nature of complaint options dynamically */}
           {Array.from(new Set(processedData.slice(1).map(row => row[row.length - 8]))).map(nature => (
             <option key={nature} value={nature}>{nature}</option>
           ))}
         </select>
         <select name="newStatus" value={filters.newStatus} onChange={handleFilterChange}>
           <option value="">Select New Status</option>
-          {/* Add new status options dynamically */}
           {Array.from(new Set(processedData.slice(1).map(row => row[row.length - 6]))).map(status => (
             <option key={status} value={status}>{status}</option>
           ))}
         </select>
         <select name="assignedTo" value={filters.assignedTo} onChange={handleFilterChange}>
           <option value="">Select Assigned To</option>
-          {/* Add assigned to options dynamically */}
           {Array.from(new Set(processedData.slice(1).map(row => row[row.length - 5]))).map(assigned => (
             <option key={assigned} value={assigned}>{assigned}</option>
           ))}
@@ -90,7 +92,7 @@ const TableDisplayAndFilters = ({ processedData, filters, handleFilterChange }) 
         <thead>
           <tr>
             {selectedColumns.map((colIndex) => (
-              <th key={colIndex}>{processedData[0][colIndex]}</th>
+              <th key={colIndex}>{processedData[0] && processedData[0][colIndex]}</th>
             ))}
             <th>Closed Date</th>
             <th>Duration</th>
