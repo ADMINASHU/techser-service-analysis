@@ -135,7 +135,7 @@ const DataTable = ({ data }) => {
       <td key="closed-date">{row[row.length - 9]}</td>, // Add the new "Closed Date" column
       <td key="duration">{row[row.length - 8]}</td>, // Add the new "Duration" column
       <td key="complaint-id">{row[row.length - 7]}</td>, // Add the new "Complaint ID" column
-      <td key="origional-complaint-id">{row[row.length - 6]}</td>, // Add the new "Complaint ID" column
+      <td key="original-complaint-id">{row[row.length - 6]}</td>, // Add the new "Complaint ID" column
       <td key="nature-of-complaint">{row[row.length - 5]}</td>, // Add the new "Nature of Complaint" column
       <td key="status">{row[row.length - 4]}</td>, // Add the new "Status" column
       <td key="assigned-to">{row[row.length - 3]}</td>, // Add the new "Assigned To" column
@@ -146,8 +146,7 @@ const DataTable = ({ data }) => {
 
   return (
     <div>
-      <h1>Formatted Data Table</h1>
-      <table border="1" cellPadding="5">
+        <table border="1" cellPadding="5">
         <thead>
           <tr>
             {selectedColumns.map((colIndex) => (
