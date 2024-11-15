@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { parse, differenceInHours } from 'date-fns';
+import React, { useState, useEffect } from 'react';
+import { parse, differenceInHours } from 'date-fns';
 
 const DataTable = ({ data }) => {
   const [processedData, setProcessedData] = useState([]);
@@ -151,6 +153,7 @@ const DataTable = ({ data }) => {
           <tr>
             {selectedColumns.map((colIndex) => (
               <th key={colIndex}>{processedData[0][colIndex]}</th>
+              <th key={colIndex}>{processedData[0][colIndex]}</th>
             ))}
             <th>Closed Date</th>
             <th>Duration</th>
@@ -164,6 +167,7 @@ const DataTable = ({ data }) => {
           </tr>
         </thead>
         <tbody>
+          {processedData.slice(1).map((row, rowIndex) => (
           {processedData.slice(1).map((row, rowIndex) => (
             <tr key={rowIndex}>
               {formatData(row)}
