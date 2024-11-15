@@ -63,6 +63,7 @@ const DataPage = () => {
       <TableDisplayAndFilters
         processedData={processedData}
         filters={filters}
+        setFilters = {setFilters}
         handleFilterChange={handleFilterChange}
       />
     </div>
