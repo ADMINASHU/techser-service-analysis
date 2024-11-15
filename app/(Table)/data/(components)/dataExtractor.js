@@ -111,13 +111,32 @@ const DataExtractor = ({ data, onDataProcessed }) => {
           }
 
           // Determine New Status
-          const count = data.filter((d) => d[1].startsWith(originalComplaintID)).length - 1;
+          const count = data?.filter((d) => {
+            let compID = "";
+            let orgID = "";
+            const ID = d[1].match(/B\d{2}[A-Z]\d+-\d+(?:-\d+)?/);
+            if (ID) {
+             compID = ID[0];
+            }
+            if (compID.includes("-")) {
+             orgID = compID.split("-").slice(0, 2).join("-");
+            } else {
+              orgID = compID;
+            }
+            // console.log("ID : "+orgID);
+             orgID ===(originalComplaintID); 
+          }).length;
           const lastSegment = complaintID.split("-").slice(-1)[0];
           const lastSegmentNumber = parseInt(lastSegment) || 0;
 
+        
+          console.log("count: "+count);
+          // console.log("lastSegment: "+lastSegment);
+          // console.log("lastSegmentNumber: "+lastSegmentNumber);
+
           if (lastSegmentNumber === count) {
             newStatus = status;
-          } else if (status === "COMPLETED") {
+          } else if (lastSegmentNumber < count && status === "COMPLETED") {
             newStatus = "IN PROCESS";
           } else {
             newStatus = status;
