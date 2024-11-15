@@ -1,0 +1,27 @@
+/* Styles for the filter section */
+.page{
+    margin: 20px;
+}
+.filterContainer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.filterContainer select,
+.filterContainer input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Styles for the search bar */
+.searchBar {
+    flex-grow: 1;
+}
+
+.tableContainer {
+    overflow-x: auto;
+}
+

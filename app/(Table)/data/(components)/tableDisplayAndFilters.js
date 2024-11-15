@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { format } from 'date-fns';
-
+import styles from './page.module.css';
 const TableDisplayAndFilters = ({ processedData, filters, setFilters, handleFilterChange }) => {
-  const selectedColumns = [1, 3]; // Columns to display
+  const selectedColumns = [3]; // Columns to display
+  const [searchTerm, setSearchTerm] = useState('');
+
   const getCurrentYear = () => format(new Date(), 'yyyy');
   const getCurrentMonth = () => format(new Date(), 'MMM');
 
@@ -58,13 +60,14 @@ const TableDisplayAndFilters = ({ processedData, filters, setFilters, handleFilt
       (filters.branch === '' || row[row.length - 3] === filters.branch) &&
       (filters.natureOfComplaint === '' || row[row.length - 8] === filters.natureOfComplaint) &&
       (filters.newStatus === '' || row[row.length - 6] === filters.newStatus) &&
-      (filters.assignedTo === '' || row[row.length - 5] === filters.assignedTo)
+      (filters.assignedTo === '' || row[row.length - 5] === filters.assignedTo) &&
+      (searchTerm === '' || row[row.length - 9].toLowerCase().includes(searchTerm.toLowerCase())) 
     );
   });
 
   return (
-    <div>
-      <div className="filters">
+    <div className={styles.page}  >
+      <div className={styles.filterContainer}>
         <select name="year" value={filters.year} onChange={handleFilterChange}>
           <option value="">Select Year</option>
           {Array.from(new Set(processedData.slice(1).map(row => row[row.length - 1]))).map(year => (
@@ -107,6 +110,14 @@ const TableDisplayAndFilters = ({ processedData, filters, setFilters, handleFilt
             <option key={assigned} value={assigned}>{assigned}</option>
           ))}
         </select>
+        <input
+          type="text"
+          name="searchOrgComplaintID"
+          placeholder="Search Complaint ID"
+          className={styles.searchBar}
+          value={filters.searchOrgComplaintID}
+          onChange={handleFilterChange}
+        />
       </div>
       <table border="1" cellPadding="5">
         <thead>
