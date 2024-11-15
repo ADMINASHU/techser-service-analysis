@@ -3,7 +3,7 @@ import { parse, differenceInHours } from 'date-fns';
 
 const DataTable = ({ data }) => {
   const [processedData, setProcessedData] = useState([]);
-  const selectedColumns = [1, 3]; // Columns to display
+  const selectedColumns = [3]; // Columns to display
 
   const regionList = [
     'AP & TELANGANA',
@@ -28,7 +28,7 @@ const DataTable = ({ data }) => {
     const newData = data.map((row, index) => {
       if (index === 0) {
         // Header row
-        return [...row, 'Closed Date', 'Duration', 'Complaint ID', 'Nature of Complaint', 'Status', 'Assigned To', 'Region', 'Branch'];
+        return [...row, 'Closed Date', 'Duration', 'Complaint ID', 'Original Complaint ID','Nature of Complaint', 'Status', 'Assigned To', 'Region', 'Branch'];
       } else {
         // Data rows
         const dateStr = row[4]; // Column 5 (index 4)
@@ -36,6 +36,7 @@ const DataTable = ({ data }) => {
         let lastDate = dateStr;
         let duration = '';
         let complaintID = '';
+        let originalComplaintID = '';
         let status = '';
         let natureOfComplaint = '';
         let assignedTo = '';
@@ -81,6 +82,13 @@ const DataTable = ({ data }) => {
           complaintID = complaintIDMatch[0];
         }
 
+        // Extract Original Complaint ID 
+        if (complaintID.includes('-')) { 
+          originalComplaintID = complaintID.split('-').slice(0, 2).join('-'); 
+        } else {
+          originalComplaintID = complaintID; 
+        }
+
         // Extract Status using regex
         const statusMatch = row[1].match(/(COMPLETED|NEW|IN PROCESS)/);
         if (statusMatch) {
@@ -110,7 +118,7 @@ const DataTable = ({ data }) => {
         const branchText = row[11].toUpperCase().replace(regionPattern, '').trim();
         branch = branchText;
 
-        return [...row, lastDate !== undefined ? lastDate : '', duration, complaintID, natureOfComplaint, status, assignedTo, region, branch];
+        return [...row, lastDate !== undefined ? lastDate : '', duration, complaintID, originalComplaintID, natureOfComplaint, status, assignedTo, region, branch];
       }
     }).filter(row => row !== null); // Filter out rows with negative duration
     setProcessedData(newData);
@@ -124,9 +132,10 @@ const DataTable = ({ data }) => {
     return selectedColumns.map((colIndex) => (
       <td key={colIndex}>{row[colIndex] !== undefined ? row[colIndex] : ''}</td>
     )).concat(
-      <td key="closed-date">{row[row.length - 8]}</td>, // Add the new "Closed Date" column
-      <td key="duration">{row[row.length - 7]}</td>, // Add the new "Duration" column
-      <td key="complaint-id">{row[row.length - 6]}</td>, // Add the new "Complaint ID" column
+      <td key="closed-date">{row[row.length - 9]}</td>, // Add the new "Closed Date" column
+      <td key="duration">{row[row.length - 8]}</td>, // Add the new "Duration" column
+      <td key="complaint-id">{row[row.length - 7]}</td>, // Add the new "Complaint ID" column
+      <td key="origional-complaint-id">{row[row.length - 6]}</td>, // Add the new "Complaint ID" column
       <td key="nature-of-complaint">{row[row.length - 5]}</td>, // Add the new "Nature of Complaint" column
       <td key="status">{row[row.length - 4]}</td>, // Add the new "Status" column
       <td key="assigned-to">{row[row.length - 3]}</td>, // Add the new "Assigned To" column
@@ -147,6 +156,7 @@ const DataTable = ({ data }) => {
             <th>Closed Date</th>
             <th>Duration</th>
             <th>Complaint ID</th>
+            <th>ORG Complaint ID</th>
             <th>Nature of Complaint</th>
             <th>Status</th>
             <th>Assigned To</th>
