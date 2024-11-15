@@ -1,19 +1,9 @@
-"use client"
-import React, { useEffect, useState } from 'react';
-import Link from 'next/link';
-import styles from "./page.module.css";
-
-
-const Home = () => {
+// app/page.js
 
 
 
-
+export default function HomePage() {
   return (
-    <div>
-      <h1>Home page</h1>
-    </div>
+   <p>HOME</p>
   );
-};
-
-export default Home;
+}
