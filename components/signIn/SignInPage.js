@@ -41,7 +41,7 @@ export default async function SignInPage(props) {
           name="user-id"
           placeholder="User ID"
           
-          onChange={handleSubmit}
+          // onChange={handleSubmit}
           required
         />
         <input
@@ -50,7 +50,7 @@ export default async function SignInPage(props) {
           name="password"
           placeholder="Password"
       
-          onChange={handleSubmit}
+          // onChange={handleSubmit}
           required
         />
         <button type="submit">Sign in</button>
