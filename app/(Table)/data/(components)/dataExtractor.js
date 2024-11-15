@@ -1,30 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { parse, differenceInHours } from 'date-fns';
+import { parse, differenceInHours, format } from 'date-fns';
 
-const DataTable = ({ data }) => {
-  const [processedData, setProcessedData] = useState([]);
-  const selectedColumns = [3]; // Columns to display
-
-  const regionList = [
-    'AP & TELANGANA',
-    'CHATTISGARH',
-    'GOA',
-    'KALKA',
-    'KARNATAKA',
-    'KERALA',
-    'MADHYA PRADESH',
-    'MUMBAI',
-    'RAJASTHAN',
-    'TAMIL NADU',
-    'West Bengal'
-  ];
-
+const DataExtractor = ({ data, onDataProcessed }) => {
   useEffect(() => {
     if (!data || !Array.isArray(data) || data.length === 0 || !Array.isArray(data[0])) {
       return;
     }
 
-    // Process the data to add the new columns with extracted date, duration, complaint ID, nature of complaint, status, assigned to, region, branch, and new status
+    // Process the data to add the new columns with extracted date, duration, complaint ID, original complaint ID, nature of complaint, status, new status, assigned to, region, branch, month, and year
     const newData = data.map((row, index) => {
       if (index === 0) {
         // Header row
@@ -39,7 +22,9 @@ const DataTable = ({ data }) => {
           'New Status',
           'Assigned To',
           'Region',
-          'Branch'
+          'Branch',
+          'Month',
+          'Year'
         ];
       } else {
         // Data rows
@@ -55,6 +40,8 @@ const DataTable = ({ data }) => {
         let assignedTo = '';
         let region = '';
         let branch = '';
+        let month = '';
+        let year = '';
 
         // Extract the last date
         if (dateStr) {
@@ -95,11 +82,11 @@ const DataTable = ({ data }) => {
           complaintID = complaintIDMatch[0];
         }
 
-        // Extract Original Complaint ID 
-        if (complaintID.includes('-')) { 
-          originalComplaintID = complaintID.split('-').slice(0, 2).join('-'); 
+        // Extract Original Complaint ID
+        if (complaintID.includes('-')) {
+          originalComplaintID = complaintID.split('-').slice(0, 2).join('-');
         } else {
-          originalComplaintID = complaintID; 
+          originalComplaintID = complaintID;
         }
 
         // Extract Status using regex
@@ -112,7 +99,7 @@ const DataTable = ({ data }) => {
         const count = data.filter(d => d[1].startsWith(originalComplaintID)).length - 1;
         const lastSegment = complaintID.split('-').slice(-1)[0];
         const lastSegmentNumber = parseInt(lastSegment) || 0;
-        
+
         if (lastSegmentNumber === count) {
           newStatus = status;
         } else if (status === "COMPLETED") {
@@ -144,6 +131,12 @@ const DataTable = ({ data }) => {
         const branchText = row[11].toUpperCase().replace(regionPattern, '').trim();
         branch = branchText;
 
+        // Extract Month and Year from Call Date
+        if (parsedCallDate) {
+          month = format(parsedCallDate, 'MMM');
+          year = format(parsedCallDate, 'yyyy');
+        }
+
         return [
           ...row,
           lastDate !== undefined ? lastDate : '',
@@ -155,64 +148,17 @@ const DataTable = ({ data }) => {
           newStatus,
           assignedTo,
           region,
-          branch
+          branch,
+          month,
+          year
         ];
       }
     }).filter(row => row !== null); // Filter out rows with negative duration
-    setProcessedData(newData);
-  }, [data]);
 
-  if (!processedData || !Array.isArray(processedData) || processedData.length === 0) {
-    return <p>Loading data...</p>;
-  }
+    onDataProcessed(newData);
+  }, [data, onDataProcessed]);
 
-  const formatData = (row) => {
-    return selectedColumns.map((colIndex) => (
-      <td key={colIndex}>{row[colIndex] !== undefined ? row[colIndex] : ''}</td>
-    )).concat(
-      <td key="closed-date">{row[row.length - 10]}</td>, // Add the new "Closed Date" column
-      <td key="duration">{row[row.length - 9]}</td>, // Add the new "Duration" column
-      <td key="complaint-id">{row[row.length - 8]}</td>, // Add the new "Complaint ID" column
-      <td key="original-complaint-id">{row[row.length - 7]}</td>, // Add the new "Original Complaint ID" column
-      <td key="nature-of-complaint">{row[row.length - 6]}</td>, // Add the new "Nature of Complaint" column
-      <td key="status">{row[row.length - 5]}</td>, // Add the new "Status" column
-      <td key="new-status">{row[row.length - 4]}</td>, // Add the new "New Status" column
-      <td key="assigned-to">{row[row.length - 3]}</td>, // Add the new "Assigned To" column
-      <td key="region">{row[row.length - 2]}</td>, // Add the new "Region" column
-      <td key="branch">{row[row.length - 1]}</td> // Add the new "Branch" column
-    );
-  };
-
-  return (
-    <div>
-      <table border="1" cellPadding="5">
-        <thead>
-          <tr>
-            {selectedColumns.map((colIndex) => (
-              <th key={colIndex}>{processedData[0][colIndex]}</th>
-            ))}
-            <th>Closed Date</th>
-            <th>Duration</th>
-            <th>Complaint ID</th>
-            <th>Original Complaint ID</th>
-            <th>Nature of Complaint</th>
-            <th>Status</th>
-            <th>New Status</th>
-            <th>Assigned To</th>
-            <th>Region</th>
-            <th>Branch</th>
-          </tr>
-        </thead>
-        <tbody>
-          {processedData.slice(1).map((row, rowIndex) => (
-            <tr key={rowIndex}>
-              {formatData(row)}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
+  return null;
 };
 
-export default DataTable;
+export default DataExtractor;

@@ -34,7 +34,7 @@ export default function RootLayout({ children }) {
               <Link href="/sheets">Sheets</Link>
             </li>
             <li>
-              <Link href="/cookies">Cookies</Link>
+              <Link href="/data">Server Data</Link>
             </li>
             <li>
               <Link href="/dashboard">Dashboard</Link>
