@@ -4,23 +4,24 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import TableDisplayAndFilters from "./(components)/tableDisplayAndFilters";
 import DataExtractor from "./(components)/dataExtractor";
+import TableView from "./(components)/TableView";
 
 const DataPage = () => {
   const [data, setData] = useState([]);
   const [processedData, setProcessedData] = useState([]);
-  const [filters, setFilters] = useState({
-    year: "",
-    month: "",
-    region: "",
-    branch: "",
-    natureOfComplaint: "",
-    newStatus: "",
-    assignedTo: "",
-  });
-  const handleFilterChange = (e) => {
-    const { name, value } = e.target;
-    setFilters((prevFilters) => ({ ...prevFilters, [name]: value }));
-  };
+  // const [filters, setFilters] = useState({
+  //   year: "",
+  //   month: "",
+  //   region: "",
+  //   branch: "",
+  //   natureOfComplaint: "",
+  //   newStatus: "",
+  //   assignedTo: "",
+  // });
+  // const handleFilterChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setFilters((prevFilters) => ({ ...prevFilters, [name]: value }));
+  // };
 
   useEffect(() => {
     const fetchCookies = async () => {
@@ -55,17 +56,18 @@ const DataPage = () => {
     };
     fetchData();
   }, []);
-
+  const selectedColumns = [16,18,3,14,15,26,20,21,22,23,24,25];
   return (
     <div>
       <h1>Complaint Data</h1>
       <DataExtractor data={data} onDataProcessed={setProcessedData} />
-      <TableDisplayAndFilters
+      {/* <TableDisplayAndFilters
         processedData={processedData}
         filters={filters}
         setFilters = {setFilters}
         handleFilterChange={handleFilterChange}
-      />
+      /> */}
+      <TableView data={processedData} selectedColumns={selectedColumns}/>
     </div>
   );
 };

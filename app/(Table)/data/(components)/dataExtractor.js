@@ -34,7 +34,6 @@ const DataExtractor = ({ data, onDataProcessed }) => {
             "Original Complaint ID",
             "Nature of Complaint",
             "Status",
-            "New Status",
             "Assigned To",
             "Region",
             "Branch",
@@ -50,7 +49,6 @@ const DataExtractor = ({ data, onDataProcessed }) => {
           let complaintID = "";
           let originalComplaintID = "";
           let status = "";
-          let newStatus = "";
           let natureOfComplaint = "";
           let assignedTo = "";
           let region = "";
@@ -110,38 +108,6 @@ const DataExtractor = ({ data, onDataProcessed }) => {
             status = statusMatch[0];
           }
 
-          // Determine New Status
-          const count = data?.filter((d) => {
-            let compID = "";
-            let orgID = "";
-            const ID = d[1].match(/B\d{2}[A-Z]\d+-\d+(?:-\d+)?/);
-            if (ID) {
-             compID = ID[0];
-            }
-            if (compID.includes("-")) {
-             orgID = compID.split("-").slice(0, 2).join("-");
-            } else {
-              orgID = compID;
-            }
-            // console.log("ID : "+orgID);
-             orgID ===(originalComplaintID); 
-          }).length;
-          const lastSegment = complaintID.split("-").slice(-1)[0];
-          const lastSegmentNumber = parseInt(lastSegment) || 0;
-
-        
-          console.log("count: "+count);
-          // console.log("lastSegment: "+lastSegment);
-          // console.log("lastSegmentNumber: "+lastSegmentNumber);
-
-          if (lastSegmentNumber === count) {
-            newStatus = status;
-          } else if (lastSegmentNumber < count && status === "COMPLETED") {
-            newStatus = "IN PROCESS";
-          } else {
-            newStatus = status;
-          }
-
           // Extract Nature of Complaint using regex
           const natureOfComplaintMatch = row[1].match(/(BREAKDOWN|INSTALLATION|PM)/);
           if (natureOfComplaintMatch) {
@@ -185,7 +151,6 @@ const DataExtractor = ({ data, onDataProcessed }) => {
             originalComplaintID,
             natureOfComplaint,
             status,
-            newStatus,
             assignedTo,
             region,
             branch,
@@ -196,7 +161,59 @@ const DataExtractor = ({ data, onDataProcessed }) => {
       })
       .filter((row) => row !== null); // Filter out rows with negative duration
 
-    onDataProcessed(newData);
+    // Step 2: Count occurrences of each "Original Complaint ID"
+    const countMap = new Map();
+    newData.forEach((row, index) => {
+      if (index > 0) {
+        // Skip header row
+        const originalComplaintID = row[17]; // Assuming "Original Complaint ID" is in column 11 (index 10)
+        if (originalComplaintID) {
+          if (countMap.has(originalComplaintID)) {
+            countMap.set(originalComplaintID, countMap.get(originalComplaintID) + 1);
+          } else {
+            countMap.set(originalComplaintID, 1);
+          }
+        }
+      }
+    });
+    // Step 3: Add the count in a new column
+    const finalData = newData.map((row, index) => {
+      if (index === 0) {
+        // Header row
+        return [...row, "Count"];
+      } else {
+        // Data rows
+        const originalComplaintID = row[17]; // Assuming "Original Complaint ID" is in column 11 (index 10)
+        const count = countMap.get(originalComplaintID) || 0;
+        return [...row, count];
+      }
+    });
+    // add column Real Status
+    const finalSData = finalData.map((row, index) => {
+      if (index === 0) {
+        // Header row
+        return [...row, "Real Status"];
+      } else {
+        const complaintID = row[16];
+        const status = row[19];
+        const count = row[26]
+        const lastSegment = complaintID.split("-").slice(-1)[0];
+        const lastSegmentNumber = parseInt(lastSegment) || 0;
+        let realStatus = "";
+        if (lastSegmentNumber < count && status === "COMPLETED") {
+          realStatus = "IN PROCESS";
+        } else {
+          realStatus = status;
+        }
+        return [...row, realStatus];
+      }
+    });
+
+    // onDataProcessed(finalData);
+
+    // console.log("finalSData: " + JSON.stringify(finalSData, null, 2));
+
+    onDataProcessed(finalSData);
   }, [data, onDataProcessed]);
 
   return null;
