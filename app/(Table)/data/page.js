@@ -56,18 +56,29 @@ const DataPage = () => {
     };
     fetchData();
   }, []);
-  const selectedColumns = [16,18,3,14,15,26,20,21,22,23,24,25];
+  const selectedColumns = [16, 18, 3, 14, 15, 26, 20, 21, 22, 23, 24, 25,27];
+  const points = {
+    Breakdown: {
+      eng: { new: 0, pending: 1, closed: [2,2.5,3] },
+      branch: { new: -0.1, pending: -0.05, closed: 0 },
+      region: { new: 0, pending: 0, closed: 0 },
+    },
+    Installation: {
+      eng: { new: 0, pending: 1, closed:  [2,2.5,3] },
+      branch: { new: 0, pending: -0.25, closed: 0.2 },
+      region: { new: 0, pending: 0, closed: 0 },
+    },
+    Pm: {
+      eng: { new: 0, pending: 1.5, closed:  [2,3,3] },
+      branch: { new: 0, pending: -0.5, closed: 0.1 },
+      region: { new: 0, pending: 0, closed: 0 },
+    },
+  };
   return (
     <div>
       <h1>Complaint Data</h1>
       <DataExtractor data={data} onDataProcessed={setProcessedData} />
-      {/* <TableDisplayAndFilters
-        processedData={processedData}
-        filters={filters}
-        setFilters = {setFilters}
-        handleFilterChange={handleFilterChange}
-      /> */}
-      <TableView data={processedData} selectedColumns={selectedColumns}/>
+      <TableView data={processedData} selectedColumns={selectedColumns} />
     </div>
   );
 };

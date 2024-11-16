@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styles from "./page.module.css";
+
 const TableView = ({ data, selectedColumns }) => {
   const [filters, setFilters] = useState({
     year: "",
@@ -15,8 +16,8 @@ const TableView = ({ data, selectedColumns }) => {
     // Set the default values for year and month based on the latest data row
     if (data.length > 1) {
       const latestRow = data[data.length - 1];
-      const latestYear = latestRow ? latestRow[latestRow.length - 3] : "";
-      const latestMonth = latestRow ? latestRow[latestRow.length - 4] : "";
+      const latestYear = latestRow ? latestRow[24] : "";
+      const latestMonth = latestRow ? latestRow[23] : "";
       setFilters((prevFilters) => ({
         ...prevFilters,
         year: latestYear,
@@ -48,13 +49,13 @@ const TableView = ({ data, selectedColumns }) => {
       return false;
     }
 
-    const year = row[row.length - 3];
-    const month = row[row.length - 4];
-    const region = row[row.length - 6];
-    const branch = row[row.length - 5];
-    const natureOfComplaint = row[row.length - 9];
-    const realStatus = row[row.length - 1];
-    const assignedTo = row[row.length - 7];
+    const year = row[24];
+    const month = row[23];
+    const region = row[21];
+    const branch = row[22];
+    const natureOfComplaint = row[18];
+    const realStatus = row[26];
+    const assignedTo = row[20];
 
     return (
       (filters.year === "" || year === filters.year) &&
@@ -69,25 +70,25 @@ const TableView = ({ data, selectedColumns }) => {
 
   const filteredBranches =
     filters.region === "" || filters.region === "ALL Region"
-      ? Array.from(new Set(data.slice(1).map((row) => row[row.length - 5])))
+      ? Array.from(new Set(data.slice(1).map((row) => row[22])))
       : Array.from(
           new Set(
             data
               .slice(1)
-              .filter((row) => row.length > 6 && row[row.length - 6] === filters.region)
-              .map((row) => row[row.length - 5])
+              .filter((row) => row[21] === filters.region)
+              .map((row) => row[22])
           )
         );
 
   const filteredAssignedTo =
     filters.branch === ""
-      ? Array.from(new Set(data.slice(1).map((row) => row[row.length - 7])))
+      ? Array.from(new Set(data.slice(1).map((row) => row[20])))
       : Array.from(
           new Set(
             data
               .slice(1)
-              .filter((row) => row.length > 7 && row[row.length - 5] === filters.branch)
-              .map((row) => row[row.length - 7])
+              .filter((row) => row[22] === filters.branch)
+              .map((row) => row[20])
           )
         );
 
@@ -100,8 +101,7 @@ const TableView = ({ data, selectedColumns }) => {
             new Set(
               data
                 .slice(1)
-                .filter((row) => row.length > 3)
-                .map((row) => row[row.length - 3])
+                .map((row) => row[24])
             )
           ).map((year) => (
             <option key={year} value={year}>
@@ -115,8 +115,7 @@ const TableView = ({ data, selectedColumns }) => {
             new Set(
               data
                 .slice(1)
-                .filter((row) => row.length > 4)
-                .map((row) => row[row.length - 4])
+                .map((row) => row[23])
             )
           ).map((month) => (
             <option key={month} value={month}>
@@ -130,8 +129,7 @@ const TableView = ({ data, selectedColumns }) => {
             new Set(
               data
                 .slice(1)
-                .filter((row) => row.length > 6)
-                .map((row) => row[row.length - 6])
+                .map((row) => row[21])
             )
           ).map((region) => (
             <option key={region} value={region}>
@@ -143,7 +141,6 @@ const TableView = ({ data, selectedColumns }) => {
           name="branch"
           value={filters.branch}
           onChange={handleFilterChange}
-          // disabled={!filters.region || filters.region === "ALL Region"}
         >
           <option value="">Select Branch</option>
           {filteredBranches.map((branch) => (
@@ -162,8 +159,7 @@ const TableView = ({ data, selectedColumns }) => {
             new Set(
               data
                 .slice(1)
-                .filter((row) => row.length > 9)
-                .map((row) => row[row.length - 9])
+                .map((row) => row[18])
             )
           ).map((nature) => (
             <option key={nature} value={nature}>
@@ -177,8 +173,7 @@ const TableView = ({ data, selectedColumns }) => {
             new Set(
               data
                 .slice(1)
-                .filter((row) => row.length > 1)
-                .map((row) => row[row.length - 1])
+                .map((row) => row[26])
             )
           ).map((status) => (
             <option key={status} value={status}>
@@ -190,7 +185,6 @@ const TableView = ({ data, selectedColumns }) => {
           name="assignedTo"
           value={filters.assignedTo}
           onChange={handleFilterChange}
-          // disabled={!filters.branch}
         >
           <option value="">Select Assigned To</option>
           {filteredAssignedTo.map((assigned) => (

@@ -21,7 +21,7 @@ const DataExtractor = ({ data, onDataProcessed }) => {
       return;
     }
 
-    // Process the data to add the new columns with extracted date, duration, complaint ID, original complaint ID, nature of complaint, status, new status, assigned to, region, branch, month, and year
+    // Process the data to add the new columns with extracted date, duration, complaint ID, original complaint ID, nature of complaint, status, assigned to, region, branch, month, and year
     const newData = data
       .map((row, index) => {
         if (index === 0) {
@@ -166,7 +166,7 @@ const DataExtractor = ({ data, onDataProcessed }) => {
     newData.forEach((row, index) => {
       if (index > 0) {
         // Skip header row
-        const originalComplaintID = row[17]; // Assuming "Original Complaint ID" is in column 11 (index 10)
+        const originalComplaintID = row[17]; // Assuming "Original Complaint ID" is in column 17 (index 17)
         if (originalComplaintID) {
           if (countMap.has(originalComplaintID)) {
             countMap.set(originalComplaintID, countMap.get(originalComplaintID) + 1);
@@ -183,12 +183,13 @@ const DataExtractor = ({ data, onDataProcessed }) => {
         return [...row, "Count"];
       } else {
         // Data rows
-        const originalComplaintID = row[17]; // Assuming "Original Complaint ID" is in column 11 (index 10)
+        const originalComplaintID = row[17];
         const count = countMap.get(originalComplaintID) || 0;
         return [...row, count];
       }
     });
-    // add column Real Status
+
+    // Step 4: Add column "Real Status"
     const finalSData = finalData.map((row, index) => {
       if (index === 0) {
         // Header row
@@ -196,12 +197,16 @@ const DataExtractor = ({ data, onDataProcessed }) => {
       } else {
         const complaintID = row[16];
         const status = row[19];
-        const count = row[26]
-        const lastSegment = complaintID.split("-").slice(-1)[0];
-        const lastSegmentNumber = parseInt(lastSegment) || 0;
+        const count = row[25] -1;
+        // const lastSegment = complaintID.split("-").slice(-1)[1];
+        const regex = new RegExp("B\\d{2}[A-Z]\\d+-\\d+-(\\d+)?");
+        const match = regex.exec(complaintID);
+        // const lastSegmentNumber = parseInt(match[1]) || 0;
         let realStatus = "";
-        if (lastSegmentNumber < count && status === "COMPLETED") {
-          realStatus = "IN PROCESS";
+        const lastSegmentNumber = match ? match[1] : 0;
+
+        if (lastSegmentNumber < (count) && status === "COMPLETED") {
+          realStatus = "IN PROGRESS";
         } else {
           realStatus = status;
         }
@@ -209,11 +214,22 @@ const DataExtractor = ({ data, onDataProcessed }) => {
       }
     });
 
-    // onDataProcessed(finalData);
-
-    // console.log("finalSData: " + JSON.stringify(finalSData, null, 2));
-
-    onDataProcessed(finalSData);
+    // Step 5: Add column "Is Pending"
+    const finalPendingData = finalSData.map((row, index) => {
+      if (index === 0) {
+        // Header row
+        return [...row, "Is Pending"];
+      } else {
+        const complaintID = row[16];
+        const regex = new RegExp("B\\d{2}[A-Z]\\d+-\\d+-(\\d+)?");
+        const match = regex.exec(complaintID);
+        const value = match ? parseInt(match[1]) > 0 : false;
+        const isPending = value ? "TRUE" : "";
+        return [...row, isPending];
+      }
+    });
+    console.log(finalPendingData);
+    onDataProcessed(finalPendingData);
   }, [data, onDataProcessed]);
 
   return null;
