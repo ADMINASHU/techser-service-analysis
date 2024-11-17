@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { parse, differenceInHours, format } from "date-fns";
 
 const DataExtractor = ({ data, onDataProcessed }) => {
+  // console.log("page: " + JSON.stringify(data));
+
   const regionList = [
     "AP & TELANGANA",
     "CHATTISGARH",
@@ -17,33 +19,34 @@ const DataExtractor = ({ data, onDataProcessed }) => {
   ];
 
   useEffect(() => {
-    if (!data || !Array.isArray(data) || data.length === 0 || !Array.isArray(data[0])) {
+    if (!data ) {
+      console.log("no data coming");
       return;
     }
 
     // Process the data to add the new columns with extracted date, duration, complaint ID, original complaint ID, nature of complaint, status, assigned to, region, branch, month, and year
     const newData = data
-      .map((row, index) => {
+      .map((item, index) => {
         if (index === 0) {
           // Header row
-          return [
-            ...row,
-            "Closed Date",
-            "Duration",
-            "Complaint ID",
-            "Original Complaint ID",
-            "Nature of Complaint",
-            "Status",
-            "Assigned To",
-            "Region",
-            "Branch",
-            "Month",
-            "Year",
-          ];
+          return {
+            ...item,
+            closedDate: "Closed Date",
+            duration: "Duration",
+            complaintID: "Complaint ID",
+            origComplaintID: "Original Complaint ID",
+            natureOfComplaint: "Nature of Complaint",
+            status: "Status",
+            assignedTo: "Assigned To",
+            region: "Region",
+            branch: "Branch",
+            month: "Month",
+            year: "Year",
+          };
         } else {
           // Data rows
-          const dateStr = row[4]; // Column 5 (index 4)
-          const callDateStr = row[3]; // Column 4 (index 3)
+          const dateStr = item["callStartEndDate"]; // Column 5 (index 4)
+          const callDate = item["callDate"]; // Column 4 (index 3)
           let lastDate = dateStr;
           let duration = "";
           let complaintID = "";
@@ -70,7 +73,7 @@ const DataExtractor = ({ data, onDataProcessed }) => {
           if (lastDate) {
             parsedLastDate = parse(lastDate, "dd.MMM.yyyy HH:mm", new Date());
           }
-          const parsedCallDate = parse(callDateStr, "dd.MMM.yyyy HH:mm", new Date());
+          const parsedCallDate = parse(callDate, "dd.MMM.yyyy HH:mm", new Date());
 
           if (!parsedLastDate) {
             parsedLastDate = currentTime;
@@ -90,7 +93,7 @@ const DataExtractor = ({ data, onDataProcessed }) => {
           }
 
           // Extract Complaint ID using regex
-          const complaintIDMatch = row[1].match(/B\d{2}[A-Z]\d+-\d+(?:-\d+)?/);
+          const complaintIDMatch = item["callNo"].match(/B\d{2}[A-Z]\d+-\d+(?:-\d+)?/);
           if (complaintIDMatch) {
             complaintID = complaintIDMatch[0];
           }
@@ -103,19 +106,19 @@ const DataExtractor = ({ data, onDataProcessed }) => {
           }
 
           // Extract Status using regex
-          const statusMatch = row[1].match(/(COMPLETED|NEW|IN PROCESS)/);
+          const statusMatch = item["callNo"].match(/(COMPLETED|NEW|IN PROCESS)/);
           if (statusMatch) {
             status = statusMatch[0];
           }
 
           // Extract Nature of Complaint using regex
-          const natureOfComplaintMatch = row[1].match(/(BREAKDOWN|INSTALLATION|PM)/);
+          const natureOfComplaintMatch = item["callNo"].match(/(BREAKDOWN|INSTALLATION|PM)/);
           if (natureOfComplaintMatch) {
             natureOfComplaint = natureOfComplaintMatch[0];
           }
 
           // Extract Assigned To using regex logic from column 6 (index 5)
-          const assignedToMatch = row[5].match(/^[A-Za-z]+(?: [A-Za-z]+)?/);
+          const assignedToMatch = item["engineerName"].match(/^[A-Za-z]+(?: [A-Za-z]+)?/);
           if (assignedToMatch && assignedToMatch[0] !== "NOT ALLOCATED") {
             assignedTo = assignedToMatch[0];
           }
@@ -125,13 +128,13 @@ const DataExtractor = ({ data, onDataProcessed }) => {
             regionList.map((region) => region.toUpperCase()).join("|"),
             "g"
           );
-          const regionMatch = row[11].toUpperCase().match(regionPattern);
+          const regionMatch = item["regionBranch"].toUpperCase().match(regionPattern);
           if (regionMatch) {
             region = regionMatch[0];
           }
 
           // Extract remaining text in column 12 after the region extraction
-          const branchText = row[11].toUpperCase().replace(regionPattern, "").trim();
+          const branchText = item["regionBranch"].toUpperCase().replace(regionPattern, "").trim();
           if (!branchText) {
             branch = region;
           } else {
@@ -143,30 +146,30 @@ const DataExtractor = ({ data, onDataProcessed }) => {
             year = format(parsedCallDate, "yyyy");
           }
 
-          return [
-            ...row,
-            lastDate !== undefined ? lastDate : "",
-            duration,
-            complaintID,
-            originalComplaintID,
-            natureOfComplaint,
-            status,
-            assignedTo,
-            region,
-            branch,
-            month,
-            year,
-          ];
+          return {
+            ...item,
+            closedDate: lastDate !== undefined ? lastDate : "",
+            duration: duration,
+            complaintID: complaintID,
+            origComplaintID: originalComplaintID,
+            natureOfComplaint: natureOfComplaint,
+            status: status,
+            assignedTo: assignedTo,
+            region: region,
+            branch: branch,
+            month: month,
+            year: year,
+          };
         }
       })
       .filter((row) => row !== null); // Filter out rows with negative duration
 
     // Step 2: Count occurrences of each "Original Complaint ID"
     const countMap = new Map();
-    newData.forEach((row, index) => {
+    newData.forEach((item, index) => {
       if (index > 0) {
         // Skip header row
-        const originalComplaintID = row[17]; // Assuming "Original Complaint ID" is in column 17 (index 17)
+        const originalComplaintID = item["origComplaintID"]; // Assuming "Original Complaint ID" is in column 17 (index 17)
         if (originalComplaintID) {
           if (countMap.has(originalComplaintID)) {
             countMap.set(originalComplaintID, countMap.get(originalComplaintID) + 1);
@@ -177,27 +180,27 @@ const DataExtractor = ({ data, onDataProcessed }) => {
       }
     });
     // Step 3: Add the count in a new column
-    const finalData = newData.map((row, index) => {
+    const finalData = newData.map((item, index) => {
       if (index === 0) {
         // Header row
-        return [...row, "Count"];
+        return { ...item, count: "Count" };
       } else {
         // Data rows
-        const originalComplaintID = row[17];
+        const originalComplaintID = item["origComplaintID"];
         const count = countMap.get(originalComplaintID) || 0;
-        return [...row, count];
+        return { ...item, count: count };
       }
     });
 
     // Step 4: Add column "Real Status"
-    const finalSData = finalData.map((row, index) => {
+    const finalSData = finalData.map((item, index) => {
       if (index === 0) {
         // Header row
-        return [...row, "Real Status"];
+        return { ...item, realStatus: "Real Status" };
       } else {
-        const complaintID = row[16];
-        const status = row[19];
-        const count = row[25] -1;
+        const complaintID = item["complaintID"];
+        const status = item["status"];
+        const count = item["count"] - 1;
         // const lastSegment = complaintID.split("-").slice(-1)[1];
         const regex = new RegExp("B\\d{2}[A-Z]\\d+-\\d+-(\\d+)?");
         const match = regex.exec(complaintID);
@@ -205,30 +208,30 @@ const DataExtractor = ({ data, onDataProcessed }) => {
         let realStatus = "";
         const lastSegmentNumber = match ? match[1] : 0;
 
-        if (lastSegmentNumber < (count) && status === "COMPLETED") {
-          realStatus = "IN PROGRESS";
+        if (lastSegmentNumber < count && status === "COMPLETED") {
+          realStatus = "IN PROCESS";
         } else {
           realStatus = status;
         }
-        return [...row, realStatus];
+        return { ...item, realStatus: realStatus };
       }
     });
 
     // Step 5: Add column "Is Pending"
-    const finalPendingData = finalSData.map((row, index) => {
+    const finalPendingData = finalSData.map((item, index) => {
       if (index === 0) {
         // Header row
-        return [...row, "Is Pending"];
+        return { ...item, isPending: "Is Pending" };
       } else {
-        const complaintID = row[16];
+        const complaintID = item["complaintID"];
         const regex = new RegExp("B\\d{2}[A-Z]\\d+-\\d+-(\\d+)?");
         const match = regex.exec(complaintID);
         const value = match ? parseInt(match[1]) > 0 : false;
         const isPending = value ? "TRUE" : "";
-        return [...row, isPending];
+        return { ...item, isPending: isPending };
       }
     });
-    console.log(finalPendingData);
+    // console.log("extracted: " + finalPendingData);
     onDataProcessed(finalPendingData);
   }, [data, onDataProcessed]);
 
