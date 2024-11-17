@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { parse, differenceInHours, format } from "date-fns";
 
 const DataExtractor = ({ data, onDataProcessed }) => {
+  console.log("page: " +  JSON.stringify(data));
+
   const regionList = [
     "AP & TELANGANA",
     "CHATTISGARH",
@@ -228,7 +230,7 @@ const DataExtractor = ({ data, onDataProcessed }) => {
         return [...row, isPending];
       }
     });
-    console.log(finalPendingData);
+    // console.log(finalPendingData);
     onDataProcessed(finalPendingData);
   }, [data, onDataProcessed]);
 

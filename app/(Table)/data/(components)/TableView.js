@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import styles from "./page.module.css";
 
 const TableView = ({ data, selectedColumns }) => {
+  // console.log("page: " +  JSON.stringify(data));
+
   const [filters, setFilters] = useState({
     year: "",
     month: "",
