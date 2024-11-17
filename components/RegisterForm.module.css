@@ -1,5 +1,5 @@
 /* components/LoginForm.module.css */
-.loginContainer {
+.registerContainer {
     background-color: #FBFCF6;
     padding: 30px;
     border-radius: 10px;
@@ -14,8 +14,9 @@
     margin-bottom: 15px;
   }
   
-  .loginContainer input[type="text"],
-  .loginContainer input[type="password"] {
+  .registerContainer input[type="text"],
+  .registerContainer input[type="email"],
+  .registerContainer input[type="password"] {
     width: 90%;
     padding: 15px;
     margin: 10px 0;
@@ -24,7 +25,7 @@
     font-size: 16px;
   }
   
-  .loginContainer button {
+  .registerContainer button {
     width: 100%;
     margin: 10px 0;
     padding: 15px;
@@ -37,20 +38,20 @@
     transition: background-color 0.3s ease;
   }
   
-  .loginContainer button:hover {
+  .registerContainer button:hover {
     background-color: #f82d1fc9;
   }
   
-  .signupLink {
-    /* display: block; */
-    text-decoration: none;
-    margin-top: 20px;
-    margin-left: 5px;
-    /* font-size: 16px; */
-    color: #007bff;
+  .loginLink {
+     /* display: block; */
+     text-decoration: none;
+     margin-top: 20px;
+     margin-left: 5px;
+     /* font-size: 16px; */
+     color: #007bff;
   }
   
-  .signupLink:hover {
+  .loginLink:hover {
     text-decoration: underline;
   }
   

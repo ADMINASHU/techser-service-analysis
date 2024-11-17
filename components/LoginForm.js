@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React from "react";
 import styles from "./LoginForm.module.css";
@@ -8,21 +8,21 @@ import { useRouter } from "next/navigation";
 
 const LoginForm = () => {
   const router = useRouter();
-  async function handleSubmit(event){
+  async function handleSubmit(event) {
     event.preventDefault();
-    const formData = new FormData(event.target);
+    const formData = new FormData(event.currentTarget);
     handleLogin(formData);
-  };
-  const handleLogin = async (formData) =>{
+  }
+  const handleLogin = async (formData) => {
     try {
       const response = await doLogin(formData);
       if (!!response.error) {
-        // alert(response.error);
+        console.log(response.error);
       } else {
         router.push("/home");
       }
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
   };
 
@@ -33,10 +33,12 @@ const LoginForm = () => {
         <input type="text" id="userId" name="userId" placeholder="User ID" required />
         <input type="password" id="password" name="password" placeholder="Password" required />
         <button type="submit">Sign in</button>
-        {/* 
-        <Link href={"/register"} className={styles.signupLink}>
-          Sign up
-        </Link> */}
+        <p>
+          Don't you have an account?
+          <Link href={"/register"} className={styles.signupLink}>
+            Register
+          </Link>
+        </p>
       </form>
     </div>
   );
