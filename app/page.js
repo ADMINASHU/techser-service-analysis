@@ -5,10 +5,6 @@ import styles from "./page.module.css";
 
 
 const Home = () => {
-
-
-
-
   return (
     <div>
       <h1>Home page</h1>
