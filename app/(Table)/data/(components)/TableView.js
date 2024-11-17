@@ -16,14 +16,14 @@ const TableView = ({ data, selectedColumns }) => {
 
   useEffect(() => {
     // Set the default values for year and month based on the latest data row
-    if (data.length > 1) {
+    if (data.length > 0) {
       const latestRow = data[data.length - 1];
-      const latestYear = latestRow ? latestRow[24] : "";
-      const latestMonth = latestRow ? latestRow[23] : "";
+      // const latestYear = latestRow ? latestRow[24] : "";
+      // const latestMonth = latestRow ? latestRow[23] : "";
       setFilters((prevFilters) => ({
         ...prevFilters,
-        year: latestYear,
-        month: latestMonth,
+        year: latestRow.year || "",
+        month: latestRow.month || "",
       }));
     }
   }, [data]);
@@ -42,70 +42,34 @@ const TableView = ({ data, selectedColumns }) => {
     }
   }, [filters.region, filters.branch]);
 
-  const filteredData = data.filter((row, index) => {
-    if (index === 0) return true; // Always include header row
-
-    // Ensure row has expected columns
-    if (!row || row.length < 12) {
-      console.warn(`Skipping row ${index} due to insufficient columns:`, row);
-      return false;
-    }
-
-    const year = row[24];
-    const month = row[23];
-    const region = row[21];
-    const branch = row[22];
-    const natureOfComplaint = row[18];
-    const realStatus = row[26];
-    const assignedTo = row[20];
-
+  const filteredData = data.filter((row) => {
     return (
-      (filters.year === "" || year === filters.year) &&
-      (filters.month === "" || month === filters.month) &&
-      (filters.region === "ALL Region" || filters.region === "" || region === filters.region) &&
-      (filters.branch === "" || branch === filters.branch) &&
-      (filters.natureOfComplaint === "" || natureOfComplaint === filters.natureOfComplaint) &&
-      (filters.realStatus === "" || realStatus === filters.realStatus) &&
-      (filters.assignedTo === "" || assignedTo === filters.assignedTo)
+      (!filters.year || row.year === filters.year) &&
+      (!filters.month || row.month === filters.month) &&
+      (filters.region === "ALL Region" || !filters.region || row.region === filters.region) &&
+      (!filters.branch || row.branch === filters.branch) &&
+      (!filters.natureOfComplaint || row.natureOfComplaint === filters.natureOfComplaint) &&
+      (!filters.realStatus || row.realStatus === filters.realStatus) &&
+      (!filters.assignedTo || row.assignedTo === filters.assignedTo)
     );
   });
 
   const filteredBranches =
-    filters.region === "" || filters.region === "ALL Region"
-      ? Array.from(new Set(data.slice(1).map((row) => row[22])))
-      : Array.from(
-          new Set(
-            data
-              .slice(1)
-              .filter((row) => row[21] === filters.region)
-              .map((row) => row[22])
-          )
-        );
+  !filters.region || filters.region === "ALL Region"
+    ? Array.from(new Set(data.map((row) => row.branch)))
+    : Array.from(new Set(data.filter((row) => row.region === filters.region).map((row) => row.branch)));
 
-  const filteredAssignedTo =
-    filters.branch === ""
-      ? Array.from(new Set(data.slice(1).map((row) => row[20])))
-      : Array.from(
-          new Set(
-            data
-              .slice(1)
-              .filter((row) => row[22] === filters.branch)
-              .map((row) => row[20])
-          )
-        );
+const filteredAssignedTo =
+  !filters.branch
+    ? Array.from(new Set(data.map((row) => row.assignedTo)))
+    : Array.from(new Set(data.filter((row) => row.branch === filters.branch).map((row) => row.assignedTo)));
 
-  return (
+return (
     <div className={styles.page}>
       <div className={styles.filterContainer}>
         <select name="year" value={filters.year} onChange={handleFilterChange}>
           <option value="">Select Year</option>
-          {Array.from(
-            new Set(
-              data
-                .slice(1)
-                .map((row) => row[24])
-            )
-          ).map((year) => (
+          {Array.from(new Set(data.slice(1).map((row) => row.year))).map((year) => (
             <option key={year} value={year}>
               {year}
             </option>
@@ -113,13 +77,7 @@ const TableView = ({ data, selectedColumns }) => {
         </select>
         <select name="month" value={filters.month} onChange={handleFilterChange}>
           <option value="">Select Month</option>
-          {Array.from(
-            new Set(
-              data
-                .slice(1)
-                .map((row) => row[23])
-            )
-          ).map((month) => (
+          {Array.from(new Set(data.slice(1).map((row) => row.month))).map((month) => (
             <option key={month} value={month}>
               {month}
             </option>
@@ -127,13 +85,7 @@ const TableView = ({ data, selectedColumns }) => {
         </select>
         <select name="region" value={filters.region} onChange={handleFilterChange}>
           <option value="ALL Region">ALL Region</option>
-          {Array.from(
-            new Set(
-              data
-                .slice(1)
-                .map((row) => row[21])
-            )
-          ).map((region) => (
+          {Array.from(new Set(data.slice(1).map((row) => row.region))).map((region) => (
             <option key={region} value={region}>
               {region}
             </option>
@@ -157,13 +109,7 @@ const TableView = ({ data, selectedColumns }) => {
           onChange={handleFilterChange}
         >
           <option value="">Select Nature of Complaint</option>
-          {Array.from(
-            new Set(
-              data
-                .slice(1)
-                .map((row) => row[18])
-            )
-          ).map((nature) => (
+          {Array.from(new Set(data.slice(1).map((row) => row.natureOfComplaint))).map((nature) => (
             <option key={nature} value={nature}>
               {nature}
             </option>
@@ -171,13 +117,7 @@ const TableView = ({ data, selectedColumns }) => {
         </select>
         <select name="realStatus" value={filters.realStatus} onChange={handleFilterChange}>
           <option value="">Select Real Status</option>
-          {Array.from(
-            new Set(
-              data
-                .slice(1)
-                .map((row) => row[26])
-            )
-          ).map((status) => (
+          {Array.from(new Set(data.slice(1).map((row) => row.realStatus))).map((status) => (
             <option key={status} value={status}>
               {status}
             </option>
@@ -199,16 +139,16 @@ const TableView = ({ data, selectedColumns }) => {
       <table border="1" cellPadding="5">
         <thead>
           <tr>
-            {selectedColumns.map((colIndex) => (
-              <th key={colIndex}>{data[0] && data[0][colIndex]}</th>
+            {selectedColumns.map((col) => (
+              <th key={col}>{col}</th>
             ))}
           </tr>
         </thead>
         <tbody>
-          {filteredData.slice(1).map((row, rowIndex) => (
+          {filteredData.map((row, rowIndex) => (
             <tr key={rowIndex}>
-              {selectedColumns.map((colIndex) => (
-                <td key={colIndex}>{row[colIndex] !== undefined ? row[colIndex] : ""}</td>
+              {selectedColumns.map((col) => (
+                <td key={col}>{row[col] !== undefined ? row[col] : ""}</td>
               ))}
             </tr>
           ))}
