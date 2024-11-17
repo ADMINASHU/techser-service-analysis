@@ -1,13 +1,13 @@
-"use client"
-import React, { useEffect, useState } from 'react';
+
 import Link from 'next/link';
 import styles from "./page.module.css";
+import LoginForm from '@/components/LoginForm';
 
 
 const Home = () => {
   return (
     <div>
-      <h1>Home page</h1>
+      <LoginForm/>
     </div>
   );
 };
