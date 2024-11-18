@@ -7,7 +7,7 @@ import React from "react";
 
 const Homepage = async () => {
   const session = await auth();
-  console.log("................"+session);
+  console.log("................"+JSON.stringify( session));
   if (!session?.user) redirect("/");
 
   return (

@@ -19,7 +19,7 @@ const LoginForm = () => {
       if (!!response.error) {
         console.log(response.error);
       } else {
-        router.push("/data");
+        router.push("/home");
       }
     } catch (error) {
       console.log(error);
