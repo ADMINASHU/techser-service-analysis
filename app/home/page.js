@@ -7,13 +7,13 @@ import React from "react";
 
 const Homepage = async () => {
   const session = await auth();
-  console.log("................"+JSON.stringify( session));
+  // console.log("................"+JSON.stringify( session?.user));
   if (!session?.user) redirect("/");
 
   return (
     <div>
       <div>Home page</div>
-      <div>{session?.user?.userID}</div>
+      <div>{session?.user}</div>
       <Logout/>
     </div>
   );
