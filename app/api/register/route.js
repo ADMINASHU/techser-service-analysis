@@ -1,6 +1,6 @@
 // app/api/register/route.js
 import { NextResponse } from "next/server";
-import { connectDB } from "@/lib/db";
+import  connectDB  from "@/lib/db";
 import bcrypt from "bcryptjs";
 import User from "@/app/models/User";
 

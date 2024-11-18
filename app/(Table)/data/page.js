@@ -4,8 +4,14 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import DataExtractor from "./(components)/dataExtractor";
 import TableView from "./(components)/TableView";
+import { auth } from "@/auth";
+import Logout from "@/components/Logout";
+import {redirect} from "next/navigation";
 
-const DataPage = () => {
+const DataPage =  () => {
+  // const session = await auth();
+  // if (!session?.user) redirect("/");
+
   const [data, setData] = useState([]);
   const [processedData, setProcessedData] = useState([]);
 
@@ -56,7 +62,7 @@ const DataPage = () => {
     <div>
       <h1>Complaint Data</h1>
       {/* <p>{JSON.stringify(data)}</p> */}
-
+      {/* <Logout/> */}
       <DataExtractor data={data} onDataProcessed={setProcessedData} />
       <TableView data={processedData} selectedColumns={selectedColumns} />
     </div>

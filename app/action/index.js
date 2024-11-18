@@ -7,10 +7,12 @@ export async function doLogout() {
 }
 
 export async function doLogin(formData) {
+  const {userID, password} = formData;
+  console.log("from server: "+userID);
   try {
     const response = await signIn("credentials", {
-      userID: formData.get("userId"),
-      password: formData.get("password"),
+      userID: userID,
+      password: password,
       redirect: false,
     });
     return response;
