@@ -5,17 +5,18 @@ import bcrypt from "bcryptjs";
 import User from "@/app/models/User";
 
 export async function POST(request) {
-  await connectDB();
-
-  const { userID, email, password } = await request.json();
-
-  console.log(userID);
-
-  if (!userID || !email || !password) {
-    return NextResponse.json({ error: "All fields are required" }, { status: 400 });
-  }
-
   try {
+    await connectDB();
+
+    const data = await request.json();
+    const { userID, email, password } = data;
+
+    console.log(userID);
+
+    if (!userID || !email || !password) {
+      return NextResponse.json({ error: "All fields are required" }, { status: 400 });
+    }
+
     // Check if user already exists
     const existingUser = await User.findOne({ userID });
     if (existingUser) {
