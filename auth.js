@@ -1,6 +1,9 @@
 import NextAuth from "next-auth";
 import CredentialProvider from "next-auth/providers/credentials";
-import { getUserByID } from "./data/users";
+import bcrypt from "bcryptjs";
+import User from "@/app/models/User";
+import connectDB from "./lib/db";
+import { NextResponse } from "next/server";
 
 export const {
   handlers: { GET, POST },
@@ -11,23 +14,26 @@ export const {
   session: { strategy: "jwt" },
   providers: [
     CredentialProvider({
-      // credentials: {
-      //   userID: {},
-      //   password: {},
-      // },
+      credentials: {
+        userID: {},
+        password: {},
+      },
       async authorize(credentials) {
         if (credentials === null) return null;
         try {
-          const user = getUserByID(credentials.userID);
+          await connectDB();
+          console.log(`Searching for user with ID: ${credentials.userID}`);
+          const user = await User.findOne({ userID: credentials.userID });
+      
           if (user) {
-            const isMatch = user?.password === credentials?.password;
-            if (isMatch) {
+            const isValidPassword = bcrypt.compare(credentials.password, user.password);
+            if (isValidPassword) {
               return user;
             } else {
               throw new Error("Invalid credentials");
             }
           } else {
-            throw new Error("User not found");
+            return NextResponse.json({ error: "User not found" }, { status: 400 });
           }
         } catch (error) {
           throw new Error(error);
