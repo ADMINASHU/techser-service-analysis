@@ -1,12 +1,12 @@
 // app/api/register/route.js
 import { NextResponse } from "next/server";
-import connectMyDB from "@/lib/myDB";
+import connectToServiceEaseDB from "@/lib/serviceDB";
 import bcrypt from "bcryptjs";
 import { User } from "../../models/User";
 
 export async function POST(request) {
   try {
-    const db = await connectMyDB();
+    const db = await connectToServiceEaseDB();
     if (!db) {
       return NextResponse.status(500).json({ error: "Error connecting to the database" });
     }

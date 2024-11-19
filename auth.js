@@ -2,7 +2,7 @@ import NextAuth from "next-auth";
 import CredentialProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { User } from "./app/models/User";
-import connectMyDB from "./lib/myDB";
+import connectToServiceEaseDB from "./lib/serviceDB";
 import { NextResponse } from "next/server";
 import { authConfig } from "./auth.config";
 
@@ -22,7 +22,7 @@ export const {
       async authorize(credentials) {
         if (credentials === null) return null;
         try {
-          await connectMyDB();
+          await connectToServiceEaseDB();
           // console.log(`Searching for user with ID: ${credentials.userID}`);
           const user = await User.findOne({ userID: credentials?.userID });
           console.log("from auth page: " + user);
