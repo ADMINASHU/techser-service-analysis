@@ -16,7 +16,6 @@ const RegisterForm = () => {
     event.preventDefault();
     try {
       const data = { userID, email, password };
-      console.log(data);
       const response = await axios.post("/api/register", data);
       if (response.status === 201) {
         setUserID("");
@@ -24,17 +23,17 @@ const RegisterForm = () => {
         setPassword("");
         Swal.fire({
           title: "Success!",
-          text: "Registration successful!",
+          text: response.message,
           icon: "success",
           confirmButtonText: "OK",
         });
         router.push("/");
       }
     } catch (error) {
-      console.log(error.message);
+      // console.log(error.message);
       Swal.fire({
         title: "Error!",
-        text: "Registration failed. Please try again.",
+        text: error.message,
         icon: "error",
         confirmButtonText: "OK",
       });

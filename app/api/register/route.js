@@ -8,10 +8,10 @@ export async function POST(request) {
   try {
     const db = await connectMyDB();
     if (!db) {
-      return NextResponse.status(500).json({ message: "Error connecting to the database" });
+      return NextResponse.status(500).json({ error: "Error connecting to the database" });
     }
     const data = await request.json();
-    console.log("from server register" + data);
+    // console.log("from server register" +JSON.stringify(data));
     const { userID, email, password } = data;
 
     if (!userID || !email || !password) {
@@ -38,6 +38,6 @@ export async function POST(request) {
     await newUser.save();
     return NextResponse.json({ message: "User registered successfully" }, { status: 201 });
   } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error }, { status: 500 });
   }
 }

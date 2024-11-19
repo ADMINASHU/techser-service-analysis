@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import { User } from "./app/models/User";
 import connectMyDB from "./lib/myDB";
 import { NextResponse } from "next/server";
+import { authConfig } from "./auth.config";
 
 export const {
   handlers: { GET, POST },
@@ -11,7 +12,7 @@ export const {
   signOut,
   auth,
 } = NextAuth({
-  session: { strategy: "jwt" },
+  ...authConfig,
   providers: [
     CredentialProvider({
       credentials: {
@@ -24,7 +25,7 @@ export const {
           await connectMyDB();
           // console.log(`Searching for user with ID: ${credentials.userID}`);
           const user = await User.findOne({ userID: credentials?.userID });
-          console.log("from auth page: "+user);
+          console.log("from auth page: " + user);
 
           if (user) {
             const isValidPassword = bcrypt.compare(credentials.password, user.password);

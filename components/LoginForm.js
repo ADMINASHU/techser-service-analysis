@@ -27,9 +27,15 @@ const LoginForm = () => {
     try {
       const response = await doLogin(cred);
       if (!!response.error) {
+        Swal.fire({
+          title: "Error!",
+          text: "Login failed. Please check your credentials.",
+          icon: "error",
+          confirmButtonText: "OK",
+        });
         console.log(response.error);
       } else {
-        router.push("/home");
+        router.push("/");
       }
     } catch (error) {
       console.log(error);
