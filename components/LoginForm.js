@@ -1,11 +1,12 @@
 "use client";
-import { useState } from "react";
 import React from "react";
+import { useState } from "react";
 import styles from "./LoginForm.module.css";
 import Link from "next/link";
 import { doLogin } from "@/app/action";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
+import Logo from "./Logo";
 
 const LoginForm = () => {
   const [userID, setUserID] = useState("");
@@ -51,7 +52,7 @@ const LoginForm = () => {
   return (
     <div className={styles.container}>
       <div className={styles.loginContainer}>
-        <img src="/logo.jpg" alt="Company Logo" className={styles.logo} />
+        <Logo/>
         <form onSubmit={handleSubmit}>
           <input
             type="text"
