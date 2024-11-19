@@ -75,7 +75,7 @@ const RegisterForm = () => {
           <button type="submit">Signup</button>
           <p>
             Already have an account?
-            <Link href="/" className={styles.loginLink}>
+            <Link href="/login" className={styles.loginLink}>
               Signin
             </Link>
           </p>

@@ -7,8 +7,7 @@ import {redirect} from "next/navigation";
 
 const Homepage = async () => {
   const session = await auth();
-  console.log("................"+JSON.stringify( session?.user ));
-  if (!session?.user.email) redirect("/login");
+
 
   return (
     <div>

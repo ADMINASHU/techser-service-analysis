@@ -13,8 +13,8 @@ const DataPage = () => {
     async function fetchData() {
       try {
         const response = await axios.get("/api/data");
-        // const result = JSON.stringify(response.data);
-        // console.log(result);
+        const result = JSON.stringify(response.data);
+        console.log(result);
         setData(response.data);
       } catch (error) {
         throw new Error(error.message);

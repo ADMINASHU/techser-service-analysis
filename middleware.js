@@ -1,15 +1,24 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { authConfig } from "./auth.config";
 import NextAuth from "next-auth";
-
-const {auth} = NextAuth(authConfig);
+import { PUBLIC_ROUTES, LOGIN, ROOT, PROTECTED_ROUTES } from "./lib/routes";
+const { auth } = NextAuth(authConfig);
 
 export async function middleware(request) {
-  const sessions = await auth();
+  const session = await auth();
+  const { nextUrl } = request;
+  const isAuthenticated = !!session?.user;
+  // console.log("middleware");
+  console.log(isAuthenticated, nextUrl.pathname);
+  const isPublicRoute =
+    PUBLIC_ROUTES.find((route) => nextUrl.pathname.startsWith(route)) &&
+    !PROTECTED_ROUTES.find((route) => nextUrl.pathname.includes(route));
 
-  return NextResponse.redirect(new URL("/login", request.url));
+  if (!isAuthenticated && !isPublicRoute) {
+    return NextResponse.redirect(new URL(LOGIN, nextUrl));
+  }
 }
 
 export const config = {
-  matcher: ["/api/:path*", "/data"],
+  matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
 };
