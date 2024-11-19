@@ -233,7 +233,7 @@ const DataExtractor = ({ data, onDataProcessed }) => {
     });
     // console.log("extracted: " + finalPendingData);
     onDataProcessed(finalPendingData);
-  }, [data, onDataProcessed]);
+  }, [data, onDataProcessed,regionList]);
 
   return null;
 };
