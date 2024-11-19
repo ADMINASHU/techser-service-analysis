@@ -1,12 +1,12 @@
 // app/api/register/route.js
 import { NextResponse } from "next/server";
-import  connectDB  from "@/lib/db";
+import  connectMyDB  from "@/lib/myDB";
 import bcrypt from "bcryptjs";
 import User from "@/app/models/User";
 
 export async function POST(request) {
   try {
-    await connectDB();
+    await connectMyDB();
 
     const data = await request.json();
     const { userID, email, password } = data;

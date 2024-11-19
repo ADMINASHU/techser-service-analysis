@@ -1,9 +1,9 @@
 
+import React from "react";
 import { auth } from "@/auth";
 import Logout from "@/components/Logout";
 import {redirect} from "next/navigation";
 
-import React from "react";
 
 const Homepage = async () => {
   const session = await auth();
@@ -13,7 +13,7 @@ const Homepage = async () => {
   return (
     <div>
       <div>Home page</div>
-      <div>{session?.user}</div>
+      {/* <div>{session?.user}</div> */}
       <Logout/>
     </div>
   );

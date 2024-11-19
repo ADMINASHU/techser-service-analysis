@@ -1,5 +1,5 @@
 import User from "@/app/models/User";
-import connectDB from "@/lib/db";
+import connectDB from "@/lib/myDB";
 
 export const getUserByID = async (userID) => {
   try {

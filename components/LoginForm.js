@@ -13,9 +13,9 @@ const LoginForm = () => {
 
   async function handleSubmit(event) {
     event.preventDefault();
-  
+    const cred = { userID, password };
     try {
-      const response = await doLogin({ userID, password });
+      const response = await doLogin(cred);
       if (!!response.error) {
         console.log(response.error);
       } else {

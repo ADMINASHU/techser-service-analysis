@@ -2,8 +2,7 @@ import NextAuth from "next-auth";
 import CredentialProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { User } from "./app/models/User";
-
-import connectDB from "./lib/db";
+import connectMyDB from "./lib/myDB";
 import { NextResponse } from "next/server";
 
 export const {
@@ -22,7 +21,7 @@ export const {
       async authorize(credentials) {
         if (credentials === null) return null;
         try {
-          await connectDB();
+          await connectMyDB();
           // console.log(`Searching for user with ID: ${credentials.userID}`);
           const user = await User.findOne({ userID: credentials?.userID });
           console.log(user);
@@ -33,7 +32,7 @@ export const {
               return user;
             } else {
               throw new Error("Invalid credentials");
-            }  
+            }
           } else {
             return NextResponse.json({ error: "User not found" }, { status: 400 });
           }

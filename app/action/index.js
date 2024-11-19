@@ -6,8 +6,9 @@ export async function doLogout() {
   await signOut({ redirect: "/" });
 }
 
-export async function doLogin( {userID, password}) {
+export async function doLogin(cred) {
   // console.log("from server: "+userID);
+  const { userID, password } = await cred;
   try {
     const response = await signIn("credentials", {
       userID: userID,
