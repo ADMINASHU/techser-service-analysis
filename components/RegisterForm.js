@@ -1,6 +1,7 @@
 "use client";
 import styles from "./RegisterForm.module.css";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { useState } from "react";
@@ -43,7 +44,13 @@ const RegisterForm = () => {
   return (
     <div className={styles.container}>
       <div className={styles.registerContainer}>
-        <img src="/logo.jpg" alt="Company Logo" className={styles.logo} />
+      <Image
+        src="/logo.jpg"  // Path to your image
+        alt="Company image"     // Alt text for accessibility
+        width={180}                    // Display width
+        height={101}
+        className={styles.logo}              // Display height
+      />
         <form onSubmit={handleSubmit}>
           <input
             type="text"

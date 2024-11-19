@@ -55,7 +55,7 @@ const LoginForm = () => {
         src="/logo.jpg"  // Path to your image
         alt="Company image"     // Alt text for accessibility
         width={180}                    // Display width
-        height={250}     
+        height={101}
         className={styles.logo}              // Display height
       />
         <form onSubmit={handleSubmit}>
