@@ -4,6 +4,7 @@ import React from "react";
 import styles from "./LoginForm.module.css";
 import Link from "next/link";
 import { doLogin } from "@/app/action";
+import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 
 const LoginForm = () => {
@@ -13,6 +14,15 @@ const LoginForm = () => {
 
   async function handleSubmit(event) {
     event.preventDefault();
+    if (!userID || !password) {
+      Swal.fire({
+        title: "Warning!",
+        text: "Please fill in all the fields.",
+        icon: "warning",
+        confirmButtonText: "OK",
+      });
+      return;
+    }
     const cred = { userID, password };
     try {
       const response = await doLogin(cred);
@@ -23,6 +33,12 @@ const LoginForm = () => {
       }
     } catch (error) {
       console.log(error);
+      Swal.fire({
+        title: "Error!",
+        text: "Login failed. Please check your credentials.",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
     }
   }
 
@@ -38,7 +54,7 @@ const LoginForm = () => {
             placeholder="User ID"
             value={userID}
             onChange={(e) => setUserID(e.target.value)}
-            required
+            
           />
           <input
             type="password"
@@ -47,7 +63,7 @@ const LoginForm = () => {
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            required
+            
           />
           <button type="submit">Sign in</button>
           <p>

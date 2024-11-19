@@ -7,7 +7,6 @@ export async function doLogout() {
 }
 
 export async function doLogin(cred) {
-  // console.log("from server: "+userID);
   const { userID, password } = await cred;
   try {
     const response = await signIn("credentials", {
@@ -15,7 +14,9 @@ export async function doLogin(cred) {
       password: password,
       redirect: false,
     });
+    console.log("from server: "+response);
     return response;
+    
   } catch (error) {
     throw new Error(error);
   }

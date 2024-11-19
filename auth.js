@@ -24,7 +24,7 @@ export const {
           await connectMyDB();
           // console.log(`Searching for user with ID: ${credentials.userID}`);
           const user = await User.findOne({ userID: credentials?.userID });
-          console.log(user);
+          console.log("from auth page: "+user);
 
           if (user) {
             const isValidPassword = bcrypt.compare(credentials.password, user.password);

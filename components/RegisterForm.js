@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { useState } from "react";
+import Swal from "sweetalert2";
 
 const RegisterForm = () => {
   const [userID, setUserID] = useState("");
@@ -13,17 +14,30 @@ const RegisterForm = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
     try {
-      const response = await axios.post("/api/register", { userID, email, password });
+      const data = { userID, email, password };
+      console.log(data);
+      const response = await axios.post("/api/register", data);
       if (response.status === 201) {
         setUserID("");
         setEmail("");
         setPassword("");
+        Swal.fire({
+          title: "Success!",
+          text: "Registration successful!",
+          icon: "success",
+          confirmButtonText: "OK",
+        });
         router.push("/");
       }
     } catch (error) {
       console.log(error.message);
+      Swal.fire({
+        title: "Error!",
+        text: "Registration failed. Please try again.",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
     }
   };
 

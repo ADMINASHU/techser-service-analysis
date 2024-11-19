@@ -1,6 +1,6 @@
 // app/api/data/route.js
 import connectToServiceEaseDB from "../../../lib/serviceDB";
-import Data from "../../models/Data";
+import {Data} from "../../models/Data";
 import { NextResponse } from "next/server";
 
 export async function GET() {

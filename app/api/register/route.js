@@ -1,17 +1,18 @@
 // app/api/register/route.js
 import { NextResponse } from "next/server";
-import  connectMyDB  from "@/lib/myDB";
+import connectMyDB from "@/lib/myDB";
 import bcrypt from "bcryptjs";
-import User from "../../models/User";
+import { User } from "../../models/User";
 
 export async function POST(request) {
   try {
-    await connectMyDB();
-
+    const db = await connectMyDB();
+    if (!db) {
+      return NextResponse.status(500).json({ message: "Error connecting to the database" });
+    }
     const data = await request.json();
+    console.log("from server register" + data);
     const { userID, email, password } = data;
-
-    console.log(userID);
 
     if (!userID || !email || !password) {
       return NextResponse.json({ error: "All fields are required" }, { status: 400 });
