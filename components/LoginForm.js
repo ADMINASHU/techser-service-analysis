@@ -27,35 +27,37 @@ const LoginForm = () => {
   }
 
   return (
-    <div className={styles.loginContainer}>
-      <img src="/logo.jpg" alt="Company Logo" className={styles.logo} />
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          id="userId"
-          name="userId"
-          placeholder="User ID"
-          value={userID}
-          onChange={(e) => setUserID(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          id="password"
-          name="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button type="submit">Sign in</button>
-        <p>
-          Don't you have an account?
-          <Link href={"/register"} className={styles.signupLink}>
-            Register
-          </Link>
-        </p>
-      </form>
+    <div className={styles.container}>
+      <div className={styles.loginContainer}>
+        <img src="/logo.jpg" alt="Company Logo" className={styles.logo} />
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            id="userId"
+            name="userId"
+            placeholder="User ID"
+            value={userID}
+            onChange={(e) => setUserID(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <button type="submit">Sign in</button>
+          <p>
+            Don't you have an account?
+            <Link href={"/register"} className={styles.signupLink}>
+              Register
+            </Link>
+          </p>
+        </form>
+      </div>
     </div>
   );
 };

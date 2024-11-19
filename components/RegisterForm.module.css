@@ -1,4 +1,12 @@
 /* components/LoginForm.module.css */
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* background-color: #d71010; */
+  height: 100vh;
+  width: 100%;
+  }
 .registerContainer {
     background-color: #FBFCF6;
     padding: 30px;
@@ -29,7 +37,7 @@
     width: 100%;
     margin: 10px 0;
     padding: 15px;
-    background-color: #F82D1F;
+    background-color: #f82d1fca;
     border: none;
     border-radius: 5px;
     color: #fff;
@@ -39,7 +47,7 @@
   }
   
   .registerContainer button:hover {
-    background-color: #f82d1fc9;
+    background-color: #f82d1f91;
   }
   
   .loginLink {

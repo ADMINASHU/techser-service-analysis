@@ -1,26 +1,24 @@
-"use client"
+"use client";
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import DataExtractor from "./(components)/dataExtractor";
 import TableView from "./(components)/TableView";
-import { auth } from "@/auth";
-import Logout from "@/components/Logout";
-import {redirect} from "next/navigation";
 
-const DataPage =  () => {
-  // const session = await auth();
-  // if (!session?.user) redirect("/");
-
+const DataPage = () => {
   const [data, setData] = useState([]);
   const [processedData, setProcessedData] = useState([]);
 
   useEffect(() => {
     async function fetchData() {
-      const response = await axios.get("/api/data");
-      // const result = JSON.stringify(response.data);
-      // console.log(result);
-      setData(response.data);
+      try {
+        const response = await axios.get("/api/data");
+        // const result = JSON.stringify(response.data);
+        // console.log(result);
+        setData(response.data);
+      } catch (error) {
+        throw new Error(error.message);
+      }
     }
     fetchData();
   }, []);

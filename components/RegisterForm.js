@@ -28,20 +28,46 @@ const RegisterForm = () => {
   };
 
   return (
-    <div className={styles.registerContainer}>
-      <img src="/logo.jpg" alt="Company Logo" className={styles.logo} />
-      <form onSubmit={handleSubmit}>
-        <input type="text" id="userId" name="userId" placeholder="User ID" value={userID} onChange={(e)=>setUserID(e.target.value)} required />
-        <input type="email" id="email" name="email" placeholder="Email" value={email} onChange={(e)=>setEmail(e.target.value)}  required />
-        <input type="password" id="password" name="password" placeholder="Password" value={password} onChange={(e)=>setPassword(e.target.value)}  required />
-        <button type="submit">Signup</button>
-        <p>
-          Already have an account?
-          <Link href="/" className={styles.loginLink}>
-            Signin
-          </Link>
-        </p>
-      </form>
+    <div className={styles.container}>
+      <div className={styles.registerContainer}>
+        <img src="/logo.jpg" alt="Company Logo" className={styles.logo} />
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            id="userId"
+            name="userId"
+            placeholder="User ID"
+            value={userID}
+            onChange={(e) => setUserID(e.target.value)}
+            required
+          />
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <button type="submit">Signup</button>
+          <p>
+            Already have an account?
+            <Link href="/" className={styles.loginLink}>
+              Signin
+            </Link>
+          </p>
+        </form>
+      </div>
     </div>
   );
 };

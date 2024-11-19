@@ -1,3 +1,9 @@
+html,
+body {
+  height: 100%;
+  margin: 0
+}
+
 body {
   font-family: var(--font-geist-sans), var(--font-geist-mono);
   margin: 0;
@@ -36,7 +42,8 @@ table {
   margin-top: 20px;
 }
 
-th, td {
+th,
+td {
   border: 1px solid #ddd;
   padding: 8px;
   text-align: left;
@@ -45,4 +52,4 @@ th, td {
 th {
   background-color: #333;
   color: white;
-} 
+}
