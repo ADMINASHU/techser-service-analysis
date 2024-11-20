@@ -7,6 +7,7 @@ export async function GET() {
     const db = await connectToServiceEaseDB();
 
     if (!db) {
+      
       return NextResponse.json({ message: "Error connecting to the database" }, { status: 500 });
     }
 
