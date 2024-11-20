@@ -1,0 +1,51 @@
+.page{
+    margin: 20px;
+}
+.table th,
+.table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+    width: 10%;
+    /* Adjust this to set the width of each column */
+}
+
+.input-field {
+    border: none;
+    background-color: transparent;
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+.input-field:focus {
+    outline: none;
+}
+
+.read-only {
+    pointer-events: none;
+    /* Prevent user from interacting with read-only fields */
+}
+
+.button-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+    /* Space between buttons and table */
+}
+
+.button {
+    padding: 10px 20px;
+    margin-left: 10px;
+    /* Space between buttons */
+    border: none;
+    background-color: #f82d1fca;
+    color: white;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.button:hover {
+    background-color: #f82d1f91;
+}
