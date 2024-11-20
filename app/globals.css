@@ -1,41 +1,23 @@
+/* Reset some basic styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 html,
 body {
   height: 100%;
-  margin: 55px auto;
+  /* overflow: hidden;  */
 }
 
 body {
   font-family: var(--font-geist-sans), var(--font-geist-mono);
-  margin: 0;
-  padding: 0;
   background-color: #f5f5f5;
+  padding-top: 55px;
 }
 
-/* nav {
-  background-color: #333;
-  padding: 10px 20px;
-}
-
-nav ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-}
-
-nav li {
-  margin-right: 15px;
-}
-
-nav a {
-  color: white;
-  text-decoration: none;
-}
-
-nav a:hover {
-  text-decoration: underline;
-} */
-
+/* Ensure navbar doesn't overflow */
 table {
   width: 100%;
   border-collapse: collapse;

@@ -10,6 +10,7 @@
   width: 100%;
   z-index: 1000;
   transition: background-color 0.3s ease;
+  overflow: hidden; /* Prevent navbar overflow */
 }
 
 .navLinks,
@@ -33,17 +34,27 @@
 .profileSection {
   display: flex;
   align-items: center;
-  padding: 0 50px;
 }
 
 .profileName {
   margin-right: 10px;
 }
 
+.logoutButton {
+  padding: 5px 10px;
+  background-color: #ff4c4c;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.logoutButton:hover {
+  background-color: #e63946;
+}
 
 .menuButton {
   display: none;
-  padding: 0 50px;
   background: none;
   border: none;
   color: white;
@@ -53,11 +64,10 @@
 
 .responsiveMenu {
   display: none;
-  width: 200px;
   flex-direction: column;
   position: absolute;
   top: 50px;
-  left: 50px;
+  right: 10px;
   background-color: #333;
   padding: 10px;
   z-index: 1001;
