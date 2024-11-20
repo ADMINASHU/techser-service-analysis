@@ -25,7 +25,7 @@
   
   .loginContainer input[type="text"],
   .loginContainer input[type="password"] {
-    width: 90%;
+    width: 100%;
     padding: 15px;
     margin: 10px 0;
     border: 1px solid #ddd;

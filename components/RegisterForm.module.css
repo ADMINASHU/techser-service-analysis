@@ -24,7 +24,7 @@
   .registerContainer input[type="text"],
   .registerContainer input[type="email"],
   .registerContainer input[type="password"] {
-    width: 90%;
+    width: 100%;
     padding: 15px;
     margin: 10px 0;
     border: 1px solid #ddd;
