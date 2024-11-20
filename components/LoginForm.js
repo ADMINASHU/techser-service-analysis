@@ -1,13 +1,22 @@
 "use client";
 import React from "react";
+import { redirect } from "next/navigation";
 import { useState } from "react";
-import styles from "./LoginForm.module.css";
 import Link from "next/link";
-import { doLogin } from "@/app/action";
 import Swal from "sweetalert2";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
-const LoginForm = () => {
+import styles from "./LoginForm.module.css";
+import { doLogin } from "@/app/action";
+import { useRouter } from "next/navigation";
+import { auth } from "@/auth";
+
+const LoginForm = async() => {
+  const session = await auth();
+  const isAuthenticated = !!session?.user;
+  if (isAuthenticated) {
+    redirect("/profile");
+  }
+  return <RegisterForm />;
   const [userID, setUserID] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
