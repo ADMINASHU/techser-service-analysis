@@ -1,10 +1,11 @@
 
 import { doLogout } from '@/app/action'
+import styles from "./Logout.module.css";
 const Logout = () => {
 
   return (
     <form action={doLogout}>
-        <button type="submit">Logout</button>
+        <button className={styles.logoutButton} type="submit">Logout</button>
     </form>
   )
 }

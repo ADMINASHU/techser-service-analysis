@@ -1,7 +1,8 @@
 import localFont from "next/font/local";
 import "./globals.css";
-import Link from 'next/link';
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import Navbar from "@/components/Navbar";
+import { auth } from "@/auth";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -19,29 +20,14 @@ export const metadata = {
   description: "Techser Service Analysis Dashboard",
 };
 
-export default function RootLayout({ children }) {
+export default async function  RootLayout({ children }) {
+  const session = await auth();
+  
+
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        {/* <nav>
-          <ul>
-            <li>
-              <Link href="/">Home</Link>
-            </li>
-            <li>
-              <Link href="/login">Login</Link>
-            </li>
-            <li>
-              <Link href="/sheets">Sheets</Link>
-            </li>
-            <li>
-              <Link href="/data">Server Data</Link>
-            </li>
-            <li>
-              <Link href="/dashboard">Dashboard</Link>
-            </li>
-          </ul>
-        </nav> */}
+        <Navbar  session={session} />
         {children}
         <SpeedInsights />
       </body>
