@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Logout from "./Logout";
 import { useRouter } from "next/navigation";
@@ -12,10 +12,15 @@ export default function Navbar({ session }) {
   const router = useRouter();
   const profileName = session?.user?.email || "User"; // Replace with actual logic to get profile name
 
-  const handleLogout = () => {
-    // Handle logout logic here
-    console.log("Logged out");
-  };
+
+useEffect(() => {
+  
+  console.log("path:");
+  console.log(router);
+
+ 
+}, [router.pathname])
+
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -35,7 +40,10 @@ export default function Navbar({ session }) {
           </Link>
         </div>
         <div className={styles.profileSection}>
-          <span className={styles.profileName}>{profileName}</span>
+          <Link href="/profile" className={styles.profileName}>
+            {profileName}
+          </Link>
+
           <Logout />
         </div>
         <button className={styles.menuButton} onClick={toggleMenu}>
@@ -43,7 +51,9 @@ export default function Navbar({ session }) {
         </button>
         {menuOpen && (
           <div className={styles.responsiveMenu}>
-            <span className={styles.profileName}>{profileName}</span>
+            <Link href="/profile"  className={router.pathname === "/profile" ? styles.activeLink : ""}>
+              {profileName}
+            </Link>
 
             <Link
               href="/"

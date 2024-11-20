@@ -14,7 +14,7 @@ const DataPage = () => {
       try {
         const response = await axios.get("/api/data");
         const result = JSON.stringify(response.data);
-        console.log(result);
+        // console.log(result);
         setData(response.data);
       } catch (error) {
         throw new Error(error.message);

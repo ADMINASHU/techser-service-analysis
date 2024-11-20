@@ -10,7 +10,7 @@
   width: 100%;
   z-index: 1000;
   transition: background-color 0.3s ease;
-  overflow: hidden; /* Prevent navbar overflow */
+  /* overflow: hidden;  */
 }
 
 .navLinks,
@@ -38,6 +38,10 @@
 
 .profileName {
   margin-right: 10px;
+  color: white;
+  text-decoration: none;
+  transition: color 0.3s ease;
+
 }
 
 .logoutButton {
@@ -64,15 +68,28 @@
 
 .responsiveMenu {
   display: none;
+  font-size: 18px;
   flex-direction: column;
   position: absolute;
   top: 50px;
-  right: 10px;
+  left: 50px;
   background-color: #333;
   padding: 10px;
   z-index: 1001;
 }
+.responsiveMenu a {
+  /* margin: 5px; */
+  padding: 10px;
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.1s ease;
 
+}
+.responsiveMenu a:hover {
+  background-color: #e63946;
+}
 @media (max-width: 768px) {
   .navLinks {
     display: none;
@@ -88,5 +105,6 @@
 
   .responsiveMenu {
     display: flex;
+
   }
 }
