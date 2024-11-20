@@ -52,12 +52,12 @@ const LoginForm = () => {
     <div className={styles.container}>
       <div className={styles.loginContainer}>
         <Image
-        src="/logo.jpg"  // Path to your image
-        alt="Company image"     // Alt text for accessibility
-        width={180}                    // Display width
-        height={101}
-        className={styles.logo}              // Display height
-      />
+          src="/logo.jpg" // Path to your image
+          alt="Company image" // Alt text for accessibility
+          width={180} // Display width
+          height={101}
+          className={styles.logo} // Display height
+        />
         <form onSubmit={handleSubmit}>
           <input
             type="text"
@@ -66,7 +66,6 @@ const LoginForm = () => {
             placeholder="User ID"
             value={userID}
             onChange={(e) => setUserID(e.target.value)}
-            
           />
           <input
             type="password"
@@ -75,11 +74,10 @@ const LoginForm = () => {
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            
           />
           <button type="submit">Sign in</button>
           <p>
-            Don't you have an account?
+            Don&apos;t you have an account?
             <Link href={"/register"} className={styles.signupLink}>
               Register
             </Link>
