@@ -1,10 +1,15 @@
-import LoginForm from '@/components/LoginForm'
-import React from 'react'
+import LoginForm from "@/components/LoginForm";
+import React from "react";
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 
-const LoginPage = () => {
-  return (
-   <LoginForm/>
-  )
-}
+const LoginPage = async () => {
+  const session = await auth();
+  const isAuthenticated = !!session?.user;
+  if (isAuthenticated) {
+    redirect("/profile");
+  }
+  return <LoginForm />;
+};
 
-export default LoginPage
+export default LoginPage;

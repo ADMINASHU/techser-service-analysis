@@ -1,7 +1,6 @@
 
 import React from "react";
 import { auth } from "@/auth";
-import Logout from "@/components/Logout";
 
 
 
@@ -13,7 +12,6 @@ const ProfilePage = async () => {
     <div>
       <div>Profile Page</div>
       <div>{session?.user.email}</div>
-      <Logout/>
     </div>
   );
 };

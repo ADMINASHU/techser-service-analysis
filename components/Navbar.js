@@ -1,33 +1,77 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import Link from "next/link";
-import { auth } from "@/auth";
 import Logout from "./Logout";
+import { useRouter } from "next/navigation";
+import styles from "./Navbar.module.css"; // Import CSS module
 
-const Navbar = async () => {
-  const session = await auth();
+export default function Navbar({ session }) {
   const isAuthenticated = !!session?.user;
+  const [menuOpen, setMenuOpen] = useState(false);
+  const router = useRouter();
+  const profileName = session?.user?.email || "User"; // Replace with actual logic to get profile name
 
-  return (
-    <nav>
-      <ul>
-        <li>
-          <Link href="/">Home</Link>
-        </li>
-        <li>
-          <Link href="/login">Login</Link>
-        </li>
-        <li>
-          <Link href="/sheets">Sheets</Link>
-        </li>
-        <li>
-          <Link href="/data">Server Data</Link>
-        </li>
-        <li>
-          <Link href="/dashboard">Dashboard</Link>
-        </li>
-      </ul>
-    </nav>
-  );
-};
+  const handleLogout = () => {
+    // Handle logout logic here
+    console.log("Logged out");
+  };
 
-export default Navbar;
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
+  if (isAuthenticated) {
+    return (
+      <nav className={styles.navbar}>
+        <div className={styles.navLinks}>
+          <Link href="/" className={router.pathname === "/" ? styles.activeLink : ""}>
+            Home
+          </Link>
+          <Link href="/data" className={router.pathname === "/data" ? styles.activeLink : ""}>
+            Data
+          </Link>
+          <Link href="/control" className={router.pathname === "/control" ? styles.activeLink : ""}>
+            Control
+          </Link>
+        </div>
+        <div className={styles.profileSection}>
+          <span className={styles.profileName}>{profileName}</span>
+          <Logout />
+        </div>
+        <button className={styles.menuButton} onClick={toggleMenu}>
+          ☰
+        </button>
+        {menuOpen && (
+          <div className={styles.responsiveMenu}>
+            <span className={styles.profileName}>{profileName}</span>
+
+            <Link
+              href="/"
+              className={router.pathname === "/" ? styles.activeLink : ""}
+              onClick={toggleMenu}
+            >
+              Home
+            </Link>
+            <Link
+              href="/data"
+              className={router.pathname === "/data" ? styles.activeLink : ""}
+              onClick={toggleMenu}
+            >
+              Data
+            </Link>
+            <Link
+              href="/control"
+              className={router.pathname === "/control" ? styles.activeLink : ""}
+              onClick={toggleMenu}
+            >
+              Control
+            </Link>
+            <Logout onClick={() => toggleMenu()} />
+          </div>
+        )}
+      </nav>
+    );
+  } else {
+    return <></>;
+  }
+}
