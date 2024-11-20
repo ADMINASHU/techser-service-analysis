@@ -16,7 +16,6 @@ const LoginForm = async() => {
   if (isAuthenticated) {
     redirect("/profile");
   }
-  return <RegisterForm />;
   const [userID, setUserID] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
