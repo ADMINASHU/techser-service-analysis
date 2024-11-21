@@ -50,6 +50,8 @@ const DataPage = () => {
     "count",
     "isPending",
     "cPoint",
+    "ePoint",
+    "bPoint",
   ];
 
   return (

@@ -1,12 +1,18 @@
 .page{
     margin: 20px;
 }
-.table th,
+.table th{
+    border: 1px solid #ddd;
+    padding: 5px;
+    text-align: center;
+    width: 100px;
+    /* Adjust this to set the width of each column */
+}
 .table td {
     border: 1px solid #ddd;
-    padding: 8px;
+    padding: 5px;
     text-align: left;
-    width: 10%;
+    width: 100px;
     /* Adjust this to set the width of each column */
 }
 
@@ -14,7 +20,7 @@
     border: none;
     background-color: transparent;
     width: 100%;
-    padding: 8px;
+    padding: 5px;
     box-sizing: border-box;
 }
 

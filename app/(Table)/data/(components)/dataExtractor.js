@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { parse, differenceInHours, format } from "date-fns";
 
 const DataExtractor = ({ data, onDataProcessed, points }) => {
-  console.log("Extractor Page: " + JSON.stringify(points));
+  // console.log("Extractor Page: " + JSON.stringify(points));
 
   const regionList = [
     "AP & TELANGANA",
@@ -235,7 +235,7 @@ const DataExtractor = ({ data, onDataProcessed, points }) => {
     const finalPointData = finalPendingData.map((item, index) => {
       if (index === 0) {
         // Header row
-        return { ...item, cPoint: "C Point" };
+        return { ...item, cPoint: "C Point", ePoint: "E Point", bPoint: "B Point" };
       } else {
         const isPending = item["isPending"];
         const complaintID = item["complaintID"];
@@ -243,24 +243,49 @@ const DataExtractor = ({ data, onDataProcessed, points }) => {
         const match = regex.exec(complaintID);
         const count = match ? parseInt(match[1]) : 0;
         const natureOfComplaint = item["natureOfComplaint"];
-        if (isPending) {
-          if (count > 2) {
-            const cPoint = points[natureOfComplaint].eng.closed[2];
-            return { ...item, cPoint: cPoint };
+        const realStatus = item["realStatus"];
+        const duration = parseFloat(item["duration"]);
+        const cPoint = (() => {
+          if (isPending) {
+            if (count > 2) {
+              return points[natureOfComplaint].eng.closed[2];
+            } else {
+              return points[natureOfComplaint].eng.closed[1];
+            }
           } else {
-            const cPoint = points[natureOfComplaint].eng.closed[1];
-            return { ...item, cPoint: cPoint };
+            return points[natureOfComplaint].eng.closed[0];
           }
-        } else {
-          const cPoint = points[natureOfComplaint].eng.closed[0];
-          return { ...item, cPoint: cPoint };
-        }
-        // return { ...item, cPoint: count };
+        })();
 
+        const ePoint = (() => {
+          if (realStatus === "NEW") {
+            return points[natureOfComplaint].eng.new;
+          } else if (realStatus === "IN PROCESS") {
+            return points[natureOfComplaint].eng.pending;
+          } else if (realStatus === "COMPLETED") {
+            return cPoint;
+          }
+        })();
 
+        const bPoint = (() => {
+          const freeDay = 3;
+          if (realStatus === "NEW" && duration > freeDay) {
+            return (duration - freeDay) * points[natureOfComplaint].branch.new;
+          } else if (realStatus === "IN PROCESS") {
+            return duration * points[natureOfComplaint].branch.pending;
+          } else if (realStatus === "COMPLETED" && duration > freeDay) {
+            return (duration - freeDay) * points[natureOfComplaint].branch.closed;
+          } else {
+            return 0;
+          }
+        })();
 
-
-        
+        return {
+          ...item,
+          cPoint: cPoint,
+          ePoint: ePoint,
+          bPoint: bPoint === 0 ? bPoint : bPoint.toFixed(2),
+        };
       }
     });
     // console.log("extracted: " + finalPendingData);
