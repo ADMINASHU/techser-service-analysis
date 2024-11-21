@@ -3,6 +3,7 @@ import connectToServiceEaseDB from "../../../lib/serviceDB";
 import { Data } from "../../models/Data";
 import Point from "../../models/Point";
 import { NextResponse } from "next/server";
+import { parse, differenceInHours, format } from 'date-fns';
 
 export async function GET() {
   try {
@@ -15,7 +16,11 @@ export async function GET() {
     const data = await Data.find({});
 
     //................................................................
-    const points = await Point.find({});
+    const point = await Point.find({}).select("category data");
+    const points = point.reduce((acc, item) => {
+      acc[item.category] = item.data;
+      return acc;
+    }, {});
 
     const regionList = [
       "AP & TELANGANA",
@@ -35,8 +40,8 @@ export async function GET() {
       return NextResponse.status(500).json({ message: "Error fetching points and data from database" });
     }
 
-    console.log(points);
-    // Process the data to add the new columns with extracted date, duration, complaint ID, original complaint ID, nature of complaint, status, assigned to, region, branch, month, and year
+    // console.log(data);
+    // // Process the data to add the new columns with extracted date, duration, complaint ID, original complaint ID, nature of complaint, status, assigned to, region, branch, month, and year
     const newData = data
       .map((item, index) => {
         if (index === 0) {
@@ -319,7 +324,7 @@ export async function GET() {
         };
       }
     });
-    return NextResponse.json(points, {
+    return NextResponse.json(finalPointData, {
       status: 200,
       headers: {
         "Content-Type": "application/json",
