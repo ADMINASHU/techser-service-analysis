@@ -5,6 +5,7 @@ import Link from "next/link";
 import Logout from "./Logout";
 import { useRouter } from "next/navigation";
 import styles from "./Navbar.module.css"; // Import CSS module
+import Image from "next/image";
 
 export default function Navbar({ session }) {
   const isAuthenticated = !!session?.user;
@@ -30,7 +31,19 @@ useEffect(() => {
       <nav className={styles.navbar}>
         <div className={styles.navLinks}>
           <Link href="/" className={router.pathname === "/" ? styles.activeLink : ""}>
+          <Image
+          src="/logo.png" // Path to your image
+          alt="Company image" // Alt text for accessibility
+          width={100} // Display width
+          height={20}
+          className={styles.logo} // Display height
+        />
+          </Link>
+          <Link href="/" className={router.pathname === "/" ? styles.activeLink : ""}>
             Home
+          </Link>
+          <Link href="/dashboard" className={router.pathname === "/dashboard" ? styles.activeLink : ""}>
+            Dashboard
           </Link>
           <Link href="/data" className={router.pathname === "/data" ? styles.activeLink : ""}>
             Data
@@ -58,6 +71,13 @@ useEffect(() => {
             <Link
               href="/"
               className={router.pathname === "/" ? styles.activeLink : ""}
+              onClick={toggleMenu}
+            >
+              Home
+            </Link>
+            <Link
+              href="/dashboard"
+              className={router.pathname === "/dashboard" ? styles.activeLink : ""}
               onClick={toggleMenu}
             >
               Home

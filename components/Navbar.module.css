@@ -3,14 +3,15 @@
   justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
-  background-color: #333;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 105, 180, 0.3), rgba(51, 51, 51, 0.8)), rgba(51, 51, 51, 0.8); /* Updated glossy gradient */
+  backdrop-filter: blur(10px); /* Glassy effect */
   color: white;
   position: fixed;
   top: 0;
   width: 100%;
   z-index: 1000;
-  transition: background-color 0.3s ease;
-  /* overflow: hidden;  */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(255, 255, 255, 0.1) inset; /* Outer and inner shadow */
+  transition: background-color 0.3s ease, backdrop-filter 0.3s ease;
 }
 
 .navLinks,
@@ -41,7 +42,6 @@
   color: white;
   text-decoration: none;
   transition: color 0.3s ease;
-
 }
 
 .logoutButton {
@@ -51,6 +51,7 @@
   border: none;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Adding shadow to the button */
 }
 
 .logoutButton:hover {
@@ -73,23 +74,31 @@
   position: absolute;
   top: 50px;
   left: 50px;
-  background-color: #333;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 105, 180, 0.3), rgba(51, 51, 51, 0.8)); /* Same updated glossy gradient */
+  backdrop-filter: blur(10px); /* Glassy effect */
   padding: 10px;
   z-index: 1001;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(255, 255, 255, 0.1) inset; /* Outer and inner shadow */
 }
+
 .responsiveMenu a {
-  /* margin: 5px; */
   padding: 10px;
   color: white;
   text-decoration: none;
   font-size: 18px;
   cursor: pointer;
   transition: background-color 0.1s ease;
-
 }
+
 .responsiveMenu a:hover {
   background-color: #e63946;
 }
+
+.logo {
+  display: block;
+  background-color: transparent;
+}
+
 @media (max-width: 768px) {
   .navLinks {
     display: none;
@@ -105,6 +114,5 @@
 
   .responsiveMenu {
     display: flex;
-
   }
 }

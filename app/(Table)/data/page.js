@@ -52,6 +52,7 @@ const DataPage = () => {
     "cPoint",
     "ePoint",
     "bPoint",
+    "rPoint",
   ];
 
   return (

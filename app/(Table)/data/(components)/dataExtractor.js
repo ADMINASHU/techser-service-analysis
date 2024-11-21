@@ -235,7 +235,7 @@ const DataExtractor = ({ data, onDataProcessed, points }) => {
     const finalPointData = finalPendingData.map((item, index) => {
       if (index === 0) {
         // Header row
-        return { ...item, cPoint: "C Point", ePoint: "E Point", bPoint: "B Point" };
+        return { ...item, cPoint: "C Point", ePoint: "E Point", bPoint: "B Point", rPoint: "R Point" };
       } else {
         const isPending = item["isPending"];
         const complaintID = item["complaintID"];
@@ -280,11 +280,25 @@ const DataExtractor = ({ data, onDataProcessed, points }) => {
           }
         })();
 
+        const rPoint = (() => {
+      
+          if (realStatus === "NEW") {
+            return points[natureOfComplaint].region.new;
+          } else if (realStatus === "IN PROCESS") {
+            return points[natureOfComplaint].region.pending;
+          } else if (realStatus === "COMPLETED") {
+            return points[natureOfComplaint].region.closed;
+          } else {
+            return 0;
+          }
+        })();
+
         return {
           ...item,
           cPoint: cPoint,
           ePoint: ePoint,
           bPoint: bPoint === 0 ? bPoint : bPoint.toFixed(2),
+          rPoint: rPoint,
         };
       }
     });
