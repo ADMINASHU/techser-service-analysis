@@ -9,7 +9,7 @@ export async function middleware(request) {
   const { nextUrl } = request;
   const isAuthenticated = !!session?.user;
   // console.log("middleware");
-  console.log(isAuthenticated, nextUrl.pathname);
+  // console.log(isAuthenticated, nextUrl.pathname);
   const isPublicRoute =
     PUBLIC_ROUTES.find((route) => nextUrl.pathname.startsWith(route)) &&
     !PROTECTED_ROUTES.find((route) => nextUrl.pathname.includes(route));

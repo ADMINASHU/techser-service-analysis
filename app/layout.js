@@ -1,8 +1,10 @@
 import localFont from "next/font/local";
 import "./globals.css";
-import { SpeedInsights } from '@vercel/speed-insights/next';
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import Navbar from "@/components/Navbar";
 import { auth } from "@/auth";
+import { DataProvider } from "../context/DataContext";
+
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -20,17 +22,18 @@ export const metadata = {
   description: "Techser Service Analysis Dashboard",
 };
 
-export default async function  RootLayout({ children }) {
+export default async function RootLayout({ children }) {
   const session = await auth();
-  
 
   return (
-    <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <Navbar  session={session} />
-        {children}
-        <SpeedInsights />
-      </body>
-    </html>
+    <DataProvider>
+      <html lang="en">
+        <body className={`${geistSans.variable} ${geistMono.variable}`}>
+          <Navbar session={session} />
+          {children}
+          <SpeedInsights />
+        </body>
+      </html>
+    </DataProvider>
   );
 }

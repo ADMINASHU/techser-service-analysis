@@ -6,21 +6,22 @@ import Logout from "./Logout";
 import { useRouter } from "next/navigation";
 import styles from "./Navbar.module.css"; // Import CSS module
 import Image from "next/image";
+import { usePathname } from 'next/navigation'
 
 export default function Navbar({ session }) {
   const isAuthenticated = !!session?.user;
   const [menuOpen, setMenuOpen] = useState(false);
-  const router = useRouter();
+ 
   const profileName = session?.user?.email || "User"; // Replace with actual logic to get profile name
-
+  const pathname = usePathname()
 
 useEffect(() => {
   
   console.log("path:");
-  console.log(router);
-
+  console.log(pathname);
+  
  
-}, [router.pathname])
+}, [pathname])
 
 
   const toggleMenu = () => {
@@ -30,7 +31,7 @@ useEffect(() => {
     return (
       <nav className={styles.navbar}>
         <div className={styles.navLinks}>
-          <Link href="/" className={router.pathname === "/" ? styles.activeLink : ""}>
+          <Link href="/" className={pathname === "/" ? styles.activeLink : ""}>
           <Image
           src="/logo.png" // Path to your image
           alt="Company image" // Alt text for accessibility
@@ -39,16 +40,16 @@ useEffect(() => {
           className={styles.logo} // Display height
         />
           </Link>
-          <Link href="/" className={router.pathname === "/" ? styles.activeLink : ""}>
+          {/* <Link href="/" className={pathname === "/" ? styles.activeLink : ""}>
             Home
-          </Link>
-          <Link href="/dashboard" className={router.pathname === "/dashboard" ? styles.activeLink : ""}>
+          </Link> */}
+          <Link href="/dashboard" className={pathname === "/dashboard" ? styles.activeLink : styles.nlink}>
             Dashboard
           </Link>
-          <Link href="/data" className={router.pathname === "/data" ? styles.activeLink : ""}>
+          <Link href="/data" className={pathname === "/data" ? styles.activeLink : styles.nlink}>
             Data
           </Link>
-          <Link href="/control" className={router.pathname === "/control" ? styles.activeLink : ""}>
+          <Link href="/control" className={pathname === "/control" ? styles.activeLink : styles.nlink}>
             Control
           </Link>
         </div>
@@ -64,34 +65,34 @@ useEffect(() => {
         </button>
         {menuOpen && (
           <div className={styles.responsiveMenu}>
-            <Link href="/profile"  className={router.pathname === "/profile" ? styles.activeLink : ""}>
+            <Link href="/profile"  className={pathname === "/profile" ? styles.activeLink : ""}>
               {profileName}
             </Link>
 
             <Link
               href="/"
-              className={router.pathname === "/" ? styles.activeLink : ""}
+              className={pathname === "/" ? styles.activeLink : ""}
               onClick={toggleMenu}
             >
               Home
             </Link>
             <Link
               href="/dashboard"
-              className={router.pathname === "/dashboard" ? styles.activeLink : ""}
+              className={pathname === "/dashboard" ? styles.activeLink : ""}
               onClick={toggleMenu}
             >
-              Home
+              Dashboard
             </Link>
             <Link
               href="/data"
-              className={router.pathname === "/data" ? styles.activeLink : ""}
+              className={pathname === "/data" ? styles.activeLink : ""}
               onClick={toggleMenu}
             >
               Data
             </Link>
             <Link
               href="/control"
-              className={router.pathname === "/control" ? styles.activeLink : ""}
+              className={pathname === "/control" ? styles.activeLink : ""}
               onClick={toggleMenu}
             >
               Control

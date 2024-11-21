@@ -1,14 +1,15 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import DataExtractor from "./(components)/dataExtractor";
 import TableView from "./(components)/TableView";
+import DataContext from "../../../context/DataContext";
 
 const DataPage = () => {
   const [points, setPoints] = useState({});
   const [data, setData] = useState([]);
-  const [processedData, setProcessedData] = useState([]);
+  const {processedData, setProcessedData}= useContext(DataContext);
 
   useEffect(() => {
     fetchPoints();

@@ -35,3 +35,7 @@ th {
   background-color: #333;
   color: white;
 }
+input:focus {
+  outline: none; /* Remove the default outline */
+  border: 1px solid transparent; /* Make the border transparent */
+}

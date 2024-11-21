@@ -1,29 +1,41 @@
-import React, { useState, useEffect } from "react";
-import { parse, differenceInHours, format } from "date-fns";
+// app/api/data/route.js
+import connectToServiceEaseDB from "../../../lib/serviceDB";
+import { Data } from "../../models/Data";
+import Point from "../../models/Point";
+import { NextResponse } from "next/server";
 
-const DataExtractor = ({ data, onDataProcessed, points }) => {
-  // console.log("Extractor Page: " + JSON.stringify(points));
+export async function GET() {
+  try {
+    const db = await connectToServiceEaseDB();
 
-  const regionList = [
-    "AP & TELANGANA",
-    "CHATTISGARH",
-    "GOA",
-    "KALKA",
-    "KARNATAKA",
-    "KERALA",
-    "MADHYA PRADESH",
-    "MUMBAI",
-    "RAJASTHAN",
-    "TAMIL NADU",
-    "West Bengal",
-  ];
-
-  useEffect(() => {
-    if (!data) {
-      console.log("no data coming");
-      return;
+    if (!db) {
+      return NextResponse.status(500).json({ message: "Error connecting to the database" });
     }
 
+    const data = await Data.find({});
+
+    //................................................................
+    const points = await Point.find({});
+
+    const regionList = [
+      "AP & TELANGANA",
+      "CHATTISGARH",
+      "GOA",
+      "KALKA",
+      "KARNATAKA",
+      "KERALA",
+      "MADHYA PRADESH",
+      "MUMBAI",
+      "RAJASTHAN",
+      "TAMIL NADU",
+      "West Bengal",
+    ];
+
+    if (!points || !data) {
+      return NextResponse.status(500).json({ message: "Error fetching points and data from database" });
+    }
+
+    console.log(points);
     // Process the data to add the new columns with extracted date, duration, complaint ID, original complaint ID, nature of complaint, status, assigned to, region, branch, month, and year
     const newData = data
       .map((item, index) => {
@@ -307,11 +319,15 @@ const DataExtractor = ({ data, onDataProcessed, points }) => {
         };
       }
     });
-    // console.log("extracted: " + finalPendingData);
-    onDataProcessed(finalPointData);
-  }, [data, onDataProcessed, points]);
+    return NextResponse.json(points, {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
-  return null;
-};
-
-export default DataExtractor;
+    //................................................................
+  } catch (error) {
+    return NextResponse.json({ error }, { status: 500 });
+  }
+}

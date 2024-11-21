@@ -3,7 +3,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 105, 180, 0.3), rgba(51, 51, 51, 0.8)), rgba(51, 51, 51, 0.8); /* Updated glossy gradient */
+  background: linear-gradient(135deg,rgba(21, 21, 21, 0.5), rgba(255, 255, 255, 0.1), rgba(248, 47, 32, 0.3), rgba(51, 51, 51, 0.6)), rgba(51, 51, 51, 0.7); /* Updated glossy gradient */
   backdrop-filter: blur(10px); /* Glassy effect */
   color: white;
   position: fixed;
@@ -22,15 +22,24 @@
 
 .navLinks a {
   margin-right: 20px;
-  color: white;
+  /* color: white; */
   text-decoration: none;
   transition: color 0.3s ease;
+}
+.nlink{
+  /* margin-right: 20px; */
+  color: white;
+  /* text-decoration: none; */
+  /* transition: color 0.3s ease; */
 }
 
 .navLinks a:hover,
 .activeLink {
-  color: #ffcc00;
+  color: #ee1313;
+  /* font-weight: 600; */
+
 }
+
 
 .profileSection {
   display: flex;
@@ -74,7 +83,9 @@
   position: absolute;
   top: 50px;
   left: 50px;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 105, 180, 0.3), rgba(51, 51, 51, 0.8)); /* Same updated glossy gradient */
+
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(248, 47, 32, 0.3), rgba(51, 51, 51, 0.8)), rgba(51, 51, 51, 0.8); /* Updated glossy gradient */
+
   backdrop-filter: blur(10px); /* Glassy effect */
   padding: 10px;
   z-index: 1001;
