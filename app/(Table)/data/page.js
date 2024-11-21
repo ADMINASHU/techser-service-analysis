@@ -6,22 +6,34 @@ import DataExtractor from "./(components)/dataExtractor";
 import TableView from "./(components)/TableView";
 
 const DataPage = () => {
+  const [points, setPoints] = useState({});
   const [data, setData] = useState([]);
   const [processedData, setProcessedData] = useState([]);
 
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await axios.get("/api/data");
-        const result = JSON.stringify(response.data);
-        // console.log(result);
-        setData(response.data);
-      } catch (error) {
-        throw new Error(error.message);
-      }
-    }
+    fetchPoints();
     fetchData();
+  
   }, []);
+  async function fetchData() {
+    try {
+      const response = await axios.get("/api/data");
+      const result = JSON.stringify(response.data);
+      // console.log(result);
+      setData(response.data);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+
+  const fetchPoints = async () => {
+    try {
+      const response = await axios.get('/api/control');
+      setPoints(response.data);
+    } catch (error) {
+      console.error('Error fetching points:', error);
+    }
+  };
 
   const selectedColumns = [
     "complaintID",
@@ -37,31 +49,15 @@ const DataPage = () => {
     "year",
     "count",
     "isPending",
+    "cPoint",
   ];
 
-  const points = {
-    Breakdown: {
-      eng: { new: 0, pending: 1, closed: [2, 2.5, 3] },
-      branch: { new: -0.1, pending: -0.05, closed: 0 },
-      region: { new: 0, pending: 0, closed: 0 },
-    },
-    Installation: {
-      eng: { new: 0, pending: 1, closed: [2, 2.5, 3] },
-      branch: { new: 0, pending: -0.25, closed: 0.2 },
-      region: { new: 0, pending: 0, closed: 0 },
-    },
-    Pm: {
-      eng: { new: 0, pending: 1.5, closed: [2, 3, 3] },
-      branch: { new: 0, pending: -0.5, closed: 0.1 },
-      region: { new: 0, pending: 0, closed: 0 },
-    },
-  };
   return (
     <div>
       <h1>Complaint Data</h1>
       {/* <p>{JSON.stringify(data)}</p> */}
       {/* <Logout/> */}
-      <DataExtractor data={data} onDataProcessed={setProcessedData} />
+      <DataExtractor data={data} onDataProcessed={setProcessedData} points={points} />
       <TableView data={processedData} selectedColumns={selectedColumns} />
     </div>
   );

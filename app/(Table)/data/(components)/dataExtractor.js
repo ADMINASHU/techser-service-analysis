@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { parse, differenceInHours, format } from "date-fns";
 
-const DataExtractor = ({ data, onDataProcessed }) => {
-  // console.log("page: " + JSON.stringify(data));
+const DataExtractor = ({ data, onDataProcessed, points }) => {
+  console.log("Extractor Page: " + JSON.stringify(points));
 
   const regionList = [
     "AP & TELANGANA",
@@ -19,7 +19,7 @@ const DataExtractor = ({ data, onDataProcessed }) => {
   ];
 
   useEffect(() => {
-    if (!data ) {
+    if (!data) {
       console.log("no data coming");
       return;
     }
@@ -231,9 +231,41 @@ const DataExtractor = ({ data, onDataProcessed }) => {
         return { ...item, isPending: isPending };
       }
     });
+    // Step 5: Add column "C Point"
+    const finalPointData = finalPendingData.map((item, index) => {
+      if (index === 0) {
+        // Header row
+        return { ...item, cPoint: "C Point" };
+      } else {
+        const isPending = item["isPending"];
+        const complaintID = item["complaintID"];
+        const regex = new RegExp("B\\d{2}[A-Z]\\d+-\\d+-(\\d+)?");
+        const match = regex.exec(complaintID);
+        const count = match ? parseInt(match[1]) : 0;
+        const natureOfComplaint = item["natureOfComplaint"];
+        if (isPending) {
+          if (count > 2) {
+            const cPoint = points[natureOfComplaint].eng.closed[2];
+            return { ...item, cPoint: cPoint };
+          } else {
+            const cPoint = points[natureOfComplaint].eng.closed[1];
+            return { ...item, cPoint: cPoint };
+          }
+        } else {
+          const cPoint = points[natureOfComplaint].eng.closed[0];
+          return { ...item, cPoint: cPoint };
+        }
+        // return { ...item, cPoint: count };
+
+
+
+
+        
+      }
+    });
     // console.log("extracted: " + finalPendingData);
-    onDataProcessed(finalPendingData);
-  }, [data, onDataProcessed]);
+    onDataProcessed(finalPointData);
+  }, [data, onDataProcessed, points]);
 
   return null;
 };
