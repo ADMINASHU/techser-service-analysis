@@ -271,8 +271,8 @@ const DataExtractor = ({ data, onDataProcessed, points }) => {
           const freeDay = 3;
           if (realStatus === "NEW" && duration > freeDay) {
             return (duration - freeDay) * points[natureOfComplaint].branch.new;
-          } else if (realStatus === "IN PROCESS") {
-            return duration * points[natureOfComplaint].branch.pending;
+          } else if (realStatus === "IN PROCESS" && duration > freeDay) {
+            return (duration - freeDay) * points[natureOfComplaint].branch.pending;
           } else if (realStatus === "COMPLETED" && duration > freeDay) {
             return (duration - freeDay) * points[natureOfComplaint].branch.closed;
           } else {
