@@ -24,7 +24,7 @@ const DashboardPage = () => {
   }
   return (
     <div>
-      <h1>Dashboard Page</h1>
+      <h1>Dashboard Region</h1>
       <DashboardTableView data={data}/>
       {/* <div>{JSON.stringify(data)}</div> */}
     </div>

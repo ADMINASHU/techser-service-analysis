@@ -10,7 +10,7 @@
   top: 0;
   width: 100%;
   z-index: 1000;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(255, 255, 255, 0.1) inset; /* Outer and inner shadow */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(255, 255, 255, 0.1) inset; /* Outer and inner shadow */
   transition: background-color 0.3s ease, backdrop-filter 0.3s ease;
 }
 
@@ -83,13 +83,28 @@
   position: absolute;
   top: 50px;
   left: 50px;
-
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(248, 47, 32, 0.3), rgba(51, 51, 51, 0.8)), rgba(51, 51, 51, 0.8); /* Updated glossy gradient */
-
+  /* width: 200px; */
+  border-radius: 8px;
+  background: linear-gradient(135deg,  rgba(248, 47, 32, 0.5), rgba(211, 211, 211, 0.4)), rgba(0, 0, 0, 0.9); /* Updated glossy gradient */
   backdrop-filter: blur(10px); /* Glassy effect */
   padding: 10px;
   z-index: 1001;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(255, 255, 255, 0.1) inset; /* Outer and inner shadow */
+}
+.responsiveDash {
+  display: flex;
+  font-size: 18px;
+  flex-direction: column;
+  position: absolute;
+  top: 50px;
+  width: 200px;
+  border-radius: 8px;
+  left: 150px;
+  background: linear-gradient(135deg,  rgba(248, 47, 32, 0.5), rgba(211, 211, 211, 0.4)), rgba(0, 0, 0, 0.9); /* Updated glossy gradient */
+  backdrop-filter: blur(10px); /* Glassy effect */
+  padding: 10px;
+  z-index: 1001;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(255, 255, 255, 0.1) inset; /* Outer and inner shadow */
 }
 
 .responsiveMenu a {
@@ -101,8 +116,21 @@
   transition: background-color 0.1s ease;
 }
 
+.responsiveDash a {
+  padding: 10px;
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.1s ease;
+}
+
 .responsiveMenu a:hover {
-  background-color: #e63946;
+  background-color: #333;
+}
+.responsiveDash a:hover {
+  background-color: #333
+
 }
 
 .logo {
