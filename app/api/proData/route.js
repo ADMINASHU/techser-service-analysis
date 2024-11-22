@@ -3,7 +3,7 @@ import connectToServiceEaseDB from "../../../lib/serviceDB";
 import { Data } from "../../models/Data";
 import Point from "../../models/Point";
 import { NextResponse } from "next/server";
-import { parse, differenceInHours, format } from 'date-fns';
+import { parse, differenceInHours, format } from "date-fns";
 
 export async function GET() {
   try {
@@ -37,7 +37,9 @@ export async function GET() {
     ];
 
     if (!points || !data) {
-      return NextResponse.status(500).json({ message: "Error fetching points and data from database" });
+      return NextResponse.status(500).json({
+        message: "Error fetching points and data from database",
+      });
     }
 
     // console.log(data);
@@ -292,14 +294,26 @@ export async function GET() {
 
         const bPoint = (() => {
           const freeDay = 3;
-          if (realStatus === "NEW" && duration > freeDay) {
-            return (duration - freeDay) * points[natureOfComplaint].branch.new;
-          } else if (realStatus === "IN PROCESS" && duration > freeDay) {
-            return (duration - freeDay) * points[natureOfComplaint].branch.pending;
-          } else if (realStatus === "COMPLETED" && duration > freeDay) {
-            return (duration - freeDay) * points[natureOfComplaint].branch.closed;
+          if (natureOfComplaint === "BREAKDOWN") {
+            if (realStatus === "NEW" && duration > freeDay) {
+              return (duration - freeDay) * points[natureOfComplaint].branch.new;
+            } else if (realStatus === "IN PROCESS" && duration > freeDay) {
+              return (duration - freeDay) * points[natureOfComplaint].branch.pending;
+            } else if (realStatus === "COMPLETED" && duration > freeDay) {
+              return (duration - freeDay) * points[natureOfComplaint].branch.closed;
+            } else {
+              return 0;
+            }
           } else {
-            return 0;
+            if (realStatus === "NEW") {
+              return points[natureOfComplaint].branch.new;
+            } else if (realStatus === "IN PROCESS") {
+              return points[natureOfComplaint].branch.pending;
+            } else if (realStatus === "COMPLETED") {
+              return points[natureOfComplaint].branch.closed;
+            } else {
+              return 0;
+            }
           }
         })();
 

@@ -12,13 +12,13 @@ const DataPage = () => {
   const {processedData, setProcessedData}= useContext(DataContext);
 
   useEffect(() => {
-    fetchPoints();
+    // fetchPoints();
     fetchData();
   
   }, []);
   async function fetchData() {
     try {
-      const response = await axios.get("/api/data");
+      const response = await axios.get("/api/proData");
       const result = JSON.stringify(response.data);
       // console.log(result);
       setData(response.data);
@@ -61,8 +61,8 @@ const DataPage = () => {
       <h1>Complaint Data</h1>
       {/* <p>{JSON.stringify(data)}</p> */}
       {/* <Logout/> */}
-      <DataExtractor data={data} onDataProcessed={setProcessedData} points={points} />
-      <TableView data={processedData} selectedColumns={selectedColumns} />
+      {/* <DataExtractor data={data} onDataProcessed={setProcessedData} points={points} /> */}
+      <TableView data={data} selectedColumns={selectedColumns} />
     </div>
   );
 };
