@@ -162,7 +162,7 @@ export async function POST(request) {
       bPoint: "B Point",
       rPoint: "R Point",
       index: "Index",
-      accuracy: "Accuracy in %",
+      accuracy: "Accuracy %",
     };
 
     // Combine header with data
