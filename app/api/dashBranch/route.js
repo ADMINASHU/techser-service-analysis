@@ -20,11 +20,24 @@ export async function POST(request) {
     const proData = await fetchProData();
     console.log("year:", year);
     // console.log("proData:", proData);
+    // Extract unique engineers per branch
+    const uniqueEngineersPerBranch = proData.reduce((acc, item) => {
+      if (item.assignedTo && item.branch) {
+        if (!acc[item.branch]) {
+          acc[item.branch] = new Set();
+        }
+        acc[item.branch].add(item.assignedTo);
+      }
+      return acc;
+    }, {});
+    // const uniqueEngineersCountPerBranch = Object.keys(uniqueEngineersPerBranch).map((branch) => ({
+    //   branch,
+    //   uniqueEngineersCount: uniqueEngineersPerBranch[branch].size,
+    // }));
+    // console.log(uniqueEngineersCountPerBranch);
     //.................................................................................
     // Extract unique engineers
-    const uniqueBranch = [
-      ...new Set(proData.map((item) => item.branch).filter(Boolean)),
-    ].sort();
+    const uniqueBranch = [...new Set(proData.map((item) => item.branch).filter(Boolean))].sort();
 
     // Count occurrences of each engineer in proData based on conditions
     const branchCallCount = proData.reduce((acc, item) => {
@@ -33,8 +46,7 @@ export async function POST(request) {
 
         if (item.realStatus === "NEW") {
           if (item.natureOfComplaint === "BREAKDOWN") {
-            acc[`${item.branch}_newBreakdown`] =
-              (acc[`${item.branch}_newBreakdown`] || 0) + 1;
+            acc[`${item.branch}_newBreakdown`] = (acc[`${item.branch}_newBreakdown`] || 0) + 1;
           } else if (item.natureOfComplaint === "INSTALLATION") {
             acc[`${item.branch}_newInstallation`] =
               (acc[`${item.branch}_newInstallation`] || 0) + 1;
@@ -43,8 +55,7 @@ export async function POST(request) {
           }
         } else if (item.realStatus === "IN PROCESS") {
           if (item.natureOfComplaint === "BREAKDOWN") {
-            acc[`${item.branch}_pendBreakdown`] =
-              (acc[`${item.branch}_pendBreakdown`] || 0) + 1;
+            acc[`${item.branch}_pendBreakdown`] = (acc[`${item.branch}_pendBreakdown`] || 0) + 1;
           } else if (item.natureOfComplaint === "INSTALLATION") {
             acc[`${item.branch}_pendInstallation`] =
               (acc[`${item.branch}_pendInstallation`] || 0) + 1;
@@ -53,8 +64,7 @@ export async function POST(request) {
           }
         } else if (item.realStatus === "COMPLETED" && item.isPending === "") {
           if (item.natureOfComplaint === "BREAKDOWN") {
-            acc[`${item.branch}_closeBreakdown`] =
-              (acc[`${item.branch}_closeBreakdown`] || 0) + 1;
+            acc[`${item.branch}_closeBreakdown`] = (acc[`${item.branch}_closeBreakdown`] || 0) + 1;
           } else if (item.natureOfComplaint === "INSTALLATION") {
             acc[`${item.branch}_closeInstallation`] =
               (acc[`${item.branch}_closeInstallation`] || 0) + 1;
@@ -112,11 +122,13 @@ export async function POST(request) {
             totalVisits
           ).toFixed(2)
         : "0.00";
-      const index = totalVisits ? (((parseFloat(bPoint) + parseFloat(ePoint)) * 1000) / totalVisits).toFixed(0) : 0;
+      const index = totalVisits
+        ? (((parseFloat(bPoint) + parseFloat(ePoint)) * 1000) / totalVisits).toFixed(0)
+        : 0;
       return {
         region: branchData.region,
         branch,
-        engineer:"",
+        engineer:  uniqueEngineersPerBranch[branch] ? uniqueEngineersPerBranch[branch].size : 0,
         totalCallAssigned: totalAssigned,
         newBreakdown,
         newInstallation,
