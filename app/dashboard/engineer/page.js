@@ -1,8 +1,7 @@
 "use client";
 import { useContext, useState, useEffect } from "react";
 import axios from "axios";
-import DataContext from "../../context/DataContext";
-import DataCompile from "./(components)/DataCompile";
+
 import DashboardTableView from "./(components)/DashboardTableView";
 
 const DashboardPage = () => {
@@ -16,7 +15,7 @@ const DashboardPage = () => {
       year: "2024",
     };
     try {
-      const response = await axios.post("/api/dashboard", payload);
+      const response = await axios.post("/api/dashEngg", payload);
       // const res = JSON.stringify(response.data);
       setData(response.data);
       // console.log(result);
