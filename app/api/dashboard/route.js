@@ -19,7 +19,7 @@ export async function POST(request) {
     const { year } = await request.json();
     const proData = await fetchProData();
     console.log("year:", year);
-    console.log("proData:", proData);
+    // console.log("proData:", proData);
     //.................................................................................
 
     // const uniqueEngineers = [...new Set(proData.map(item => item["engineer"]))];
@@ -114,7 +114,7 @@ export async function POST(request) {
     const finalDataWithHeader = [header, ...finalData];
 
     // Log the final data
-    console.log(finalDataWithHeader);
+    // console.log(finalDataWithHeader);
 
     // Return the final data
     return NextResponse.json(finalDataWithHeader, {
