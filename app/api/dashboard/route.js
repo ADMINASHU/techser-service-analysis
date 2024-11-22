@@ -21,7 +21,7 @@ export async function POST(request) {
     console.log("year:", year);
     // console.log("proData:", proData);
 
-    return NextResponse.json({ year }, {
+    return NextResponse.json( proData , {
       status: 200,
       headers: {
         "Content-Type": "application/json",
