@@ -27,8 +27,8 @@ const DashboardPage = () => {
   return (
     <div>
       <h1>Dashboard Page</h1>
-      {/* <DashboardTableView dta={data}/> */}
-      <div>{JSON.stringify(data)}</div>
+      <DashboardTableView data={data}/>
+      {/* <div>{JSON.stringify(data)}</div> */}
     </div>
   );
 };
