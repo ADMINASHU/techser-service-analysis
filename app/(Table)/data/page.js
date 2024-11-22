@@ -2,14 +2,14 @@
 
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import DataExtractor from "./(components)/dataExtractor";
+// import DataExtractor from "./(components)/dataExtractor";
 import TableView from "./(components)/TableView";
-import DataContext from "../../../context/DataContext";
+// import DataContext from "../../../context/DataContext";
 
 const DataPage = () => {
-  const [points, setPoints] = useState({});
+  // const [points, setPoints] = useState({});
   const [data, setData] = useState([]);
-  const {processedData, setProcessedData}= useContext(DataContext);
+  // const {processedData, setProcessedData}= useContext(DataContext);
 
   useEffect(() => {
     // fetchPoints();
@@ -19,7 +19,7 @@ const DataPage = () => {
   async function fetchData() {
     try {
       const response = await axios.get("/api/proData");
-      const result = JSON.stringify(response.data);
+      // const result = JSON.stringify(response.data);
       // console.log(result);
       setData(response.data);
     } catch (error) {
@@ -27,14 +27,14 @@ const DataPage = () => {
     }
   };
 
-  const fetchPoints = async () => {
-    try {
-      const response = await axios.get('/api/control');
-      setPoints(response.data);
-    } catch (error) {
-      console.error('Error fetching points:', error);
-    }
-  };
+  // const fetchPoints = async () => {
+  //   try {
+  //     const response = await axios.get('/api/control');
+  //     setPoints(response.data);
+  //   } catch (error) {
+  //     console.error('Error fetching points:', error);
+  //   }
+  // };
 
   const selectedColumns = [
     "complaintID",

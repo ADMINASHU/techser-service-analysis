@@ -6,16 +6,19 @@ import DataCompile from "./(components)/DataCompile";
 import DashboardTableView from "./(components)/DashboardTableView";
 
 const DashboardPage = () => {
-  // const { processedData } = useContext(DataContext);
-  const [result, setResult] = useState(null);
+  const [data, setData] = useState(null);
   useEffect(() => {
     fetchData();
   }, []);
   async function fetchData() {
+    const payload = {
+      // Add your payload data here
+      year: "2024",
+    };
     try {
-      const response = await axios.get("/api/proData");
-      const res = JSON.stringify(response.data);
-      setResult(res);
+      const response = await axios.post("/api/dashboard", payload);
+      // const res = JSON.stringify(response.data);
+      setData(response.data);
       // console.log(result);
     } catch (error) {
       throw new Error(error.message);
@@ -24,7 +27,8 @@ const DashboardPage = () => {
   return (
     <div>
       <h1>Dashboard Page</h1>
-      {JSON.stringify(result)}
+      {/* <DashboardTableView dta={data}/> */}
+      <div>{JSON.stringify(data)}</div>
     </div>
   );
 };
