@@ -2,11 +2,12 @@
 import { useEffect, useState } from "react";
 
 // Set the threshold for data freshness (e.g., 6 hours)
-const DATA_THRESHOLD_MS = 6 * 60 * 60 * 1000;
+const DATA_THRESHOLD_MS = 60 * 60 * 1000;
 
 const HomePage = () => {
   const [data, setData] = useState([]);
   const [date, setDate] = useState("");
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -19,6 +20,7 @@ const HomePage = () => {
         const age = now - cachedTimestamp;
         if (age < DATA_THRESHOLD_MS) {
           setData(cachedData);
+          setDate(cachedTimestamp);
           return;
         }
       }
@@ -36,15 +38,6 @@ const HomePage = () => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    if (data.length > 0) {
-      // Get the last row
-      const lastRow = data[data.length - 1];
-      const value = lastRow[0];
-      console.log(value);
-      setDate(value);
-    }
-  }, [data]);
 
   return (
     <div>
@@ -53,6 +46,7 @@ const HomePage = () => {
           <p>Fetched Data till Date:
           { data[data.length - 1]["regDate"]}
           </p>
+          <p>Refresh at: {Date(date)}</p>
         </div>
       ) : (
         <p>Loading...</p>
