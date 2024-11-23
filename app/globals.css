@@ -44,9 +44,12 @@ thead {
   position: sticky;
   top: 60;
   z-index: 1;
+  position: -webkit-sticky;
 }
 
 input:focus {
-  outline: none; /* Remove the default outline */
-  border: 1px solid transparent; /* Make the border transparent */
+  outline: none;
+  /* Remove the default outline */
+  border: 1px solid transparent;
+  /* Make the border transparent */
 }
