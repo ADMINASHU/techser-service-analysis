@@ -341,7 +341,7 @@ export async function GET() {
       }
     }).filter((row) => row.region !== "Region");
 
-    console.log(finalData);
+    // console.log(finalPointData);
     return NextResponse.json(finalPointData, {
       status: 200,
       headers: {
