@@ -129,8 +129,8 @@ return (
           onChange={handleFilterChange}
         >
           <option value="">Select Assigned To</option>
-          {filteredAssignedTo.map((assigned) => (
-            <option key={assigned} value={assigned}>
+          {filteredAssignedTo.map((assigned,i) => (
+            <option key={i} value={assigned}>
               {assigned}
             </option>
           ))}
@@ -139,16 +139,16 @@ return (
       <table border="1" cellPadding="5">
         <thead>
           <tr>
-            {selectedColumns.map((col) => (
-              <th key={col}>{col}</th>
+            {selectedColumns.map((col, index) => (
+              <th key={index}>{col}</th>
             ))}
           </tr>
         </thead>
         <tbody>
           {filteredData.map((row, rowIndex) => (
             <tr key={rowIndex}>
-              {selectedColumns.map((col) => (
-                <td key={col}>{row[col] !== undefined ? row[col] : ""}</td>
+              {selectedColumns.map((col, index) => (
+                <td key={index}>{row[col] !== undefined ? row[col] : ""}</td>
               ))}
             </tr>
           ))}

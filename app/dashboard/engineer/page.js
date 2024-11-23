@@ -1,36 +1,38 @@
 "use client";
-import { useContext, useState, useEffect } from "react";
-import axios from "axios";
+import { useState, useEffect } from "react";
 import styles from "../Dashboard.module.css";
-
 import DashboardTableView from "./(components)/DashboardTableView";
+import DataCompile from "./(components)/DataCompile";
 
 const DashboardPage = () => {
-  const [data, setData] = useState(null);
+  const [proData, setProData] = useState([]);
+  const [data, setData] = useState([]);
+
   useEffect(() => {
-    fetchData();
-  }, []);
-  async function fetchData() {
-    const payload = {
-      // Add your payload data here
-      year: "2024",
-    };
-    try {
-      const response = await axios.post("/api/dashEngg", payload);
-      // const res = JSON.stringify(response.data);
-      setData(response.data);
-      // console.log(result);
-    } catch (error) {
-      throw new Error(error.message);
+    const cachedData = retrieveDataFromLocalStorage("analysisData");
+    if (cachedData) {
+      setProData(cachedData);
     }
-  }
+  }, []);
+
+  const onDataProcessed = (data) => {
+    setData(data);
+  };
   return (
     <div className={styles.dash}>
       <h1>Dashboard Engineer</h1>
+      <DataCompile proData={proData} onDataProcessed={onDataProcessed} />
       <DashboardTableView data={data} />
       {/* <div>{JSON.stringify(data)}</div> */}
     </div>
   );
+};
+const retrieveDataFromLocalStorage = (key) => {
+  if (typeof window !== "undefined") {
+    const data = localStorage.getItem(key);
+    return data ? JSON.parse(data) : null;
+  }
+  return null;
 };
 
 export default DashboardPage;

@@ -1,22 +1,25 @@
-// app/api/data/route.js
 import connectToServiceEaseDB from "../../../lib/serviceDB";
 import { Data } from "../../models/Data";
 import Point from "../../models/Point";
 import { NextResponse } from "next/server";
-import { parse, differenceInHours, format } from "date-fns";
+import { parse, differenceInHours, format, isValid } from "date-fns";
 
 export async function GET() {
   try {
     const db = await connectToServiceEaseDB();
 
     if (!db) {
+      console.error("Database connection failed");
       return NextResponse.status(500).json({ message: "Error connecting to the database" });
     }
 
     const data = await Data.find({});
-
-    //................................................................
     const point = await Point.find({}).select("category data");
+    if (!point || !data) {
+      console.error("Error fetching points and data from database");
+      return NextResponse.status(500).json({ message: "Error fetching points and data from database" });
+    }
+
     const points = point.reduce((acc, item) => {
       acc[item.category] = item.data;
       return acc;
@@ -36,321 +39,115 @@ export async function GET() {
       "West Bengal",
     ];
 
-    if (!points || !data) {
-      return NextResponse.status(500).json({
-        message: "Error fetching points and data from database",
+    const parseDate = (dateStr) => {
+      const dates = dateStr.match(/\d{2}\.\w{3}\.\d{4} \d{2}:\d{2}/g);
+      return dates ? dates[dates.length - 1] : null;
+    };
+
+    const newData = data.reduce((acc, item) => {
+      const callDate = item.callDate;
+      const dateStr = item.callStartEndDate;
+      const lastDate = dateStr ? parseDate(dateStr) : null;
+      const parsedCallDate = callDate ? parse(callDate, "dd.MMM.yyyy HH:mm", new Date()) : null;
+      const parsedLastDate = lastDate ? parse(lastDate, "dd.MMM.yyyy HH:mm", new Date()) : new Date();
+
+      if (!isValid(parsedCallDate) || !isValid(parsedLastDate)) {
+        console.warn("Invalid date values found:", { parsedCallDate, parsedLastDate });
+        return acc;
+      }
+
+      const duration = parsedCallDate && parsedLastDate ? ((differenceInHours(parsedLastDate, parsedCallDate) / 24).toFixed(2)) + ' days' : '';
+
+      if (!duration || parseFloat(duration) < 0) return acc;
+
+      const complaintID = item.callNo.match(/B\d{2}[A-Z]\d+-\d+(?:-\d+)?/)?.[0] || '';
+      const originalComplaintID = complaintID.includes("-") ? complaintID.split("-").slice(0, 2).join("-") : complaintID;
+      const status = item.callNo.match(/(COMPLETED|NEW|IN PROCESS)/)?.[0] || '';
+      const natureOfComplaint = item.callNo.match(/(BREAKDOWN|INSTALLATION|PM)/)?.[0] || '';
+      const assignedTo = item.engineerName.match(/^[A-Za-z]+(?: [A-Za-z]+)?/)?.[0] !== "NOT ALLOCATED" ? item.engineerName.match(/^[A-Za-z]+(?: [A-Za-z]+)?/)?.[0] : '';
+      const regionPattern = new RegExp(regionList.map(region => region.toUpperCase()).join("|"), "g");
+      const region = item.regionBranch.toUpperCase().match(regionPattern)?.[0] || '';
+      const branch = item.regionBranch.toUpperCase().replace(regionPattern, "").trim() || region;
+      const month = parsedCallDate ? format(parsedCallDate, "MMM") : '';
+      const year = parsedCallDate ? format(parsedCallDate, "yyyy") : '';
+
+      acc.push({
+        regDate: callDate,
+        closedDate: lastDate || '',
+        duration,
+        complaintID,
+        origComplaintID: originalComplaintID,
+        natureOfComplaint,
+        status,
+        assignedTo,
+        region,
+        branch,
+        month,
+        year,
       });
-    }
+      return acc;
+    }, []);
 
-    // console.log(data);
-    // // Process the data to add the new columns with extracted date, duration, complaint ID, original complaint ID, nature of complaint, status, assigned to, region, branch, month, and year
-    const newData = data
-      .map((item, index) => {
-        if (index === 0) {
-          // Header row
-          return {
-          
-            regDate: "Call Register Date",
-            closedDate: "Closed Date",
-            duration: "Duration",
-            complaintID: "Complaint ID",
-            origComplaintID: "Original Complaint ID",
-            natureOfComplaint: "Nature of Complaint",
-            status: "Status",
-            assignedTo: "Assigned To",
-            region: "Region",
-            branch: "Branch",
-            month: "Month",
-            year: "Year",
-          };
-        } else {
-          // Data rows
-          const dateStr = item["callStartEndDate"]; // Column 5 (index 4)
-          const callDate = item["callDate"]; // Column 4 (index 3)
-          let lastDate = dateStr;
-          let duration = "";
-          let complaintID = "";
-          let originalComplaintID = "";
-          let status = "";
-          let natureOfComplaint = "";
-          let assignedTo = "";
-          let region = "";
-          let branch = "";
-          let month = "";
-          let year = "";
-
-          // Extract the last date
-          if (dateStr) {
-            const dates = dateStr.match(/\d{2}\.\w{3}\.\d{4} \d{2}:\d{2}/g);
-            if (dates && dates.length > 1) {
-              lastDate = dates[dates.length - 1];
-            }
-          }
-
-          // Convert dates to Date objects and calculate duration using date-fns
-          const currentTime = new Date();
-          let parsedLastDate = null;
-          if (lastDate) {
-            parsedLastDate = parse(lastDate, "dd.MMM.yyyy HH:mm", new Date());
-          }
-          const parsedCallDate = parse(callDate, "dd.MMM.yyyy HH:mm", new Date());
-
-          if (!parsedLastDate) {
-            parsedLastDate = currentTime;
-          }
-
-          if (!isNaN(parsedLastDate.getTime()) && !isNaN(parsedCallDate.getTime())) {
-            const diffInHours = differenceInHours(parsedLastDate, parsedCallDate);
-            const diffInDays = (diffInHours / 24).toFixed(2); // Convert hours to days with decimal values
-            if (diffInDays >= 0) {
-              duration = `${diffInDays} days`;
-            }
-          }
-
-          // Skip rows with negative duration
-          if (duration === "" || parseFloat(duration) < 0) {
-            return null;
-          }
-
-          // Extract Complaint ID using regex
-          const complaintIDMatch = item["callNo"].match(/B\d{2}[A-Z]\d+-\d+(?:-\d+)?/);
-          if (complaintIDMatch) {
-            complaintID = complaintIDMatch[0];
-          }
-
-          // Extract Original Complaint ID
-          if (complaintID.includes("-")) {
-            originalComplaintID = complaintID.split("-").slice(0, 2).join("-");
-          } else {
-            originalComplaintID = complaintID;
-          }
-
-          // Extract Status using regex
-          const statusMatch = item["callNo"].match(/(COMPLETED|NEW|IN PROCESS)/);
-          if (statusMatch) {
-            status = statusMatch[0];
-          }
-
-          // Extract Nature of Complaint using regex
-          const natureOfComplaintMatch = item["callNo"].match(/(BREAKDOWN|INSTALLATION|PM)/);
-          if (natureOfComplaintMatch) {
-            natureOfComplaint = natureOfComplaintMatch[0];
-          }
-
-          // Extract Assigned To using regex logic from column 6 (index 5)
-          const assignedToMatch = item["engineerName"].match(/^[A-Za-z]+(?: [A-Za-z]+)?/);
-          if (assignedToMatch && assignedToMatch[0] !== "NOT ALLOCATED") {
-            assignedTo = assignedToMatch[0];
-          }
-
-          // Extract Region using regex logic from column 12 (index 11)
-          const regionPattern = new RegExp(
-            regionList.map((region) => region.toUpperCase()).join("|"),
-            "g"
-          );
-          const regionMatch = item["regionBranch"].toUpperCase().match(regionPattern);
-          if (regionMatch) {
-            region = regionMatch[0];
-          }
-
-          // Extract remaining text in column 12 after the region extraction
-          const branchText = item["regionBranch"].toUpperCase().replace(regionPattern, "").trim();
-          if (!branchText) {
-            branch = region;
-          } else {
-            branch = branchText;
-          }
-          // Extract Month and Year from Call Date
-          if (parsedCallDate) {
-            month = format(parsedCallDate, "MMM");
-            year = format(parsedCallDate, "yyyy");
-          }
-
-          return {
-            
-            regDate: callDate,
-            closedDate: lastDate !== undefined ? lastDate : "",
-            duration: duration,
-            complaintID: complaintID,
-            origComplaintID: originalComplaintID,
-            natureOfComplaint: natureOfComplaint,
-            status: status,
-            assignedTo: assignedTo,
-            region: region,
-            branch: branch,
-            month: month,
-            year: year,
-          };
-        }
-      })
-      .filter((row) => row !== null); // Filter out rows with negative duration
-
-    // Step 2: Count occurrences of each "Original Complaint ID"
     const countMap = new Map();
-    newData.forEach((item, index) => {
-      if (index > 0) {
-        // Skip header row
-        const originalComplaintID = item["origComplaintID"]; // Assuming "Original Complaint ID" is in column 17 (index 17)
-        if (originalComplaintID) {
-          if (countMap.has(originalComplaintID)) {
-            countMap.set(originalComplaintID, countMap.get(originalComplaintID) + 1);
-          } else {
-            countMap.set(originalComplaintID, 1);
-          }
+    newData.forEach(item => {
+      if (item.origComplaintID) {
+        countMap.set(item.origComplaintID, (countMap.get(item.origComplaintID) || 0) + 1);
+      }
+    });
+
+    const finalData = newData.map(item => ({
+      ...item,
+      count: countMap.get(item.origComplaintID) || 0,
+    }));
+
+    const finalSData = finalData.map(item => {
+      const lastSegmentNumber = parseInt(item.complaintID.split("-")[2]) || 0;
+      const realStatus = (lastSegmentNumber < item.count - 1 && item.status === "COMPLETED") ? "IN PROCESS" : item.status;
+      return { ...item, realStatus };
+    });
+
+    const finalPendingData = finalSData.map(item => ({
+      ...item,
+      isPending: parseInt(item.complaintID.split("-")[2]) > 0 ? "TRUE" : "",
+    }));
+
+    const finalPointData = finalPendingData.map(item => {
+      const isPending = item.isPending;
+      const count = parseInt(item.complaintID.split("-")[2]) || 0;
+      const natureOfComplaint = item.natureOfComplaint;
+      const realStatus = item.realStatus;
+      const duration = parseFloat(item.duration);
+
+      const cPoint = isPending ? points[natureOfComplaint].eng.closed[Math.min(2, count - 1)] : points[natureOfComplaint].eng.closed[0];
+      const ePoint = realStatus === "NEW" ? points[natureOfComplaint].eng.new : realStatus === "IN PROCESS" ? points[natureOfComplaint].eng.pending : cPoint;
+      const freeDay = 3;
+
+      const bPoint = (() => {
+        if (natureOfComplaint === "BREAKDOWN" && duration > freeDay) {
+          return (duration - freeDay) * points[natureOfComplaint].branch[realStatus.toLowerCase()];
         }
-      }
-    });
-    // Step 3: Add the count in a new column
-    const finalData = newData.map((item, index) => {
-      if (index === 0) {
-        // Header row
-        return { ...item, count: "Count" };
-      } else {
-        // Data rows
-        const originalComplaintID = item["origComplaintID"];
-        const count = countMap.get(originalComplaintID) || 0;
-        return { ...item, count: count };
-      }
-    });
+        return points[natureOfComplaint].branch[realStatus.toLowerCase()] || 0;
+      })();
 
-    // Step 4: Add column "Real Status"
-    const finalSData = finalData.map((item, index) => {
-      if (index === 0) {
-        // Header row
-        return { ...item, realStatus: "Real Status" };
-      } else {
-        const complaintID = item["complaintID"];
-        const status = item["status"];
-        const count = item["count"] - 1;
-        // const lastSegment = complaintID.split("-").slice(-1)[1];
-        const regex = new RegExp("B\\d{2}[A-Z]\\d+-\\d+-(\\d+)?");
-        const match = regex.exec(complaintID);
-        // const lastSegmentNumber = parseInt(match[1]) || 0;
-        let realStatus = "";
-        const lastSegmentNumber = match ? match[1] : 0;
+      const rPoint = points[natureOfComplaint].region[realStatus.toLowerCase()] || 0;
 
-        if (lastSegmentNumber < count && status === "COMPLETED") {
-          realStatus = "IN PROCESS";
-        } else {
-          realStatus = status;
-        }
-        return { ...item, realStatus: realStatus };
-      }
-    });
+      return {
+        ...item,
+        cPoint,
+        ePoint,
+        bPoint: bPoint === 0 ? bPoint : bPoint.toFixed(2),
+        rPoint,
+      };
+    }).filter(row => row.region !== "Region");
 
-    // Step 5: Add column "Is Pending"
-    const finalPendingData = finalSData.map((item, index) => {
-      if (index === 0) {
-        // Header row
-        return { ...item, isPending: "Is Pending" };
-      } else {
-        const complaintID = item["complaintID"];
-        const regex = new RegExp("B\\d{2}[A-Z]\\d+-\\d+-(\\d+)?");
-        const match = regex.exec(complaintID);
-        const value = match ? parseInt(match[1]) > 0 : false;
-        const isPending = value ? "TRUE" : "";
-        return { ...item, isPending: isPending };
-      }
-    });
-    // Step 5: Add column "C Point"
-    const finalPointData = finalPendingData.map((item, index) => {
-      if (index === 0) {
-        // Header row
-        return {
-          ...item,
-          cPoint: "C Point",
-          ePoint: "E Point",
-          bPoint: "B Point",
-          rPoint: "R Point",
-        };
-      } else {
-        const isPending = item["isPending"];
-        const complaintID = item["complaintID"];
-        const regex = new RegExp("B\\d{2}[A-Z]\\d+-\\d+-(\\d+)?");
-        const match = regex.exec(complaintID);
-        const count = match ? parseInt(match[1]) : 0;
-        const natureOfComplaint = item["natureOfComplaint"];
-        const realStatus = item["realStatus"];
-        const duration = parseFloat(item["duration"]);
-        const cPoint = (() => {
-          if (isPending) {
-            if (count > 2) {
-              return points[natureOfComplaint].eng.closed[2];
-            } else {
-              return points[natureOfComplaint].eng.closed[1];
-            }
-          } else {
-            return points[natureOfComplaint].eng.closed[0];
-          }
-        })();
-
-        const ePoint = (() => {
-          if (realStatus === "NEW") {
-            return points[natureOfComplaint].eng.new;
-          } else if (realStatus === "IN PROCESS") {
-            return points[natureOfComplaint].eng.pending;
-          } else if (realStatus === "COMPLETED") {
-            return cPoint;
-          }
-        })();
-
-        const bPoint = (() => {
-          const freeDay = 3;
-          if (natureOfComplaint === "BREAKDOWN") {
-            if (realStatus === "NEW" && duration > freeDay) {
-              return (duration - freeDay) * points[natureOfComplaint].branch.new;
-            } else if (realStatus === "IN PROCESS" && duration > freeDay) {
-              return (duration - freeDay) * points[natureOfComplaint].branch.pending;
-            } else if (realStatus === "COMPLETED" && duration > freeDay) {
-              return (duration - freeDay) * points[natureOfComplaint].branch.closed;
-            } else {
-              return 0;
-            }
-          } else {
-            if (realStatus === "NEW") {
-              return points[natureOfComplaint].branch.new;
-            } else if (realStatus === "IN PROCESS") {
-              return points[natureOfComplaint].branch.pending;
-            } else if (realStatus === "COMPLETED") {
-              return points[natureOfComplaint].branch.closed;
-            } else {
-              return 0;
-            }
-          }
-        })();
-
-        const rPoint = (() => {
-          if (realStatus === "NEW") {
-            return points[natureOfComplaint].region.new;
-          } else if (realStatus === "IN PROCESS") {
-            return points[natureOfComplaint].region.pending;
-          } else if (realStatus === "COMPLETED") {
-            return points[natureOfComplaint].region.closed;
-          } else {
-            return 0;
-          }
-        })();
-
-        return {
-          ...item,
-          cPoint: cPoint,
-          ePoint: ePoint,
-          bPoint: bPoint === 0 ? bPoint : bPoint.toFixed(2),
-          rPoint: rPoint,
-        };
-      }
-    }).filter((row) => row.region !== "Region");
-
-    // console.log(finalPointData);
     return NextResponse.json(finalPointData, {
       status: 200,
       headers: {
         "Content-Type": "application/json",
       },
     });
-
-    //................................................................
   } catch (error) {
-    return NextResponse.json({ error }, { status: 500 });
+    console.error("Error in GET request:", error);
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
