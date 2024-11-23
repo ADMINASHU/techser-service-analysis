@@ -39,7 +39,7 @@ const DataPage = () => {
   const selectedColumns = [
     "complaintID",
     "natureOfComplaint",
-    "callDate",
+    "regDate",
     "closedDate",
     "duration",
     "realStatus",

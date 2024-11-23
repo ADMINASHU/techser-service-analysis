@@ -49,7 +49,8 @@ export async function GET() {
         if (index === 0) {
           // Header row
           return {
-            ...item,
+          
+            regDate: "Call Register Date",
             closedDate: "Closed Date",
             duration: "Duration",
             complaintID: "Complaint ID",
@@ -166,7 +167,8 @@ export async function GET() {
           }
 
           return {
-            ...item,
+            
+            regDate: callDate,
             closedDate: lastDate !== undefined ? lastDate : "",
             duration: duration,
             complaintID: complaintID,
@@ -338,6 +340,8 @@ export async function GET() {
         };
       }
     }).filter((row) => row.region !== "Region");
+
+    console.log(finalData);
     return NextResponse.json(finalPointData, {
       status: 200,
       headers: {
