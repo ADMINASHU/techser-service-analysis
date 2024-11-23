@@ -1,9 +1,8 @@
-import React from 'react'
+import React from "react";
+import styles from "../Dashboard.module.css";
 
 const page = () => {
-  return (
-    <div>Customer Dash Page</div>
-  )
-}
+  return <div className={styles.dash}>Customer Dash Page</div>;
+};
 
-export default page
+export default page;

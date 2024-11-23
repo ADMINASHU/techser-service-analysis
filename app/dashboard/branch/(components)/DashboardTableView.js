@@ -1,4 +1,5 @@
-import React from 'react';
+import React from "react";
+import styles from "../../Dashboard.module.css";
 
 const DashboardTableView = ({ data }) => {
   if (!data || data.length === 0) return <div>No data available</div>;
@@ -7,8 +8,19 @@ const DashboardTableView = ({ data }) => {
     <table>
       <thead>
         <tr>
-          {Object.values(data[0]).map((key) => (
-            <th key={key}>{key}</th>
+          <th colSpan={3}>Dashboard Branch</th>
+          <th colSpan={1}>Entry</th>
+          <th colSpan={3}>New</th>
+          <th colSpan={3}>Pending</th>
+          <th colSpan={3}>Closed in 1st Attempt</th>
+          <th colSpan={3}>Pending Call Closed</th>
+          <th colSpan={3}>Total</th>
+          <th colSpan={1}>Index</th>
+          <th colSpan={1}>Accuracy</th>
+        </tr>
+        <tr>
+          {Object.values(data[0]).map((key, index) => (
+            <th key={index}>{key}</th>
           ))}
         </tr>
       </thead>

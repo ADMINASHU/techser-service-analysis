@@ -18,6 +18,7 @@ export async function POST(request) {
   try {
     const { year } = await request.json();
     const proData = await fetchProData();
+
     console.log("year:", year);
     // console.log("proData:", proData);
     // Extract unique engineers per branch
@@ -92,9 +93,10 @@ export async function POST(request) {
       }
       return acc;
     }, {});
-
     // Map unique engineers to regions and branches
     const finalData = uniqueBranch.map((branch) => {
+      // console.log(uniqueEngineersPerBranch[branch]);
+
       const branchData = proData.find((item) => item.branch === branch);
       const totalAssigned = branchCallCount[branch];
       const newBreakdown = branchCallCount[`${branch}_newBreakdown`] || 0;
@@ -122,13 +124,14 @@ export async function POST(request) {
             totalVisits
           ).toFixed(2)
         : "0.00";
+        const point = parseFloat(bPoint) + parseFloat(ePoint);
       const index = totalVisits
         ? (((parseFloat(bPoint) + parseFloat(ePoint)) * 1000) / totalVisits).toFixed(0)
         : 0;
       return {
         region: branchData.region,
         branch,
-        engineer:  uniqueEngineersPerBranch[branch] ? uniqueEngineersPerBranch[branch].size : 0,
+        engineer: uniqueEngineersPerBranch[branch] ? uniqueEngineersPerBranch[branch].size : 0,
         totalCallAssigned: totalAssigned,
         newBreakdown,
         newInstallation,
@@ -145,7 +148,6 @@ export async function POST(request) {
         totalVisits,
         ePoint,
         bPoint,
-        rPoint,
         index,
         accuracy,
       };
@@ -155,30 +157,29 @@ export async function POST(request) {
     const header = {
       region: "Region",
       branch: "Branch",
-      engineer: "Engineer",
-      totalCallAssigned: "Total Call Assigned",
-      newBreakdown: "New Breakdown",
-      newInstallation: "New Installation",
-      newPM: "New PM",
-      pendBreakdown: "Pending Breakdown",
-      pendInstallation: "Pending Installation",
-      pendPM: "Pending PM",
-      closeBreakdown: "Closed Breakdown",
-      closeInstallation: "Closed Installation",
-      closePM: "Closed PM",
-      pCloseBreakdown: "P Closed Breakdown",
-      pCloseInstallation: "P Closed Installation",
-      pClosePM: "P Closed PM",
-      totalVisits: "Total Visits",
+      engineer: "Eng",
+      totalCallAssigned: "Call",
+      newBreakdown: "B",
+      newInstallation: "I",
+      newPM: "P",
+      pendBreakdown: "B",
+      pendInstallation: "I",
+      pendPM: "P",
+      closeBreakdown: "B",
+      closeInstallation: "I",
+      closePM: "P",
+      pCloseBreakdown: "B",
+      pCloseInstallation: "I",
+      pClosePM: "P",
+      totalVisits: "Visits",
       ePoint: "E Point",
       bPoint: "B Point",
-      rPoint: "R Point",
-      index: "Index",
-      accuracy: "Accuracy %",
+      index: "Score",
+      accuracy: "%",
     };
 
     // Combine header with data
-    const finalDataWithHeader = [header, ...finalData];
+    const finalDataWithHeader = [header, ...finalData].filter((row) => row.region !== "");
 
     // Log the final data
     // console.log(finalDataWithHeader);

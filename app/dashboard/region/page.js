@@ -1,6 +1,8 @@
 "use client";
 import { useContext, useState, useEffect } from "react";
 import axios from "axios";
+import styles from "../Dashboard.module.css";
+
 import DashboardTableView from "./(components)/DashboardTableView";
 
 const DashboardPage = () => {
@@ -23,9 +25,9 @@ const DashboardPage = () => {
     }
   }
   return (
-    <div>
+    <div className={styles.dash}>
       <h1>Dashboard Region</h1>
-      <DashboardTableView data={data}/>
+      <DashboardTableView data={data} />
       {/* <div>{JSON.stringify(data)}</div> */}
     </div>
   );
