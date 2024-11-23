@@ -16,11 +16,6 @@ export default function Navbar({ session }) {
   const profileName = session?.user?.email || "User"; // Replace with actual logic to get profile name
   const pathname = usePathname();
 
-  useEffect(() => {
-    console.log("path:");
-    console.log(pathname);
-  }, [pathname]);
-
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
   };
