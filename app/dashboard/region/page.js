@@ -1,8 +1,8 @@
 "use client";
 import { useContext, useState, useEffect } from "react";
 import axios from "axios";
-import DataContext from "../../context/DataContext";
-import DataCompile from "./(components)/DataCompile";
+import styles from "../Dashboard.module.css";
+
 import DashboardTableView from "./(components)/DashboardTableView";
 
 const DashboardPage = () => {
@@ -16,7 +16,7 @@ const DashboardPage = () => {
       year: "2024",
     };
     try {
-      const response = await axios.post("/api/dashboard", payload);
+      const response = await axios.post("/api/dashRegion", payload);
       // const res = JSON.stringify(response.data);
       setData(response.data);
       // console.log(result);
@@ -25,9 +25,9 @@ const DashboardPage = () => {
     }
   }
   return (
-    <div>
-      <h1>Dashboard Page</h1>
-      <DashboardTableView data={data}/>
+    <div className={styles.dash}>
+      <h1>Dashboard Region</h1>
+      <DashboardTableView data={data} />
       {/* <div>{JSON.stringify(data)}</div> */}
     </div>
   );

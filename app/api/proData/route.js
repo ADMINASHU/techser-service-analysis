@@ -337,7 +337,7 @@ export async function GET() {
           rPoint: rPoint,
         };
       }
-    });
+    }).filter((row) => row.region !== "Region");
     return NextResponse.json(finalPointData, {
       status: 200,
       headers: {
