@@ -1,4 +1,5 @@
-"use client"
+"use client";
+import Loading from "@/components/Loading";
 import { useEffect, useState } from "react";
 
 // Set the threshold for data freshness (e.g., 6 hours)
@@ -7,7 +8,6 @@ const DATA_THRESHOLD_MS = 60 * 60 * 1000;
 const HomePage = () => {
   const [data, setData] = useState([]);
   const [date, setDate] = useState("");
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,18 +38,36 @@ const HomePage = () => {
     fetchData();
   }, []);
 
-
   return (
-    <div>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "80vh",
+        margin: "40px",
+        textAlign: "center",
+        fontSize: "20px",
+        fontWeight: "bold",
+        padding: "20px",
+        zIndex:"2",
+        textShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)"
+      }}
+    >
       {data.length > 0 ? (
         <div>
-          <p>Fetched Data till Date:
-          { data[data.length - 1]["regDate"]}
-          </p>
-          <p>Refresh at: {Date(date)}</p>
+          <div
+            style={{
+              marginBottom: "50px",
+            }}
+          >
+            Fetched Data till Date: 
+            {data[data.length - 1]["regDate"]}
+          </div>
+          <div>Refresh at: {Date(date)}</div>
         </div>
       ) : (
-        <p>Loading...</p>
+        <Loading />
       )}
     </div>
   );
