@@ -1,17 +1,16 @@
 "use client";
 import Loading from "@/components/Loading";
-import { useEffect, useState } from "react";
+import { useEffect, useContext, useState } from "react";
+import DataContext from "../context/DataContext";
 
 // Set the threshold for data freshness (e.g., 6 hours)
-const DATA_THRESHOLD_MS = 60 * 60 * 1000;
 const CHUNK_SIZE = 500; // Number of rows to fetch per chunk
 
 const HomePage = () => {
-  const [data, setData] = useState([]);
+  const { processedData, setProcessedData } = useContext(DataContext);
   const [loading, setLoading] = useState(true);
   const [startRow, setStartRow] = useState(0);
   const [totalRows, setTotalRows] = useState(0);
-  const [date, setDate] = useState(null);
 
   const fetchDataChunk = async (startRow, chunkSize) => {
     try {
@@ -23,7 +22,25 @@ const HomePage = () => {
       if (result.error) {
         console.error('Error fetching data:', result.error);
       } else {
-        setData(prevData => [...prevData, ...result.finalPointData]);
+        setProcessedData(prevData => [...prevData, ...result.finalPointData.map(item => ({
+          complaintID: item.complaintID,
+          natureOfComplaint: item.natureOfComplaint,
+          regDate: item.regDate,
+          closedDate: item.closedDate,
+          duration: item.duration,
+          realStatus: item.realStatus,
+          assignedTo: item.assignedTo,
+          region: item.region,
+          branch: item.branch,
+          month: item.month,
+          year: item.year,
+          count:item.count,
+          isPending: item.isPending,
+          cPoint: parseFloat(item.cPoint),
+          ePoint: parseFloat(item.ePoint),
+          bPoint: parseFloat(item.bPoint),
+          rPoint: parseFloat(item.rPoint),
+        }))]);
         setTotalRows(result.totalRows);
       }
       setLoading(false);
@@ -35,20 +52,6 @@ const HomePage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const cachedData = retrieveDataFromLocalStorage("analysisData");
-      const cachedTimestamp = retrieveDataFromLocalStorage("analysisDataTimestamp");
-
-      if (cachedData && cachedTimestamp) {
-        const now = new Date().getTime();
-        const age = now - cachedTimestamp;
-        if (age < DATA_THRESHOLD_MS) {
-          setData(cachedData);
-          setDate(new Date(cachedTimestamp));
-          setLoading(false);
-          return;
-        }
-      }
-
       // Start fetching the first chunk
       await fetchDataChunk(0, CHUNK_SIZE);
     };
@@ -67,13 +70,6 @@ const HomePage = () => {
       return () => clearTimeout(timer);
     }
   }, [startRow, totalRows]);
-
-  useEffect(() => {
-    if (data.length > 0) {
-      storeDataInLocalStorage('analysisData', data);
-      storeDataInLocalStorage('analysisDataTimestamp', new Date().getTime());
-    }
-  }, [data]);
 
   return (
     <div
@@ -101,27 +97,12 @@ const HomePage = () => {
             }}
           >
             Fetched Data till Date: 
-            {data[data.length - 1]?.regDate}
+            {processedData[processedData.length - 1]?.regDate}
           </div>
-          <div>Refresh at: {date ? date.toLocaleString() : "N/A"}</div>
         </div>
       )}
     </div>
   );
-};
-
-const storeDataInLocalStorage = (key, data) => {
-  if (typeof window !== "undefined") {
-    localStorage.setItem(key, JSON.stringify(data));
-  }
-};
-
-const retrieveDataFromLocalStorage = (key) => {
-  if (typeof window !== "undefined") {
-    const data = localStorage.getItem(key);
-    return data ? JSON.parse(data) : null;
-  }
-  return null;
 };
 
 export default HomePage;

@@ -17,7 +17,7 @@ export async function GET(request) {
       return NextResponse.status(500).json({ message: "Error connecting to the database" });
     }
 
-    const point = await Point.find({}).select("category data");
+    const point = await Point.find({});
     const data = await Data.find({}).skip(startRow).limit(chunkSize);
     if (!point || !data) {
       console.error("Error fetching points and data from database");
@@ -197,6 +197,7 @@ export async function GET(request) {
       .filter((row) => row.region !== "Region");
 
     const totalRows = await Data.countDocuments();
+    console.log(finalPointData);
     
     return NextResponse.json({ finalPointData, totalRows }, {
       status: 200,

@@ -1,16 +1,18 @@
 import { useContext, useState, useEffect } from "react";
+import DataContext from "../../../../context/DataContext";
 
-const DataCompile = ({ proData, onDataProcessed }) => {
+const DataCompile = ({ onDataProcessed }) => {
+ const { processedData } = useContext(DataContext);
   const [processed, setProcessed] = useState(false);
   useEffect(() => {
-    if (proData.length > 0 && !processed) {
+    if (processedData.length > 0 && !processed) {
       const processData = async () => {
         const uniqueEngineers = [
-          ...new Set(proData.map((item) => item.assignedTo).filter(Boolean)),
+          ...new Set(processedData.map((item) => item.assignedTo).filter(Boolean)),
         ].sort();
 
-        // Count occurrences of each engineer in proData based on conditions
-        const engineerCallCount = proData.reduce((acc, item) => {
+        // Count occurrences of each engineer in processedData based on conditions
+        const engineerCallCount = processedData.reduce((acc, item) => {
           if (item.assignedTo) {
             acc[item.assignedTo] = (acc[item.assignedTo] || 0) + 1;
 
@@ -68,7 +70,7 @@ const DataCompile = ({ proData, onDataProcessed }) => {
 
         // Map unique engineers to regions and branches
         const finalData = uniqueEngineers.map((engineer) => {
-          const engineerData = proData.find((item) => item.assignedTo === engineer);
+          const engineerData = processedData.find((item) => item.assignedTo === engineer);
           const totalAssigned = engineerCallCount[engineer];
           const newBreakdown = engineerCallCount[`${engineer}_newBreakdown`] || 0;
           const newInstallation = engineerCallCount[`${engineer}_newInstallation`] || 0;
@@ -153,7 +155,7 @@ const DataCompile = ({ proData, onDataProcessed }) => {
       };
       processData();
     }
-  }, [proData, onDataProcessed]);
+  }, [processedData, onDataProcessed]);
   return null;
 };
 

@@ -1,12 +1,31 @@
 import React, { useState, useEffect } from "react";
 import styles from "./page.module.css";
 
-const TableView = ({ data, selectedColumns }) => {
+const TableView = ({ data }) => {
   // console.log("page: " +  JSON.stringify(data));
+  const selectedColumns = [
+    "complaintID",
+    "natureOfComplaint",
+    "regDate",
+    "closedDate",
+    "duration",
+    "realStatus",
+    "assignedTo",
+    "region",
+    "branch",
+    "month",
+    "year",
+    "count",
+    "isPending",
+    "cPoint",
+    "ePoint",
+    "bPoint",
+    "rPoint",
+  ];
 
   const [filters, setFilters] = useState({
-    year: "",
-    month: "",
+    year:  data[data.length - 1].year,
+    month:  data[data.length - 1].month,
     region: "ALL Region",
     branch: "",
     natureOfComplaint: "",
@@ -14,19 +33,17 @@ const TableView = ({ data, selectedColumns }) => {
     assignedTo: "",
   });
 
-  useEffect(() => {
-    // Set the default values for year and month based on the latest data row
-    if (data.length > 0) {
-      const latestRow = data[data.length - 1];
-      // const latestYear = latestRow ? latestRow[24] : "";
-      // const latestMonth = latestRow ? latestRow[23] : "";
-      setFilters((prevFilters) => ({
-        ...prevFilters,
-        year: latestRow.year || "",
-        month: latestRow.month || "",
-      }));
-    }
-  }, [data]);
+  // useEffect(() => {
+  //   // Set the default values for year and month based on the latest data row
+  //   if (data.length > 0) {
+  //     const latestRow = data[data.length - 1];
+  //     setFilters((prevFilters) => ({
+  //       ...prevFilters,
+  //       year: latestRow.year || "",
+  //       month: latestRow.month || "",
+  //     }));
+  //   }
+  // }, [data]);
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
@@ -55,16 +72,19 @@ const TableView = ({ data, selectedColumns }) => {
   });
 
   const filteredBranches =
-  !filters.region || filters.region === "ALL Region"
-    ? Array.from(new Set(data.map((row) => row.branch)))
-    : Array.from(new Set(data.filter((row) => row.region === filters.region).map((row) => row.branch)));
+    !filters.region || filters.region === "ALL Region"
+      ? Array.from(new Set(data.map((row) => row.branch)))
+      : Array.from(
+          new Set(data.filter((row) => row.region === filters.region).map((row) => row.branch))
+        );
 
-const filteredAssignedTo =
-  !filters.branch
+  const filteredAssignedTo = !filters.branch
     ? Array.from(new Set(data.map((row) => row.assignedTo)))
-    : Array.from(new Set(data.filter((row) => row.branch === filters.branch).map((row) => row.assignedTo)));
+    : Array.from(
+        new Set(data.filter((row) => row.branch === filters.branch).map((row) => row.assignedTo))
+      );
 
-return (
+  return (
     <div className={styles.page}>
       <div className={styles.filterContainer}>
         <select name="year" value={filters.year} onChange={handleFilterChange}>
@@ -91,11 +111,7 @@ return (
             </option>
           ))}
         </select>
-        <select
-          name="branch"
-          value={filters.branch}
-          onChange={handleFilterChange}
-        >
+        <select name="branch" value={filters.branch} onChange={handleFilterChange}>
           <option value="">Select Branch</option>
           {filteredBranches.map((branch) => (
             <option key={branch} value={branch}>
@@ -103,33 +119,28 @@ return (
             </option>
           ))}
         </select>
+
         <select
           name="natureOfComplaint"
           value={filters.natureOfComplaint}
           onChange={handleFilterChange}
         >
           <option value="">Select Nature of Complaint</option>
-          {Array.from(new Set(data.slice(1).map((row) => row.natureOfComplaint))).map((nature) => (
-            <option key={nature} value={nature}>
-              {nature}
-            </option>
-          ))}
+          <option value="BREAKDOWN">BREAKDOWN</option>
+          <option value="INSTALLATION">INSTALLATION</option>
+          <option value="PM">PM</option>
         </select>
+
         <select name="realStatus" value={filters.realStatus} onChange={handleFilterChange}>
-          <option value="">Select Real Status</option>
-          {Array.from(new Set(data.slice(1).map((row) => row.realStatus))).map((status) => (
-            <option key={status} value={status}>
-              {status}
-            </option>
-          ))}
+          <option value="">Select Status</option>
+          <option value="COMPLETED">COMPLETED</option>
+          <option value="IN PROCESS">IN PROCESS</option>
+          <option value="NEW">NEW</option>
         </select>
-        <select
-          name="assignedTo"
-          value={filters.assignedTo}
-          onChange={handleFilterChange}
-        >
+
+        <select name="assignedTo" value={filters.assignedTo} onChange={handleFilterChange}>
           <option value="">Select Assigned To</option>
-          {filteredAssignedTo.map((assigned,i) => (
+          {filteredAssignedTo.map((assigned, i) => (
             <option key={i} value={assigned}>
               {assigned}
             </option>
