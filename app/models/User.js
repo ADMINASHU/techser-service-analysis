@@ -1,21 +1,26 @@
 // app/models/User.js
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const UserSchema = new mongoose.Schema({
   userID: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
   },
   email: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
   },
   password: {
     type: String,
-    required: true
-  }
+    required: true,
+  },
+  isAdmin: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
 });
 
-export const User = mongoose.models?.User ?? mongoose.model('User', UserSchema);
+export const User = mongoose.models?.User ?? mongoose.model("User", UserSchema);

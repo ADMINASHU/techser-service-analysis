@@ -20,23 +20,24 @@ export const {
         password: {},
       },
       async authorize(credentials) {
-        if (credentials === null) return null;
+        if (!credentials) return null;
         try {
           await connectToServiceEaseDB();
-          // console.log(`Searching for user with ID: ${credentials.userID}`);
-          const user = await User.findOne({ userID: credentials?.userID });
-          console.log("from auth page: " + user);
-
-          if (user) {
-            const isValidPassword = bcrypt.compare(credentials.password, user.password);
-            if (isValidPassword) {
-              return user;
-            } else {
-              throw new Error("Invalid credentials");
-            }
-          } else {
-            return NextResponse.json({ error: "User not found" }, { status: 400 });
+          const user = await User.findOne({ userID: credentials.userID });
+          if (!user) {
+            throw new Error("User not found");
           }
+          const isValidPassword = await bcrypt.compare(credentials.password, user.password);
+          if (!isValidPassword) {
+            throw new Error("Invalid credentials");
+          }
+          // console.log("user data : " + JSON.stringify(user));
+          return {
+            id: user._id.toString(),
+            userID: user.userID,
+            email: user.email,
+            isAdmin: user.isAdmin, // Convert isAdmin to boolean
+          };
         } catch (error) {
           throw new Error(error);
         }
@@ -47,4 +48,30 @@ export const {
     strategy: "jwt",
   },
   secret: process.env.AUTH_SECRET,
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.userID = user.userID;
+        token.email = user.email;
+        token.isAdmin = user.isAdmin;
+        // Ensure isAdmin is defined
+      }
+      // console.log("JWT Callback - Token:", token);
+      // Console log the token
+      return token;
+    },
+    async session({ session, token }) {
+      if (token) {
+        session.user = {
+          id: token.id,
+          userID: token.userID,
+          email: token.email,
+          isAdmin: token.isAdmin, // Ensure isAdmin is defined
+        };
+      }
+      // console.log("Session Callback - Session:", session); // Console log the session
+      return session;
+    },
+  },
+  debug: true,
 });

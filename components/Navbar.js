@@ -10,6 +10,7 @@ import { usePathname } from "next/navigation";
 
 export default function Navbar({ session }) {
   const isAuthenticated = !!session?.user;
+  const isAdmin = session?.user?.isAdmin;
   const [menuOpen, setMenuOpen] = useState(false);
   const [dashOpen, setDashOpen] = useState(false);
 
@@ -40,7 +41,14 @@ export default function Navbar({ session }) {
           </Link> */}
           <Link
             href=""
-            className={pathname === "/dashboard/engineer" || pathname === "/dashboard/branch"|| pathname === "/dashboard/region" ||pathname === "/dashboard/customer" ? styles.activeLink : styles.nlink}
+            className={
+              pathname === "/dashboard/engineer" ||
+              pathname === "/dashboard/branch" ||
+              pathname === "/dashboard/region" ||
+              pathname === "/dashboard/customer"
+                ? styles.activeLink
+                : styles.nlink
+            }
             onClick={toggleDash}
           >
             Dashboard
@@ -48,12 +56,14 @@ export default function Navbar({ session }) {
           <Link href="/data" className={pathname === "/data" ? styles.activeLink : styles.nlink}>
             Data
           </Link>
-          <Link
-            href="/control"
-            className={pathname === "/control" ? styles.activeLink : styles.nlink}
-          >
-            Control
-          </Link>
+          {isAdmin && (
+            <Link
+              href="/control"
+              className={pathname === "/control" ? styles.activeLink : styles.nlink}
+            >
+              Control
+            </Link>
+          )}
         </div>
         <div className={styles.profileSection}>
           <Link href="/profile" className={styles.profileName}>
@@ -92,13 +102,15 @@ export default function Navbar({ session }) {
             >
               Data
             </Link>
-            <Link
-              href="/control"
-              className={pathname === "/control" ? styles.activeLink : ""}
-              onClick={toggleMenu}
-            >
-              Control
-            </Link>
+            {isAdmin && (
+              <Link
+                href="/control"
+                className={pathname === "/control" ? styles.activeLink : ""}
+                onClick={toggleMenu}
+              >
+                Control
+              </Link>
+            )}
             <Logout onClick={() => toggleMenu()} />
           </div>
         )}

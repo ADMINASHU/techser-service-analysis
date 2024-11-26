@@ -100,7 +100,7 @@ export async function GET(request) {
         status,
         assignedTo,
         region,
-        branch,
+        branch: branch==="BHOOPAL" ? "BHOPAL" : branch,
         month,
         year,
       });
