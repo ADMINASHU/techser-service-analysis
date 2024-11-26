@@ -13,6 +13,7 @@ export async function POST(request) {
     const data = await request.json();
     // console.log("from server register" +JSON.stringify(data));
     const { userID, email, password } = data;
+    const isAdmin = false;
 
     if (!userID || !email || !password) {
       return NextResponse.json({ error: "All fields are required" }, { status: 400 });
@@ -33,6 +34,7 @@ export async function POST(request) {
       userID,
       email,
       password: hashedPassword,
+      isAdmin,
     });
 
     await newUser.save();
