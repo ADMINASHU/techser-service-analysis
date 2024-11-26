@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 const DataCompile = ({ proData, onDataProcessed }) => {
   const [processed, setProcessed] = useState(false);
@@ -14,20 +14,16 @@ const DataCompile = ({ proData, onDataProcessed }) => {
           }
           return acc;
         }, {});
-        // const uniqueEngineersCountPerBranch = Object.keys(uniqueEngineersPerBranch).map((branch) => ({
-        //   branch,
-        //   uniqueEngineersCount: uniqueEngineersPerBranch[branch].size,
-        // }));
-        // console.log(uniqueEngineersCountPerBranch);
-        //.................................................................................
-        // Extract unique engineers
-        const uniqueBranch = [...new Set(proData.map((item) => item.branch).filter(Boolean))].sort();
-    
+
+        const uniqueBranch = [
+          ...new Set(proData.map((item) => item.branch).filter(Boolean)),
+        ].sort();
+
         // Count occurrences of each engineer in proData based on conditions
         const branchCallCount = proData.reduce((acc, item) => {
           if (item.branch) {
             acc[item.branch] = (acc[item.branch] || 0) + 1;
-    
+
             if (item.realStatus === "NEW") {
               if (item.natureOfComplaint === "BREAKDOWN") {
                 acc[`${item.branch}_newBreakdown`] = (acc[`${item.branch}_newBreakdown`] || 0) + 1;
@@ -39,7 +35,8 @@ const DataCompile = ({ proData, onDataProcessed }) => {
               }
             } else if (item.realStatus === "IN PROCESS") {
               if (item.natureOfComplaint === "BREAKDOWN") {
-                acc[`${item.branch}_pendBreakdown`] = (acc[`${item.branch}_pendBreakdown`] || 0) + 1;
+                acc[`${item.branch}_pendBreakdown`] =
+                  (acc[`${item.branch}_pendBreakdown`] || 0) + 1;
               } else if (item.natureOfComplaint === "INSTALLATION") {
                 acc[`${item.branch}_pendInstallation`] =
                   (acc[`${item.branch}_pendInstallation`] || 0) + 1;
@@ -48,7 +45,8 @@ const DataCompile = ({ proData, onDataProcessed }) => {
               }
             } else if (item.realStatus === "COMPLETED" && item.isPending === "") {
               if (item.natureOfComplaint === "BREAKDOWN") {
-                acc[`${item.branch}_closeBreakdown`] = (acc[`${item.branch}_closeBreakdown`] || 0) + 1;
+                acc[`${item.branch}_closeBreakdown`] =
+                  (acc[`${item.branch}_closeBreakdown`] || 0) + 1;
               } else if (item.natureOfComplaint === "INSTALLATION") {
                 acc[`${item.branch}_closeInstallation`] =
                   (acc[`${item.branch}_closeInstallation`] || 0) + 1;
@@ -79,7 +77,7 @@ const DataCompile = ({ proData, onDataProcessed }) => {
         // Map unique engineers to regions and branches
         const finalData = uniqueBranch.map((branch) => {
           // console.log(uniqueEngineersPerBranch[branch]);
-    
+
           const branchData = proData.find((item) => item.branch === branch);
           const totalAssigned = branchCallCount[branch];
           const newBreakdown = branchCallCount[`${branch}_newBreakdown`] || 0;
@@ -107,7 +105,7 @@ const DataCompile = ({ proData, onDataProcessed }) => {
                 totalVisits
               ).toFixed(2)
             : "0.00";
-            const point = parseFloat(bPoint) + parseFloat(ePoint);
+          const point = parseFloat(bPoint) + parseFloat(ePoint);
           const index = totalVisits
             ? (((parseFloat(bPoint) + parseFloat(ePoint)) * 1000) / totalVisits).toFixed(0)
             : 0;
@@ -135,7 +133,7 @@ const DataCompile = ({ proData, onDataProcessed }) => {
             accuracy,
           };
         });
-    
+
         // Create header row
         const header = {
           region: "Region",
@@ -160,10 +158,10 @@ const DataCompile = ({ proData, onDataProcessed }) => {
           index: "Score",
           accuracy: "%",
         };
-    
+
         // Combine header with data
         const finalDataWithHeader = [header, ...finalData].filter((row) => row.region !== "");
-            onDataProcessed(finalDataWithHeader);
+        onDataProcessed(finalDataWithHeader);
 
         setProcessed(true);
       };

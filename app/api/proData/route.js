@@ -4,7 +4,11 @@ import Point from "../../models/Point";
 import { NextResponse } from "next/server";
 import { parse, differenceInHours, format, isValid } from "date-fns";
 
-export async function GET() {
+export async function GET(request) {
+  const { searchParams } = new URL(request.url);
+  const startRow = parseInt(searchParams.get('startRow')) || 0;
+  const chunkSize = parseInt(searchParams.get('chunkSize')) || 100;
+
   try {
     const db = await connectToServiceEaseDB();
 
@@ -13,8 +17,8 @@ export async function GET() {
       return NextResponse.status(500).json({ message: "Error connecting to the database" });
     }
 
-    const point = await Point.find({}).select("category data");
-    const data = await Data.find({});
+    const point = await Point.find({});
+    const data = await Data.find({}).skip(startRow).limit(chunkSize);
     if (!point || !data) {
       console.error("Error fetching points and data from database");
       return NextResponse.status(500).json({
@@ -192,7 +196,10 @@ export async function GET() {
       })
       .filter((row) => row.region !== "Region");
 
-    return NextResponse.json(finalPointData, {
+    const totalRows = await Data.countDocuments();
+    // console.log(finalPointData);
+    
+    return NextResponse.json({ finalPointData, totalRows }, {
       status: 200,
       headers: {
         "Content-Type": "application/json",

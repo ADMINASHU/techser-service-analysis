@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from "react";
+import {  useState, useEffect } from "react";
 
 const DataCompile = ({ proData, onDataProcessed }) => {
   const [processed, setProcessed] = useState(false);
@@ -23,13 +23,7 @@ const DataCompile = ({ proData, onDataProcessed }) => {
           }
           return acc;
         }, {});
-        // const uniqueEngineersCountPerBranch = Object.keys(uniqueEngineersPerBranch).map((branch) => ({
-        //   branch,
-        //   uniqueEngineersCount: uniqueEngineersPerBranch[branch].size,
-        // }));
-        // console.log(uniqueEngineersCountPerBranch);
-        //.................................................................................
-        // Extract unique engineers
+     
         const uniqueRegion = [
           ...new Set(proData.map((item) => item.region).filter(Boolean)),
         ].sort();

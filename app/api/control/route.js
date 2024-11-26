@@ -11,7 +11,7 @@ export async function GET() {
       return NextResponse.json({ message: "Error connecting to the database" }, { status: 500 });
     }
 
-    const points = await Point.find({}).select("category data");
+    const points = await Point.find({});
     const data = points.reduce((acc, item) => {
       acc[item.category] = item.data;
       return acc;

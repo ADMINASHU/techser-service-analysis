@@ -12,32 +12,17 @@ const Control = () => {
 
   useEffect(() => {
     fetchPoints();
-    updateData();
   }, []);
 
   const fetchPoints = async () => {
     try {
       const response = await axios.get("/api/control");
       setPoints(response.data);
-      updateData();
     } catch (error) {
       console.error("Error fetching points:", error);
     }
   };
-  const updateData = async () => {
-    try {
-      // Fetch new data if no cached data or if cached data is outdated
-      const response = await fetch("/api/proData");
-      const result = await response.json();
-      if (response.ok) {
-        //  setData(result);
-        storeDataInLocalStorage("analysisData", result);
-        storeDataInLocalStorage("analysisDataTimestamp", new Date().getTime());
-      }
-    } catch (e) {
-      console.log(e.errors);
-    }
-  };
+
   const handleSave = async () => {
     try {
       const response = await axios.put("/api/control", points);

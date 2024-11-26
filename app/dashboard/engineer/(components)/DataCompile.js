@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 const DataCompile = ({ proData, onDataProcessed }) => {
   const [processed, setProcessed] = useState(false);
