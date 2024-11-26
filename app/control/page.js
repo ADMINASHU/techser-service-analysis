@@ -18,7 +18,6 @@ const Control = () => {
     try {
       const response = await axios.get("/api/control");
       setPoints(response.data);
-      updateData();
     } catch (error) {
       console.error("Error fetching points:", error);
     }

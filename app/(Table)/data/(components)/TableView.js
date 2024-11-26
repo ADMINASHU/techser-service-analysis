@@ -33,17 +33,6 @@ const TableView = ({ data }) => {
     assignedTo: "",
   });
 
-  // useEffect(() => {
-  //   // Set the default values for year and month based on the latest data row
-  //   if (data.length > 0) {
-  //     const latestRow = data[data.length - 1];
-  //     setFilters((prevFilters) => ({
-  //       ...prevFilters,
-  //       year: latestRow.year || "",
-  //       month: latestRow.month || "",
-  //     }));
-  //   }
-  // }, [data]);
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;

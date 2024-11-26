@@ -197,7 +197,7 @@ export async function GET(request) {
       .filter((row) => row.region !== "Region");
 
     const totalRows = await Data.countDocuments();
-    console.log(finalPointData);
+    // console.log(finalPointData);
     
     return NextResponse.json({ finalPointData, totalRows }, {
       status: 200,
