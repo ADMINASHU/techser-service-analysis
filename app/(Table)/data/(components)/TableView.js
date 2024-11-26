@@ -24,8 +24,8 @@ const TableView = ({ data }) => {
   ];
 
   const [filters, setFilters] = useState({
-    year:  data[data.length - 1].year,
-    month:  data[data.length - 1].month,
+    year:  data[data.length - 1]?.year,
+    month:  data[data.length - 1]?.month,
     region: "ALL Region",
     branch: "",
     natureOfComplaint: "",

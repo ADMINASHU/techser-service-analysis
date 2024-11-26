@@ -31,7 +31,7 @@ export const {
           if (!isValidPassword) {
             throw new Error("Invalid credentials");
           }
-          console.log("user data : " + JSON.stringify(user));
+          // console.log("user data : " + JSON.stringify(user));
           return {
             id: user._id.toString(),
             userID: user.userID,
