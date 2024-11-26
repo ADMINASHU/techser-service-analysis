@@ -22,7 +22,6 @@ export async function middleware(request) {
   }
 
   if (isAdminRoute && !isAdmin) {
-    // Redirect to root if trying to access admin route without admin privileges
     return NextResponse.redirect(new URL(ROOT, nextUrl));
   }
 
