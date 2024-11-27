@@ -69,8 +69,7 @@ const Profile = ({ LoggedUserID }) => {
 
   return (
     <div className={styles.page}>
-        <h1 className={styles.title}>Profile Page</h1>
-
+      <h1 className={styles.title}>Profile Page</h1>
       <div className={styles.container}>
         <div className={styles.fContainer}>
           {editMode ? (
@@ -91,10 +90,9 @@ const Profile = ({ LoggedUserID }) => {
           <div className={styles.field}>
             <input
               className={styles.input}
-              type="button"
-              name="verified"
-              value={formData.verified ? "Verified" : "Unverified"}
+              value={formData.verified ? "Verified" : "Not Verified"}
               disabled
+              readOnly
             />
           </div>
 

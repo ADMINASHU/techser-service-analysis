@@ -14,7 +14,7 @@ export default function Navbar({ session }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [dashOpen, setDashOpen] = useState(false);
 
-  const profileName = session?.user?.email || "User"; // Replace with actual logic to get profile name
+  const profileName = session?.user?.userID || "User" // Replace with actual logic to get profile name
   const pathname = usePathname();
 
   const toggleMenu = () => {

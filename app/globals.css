@@ -41,10 +41,10 @@ th {
 }
 
 thead {
-  position: sticky;
-  position: -webkit-sticky;
+  /* position: sticky; */
+  /* position: -webkit-sticky; */
   top: 60;
-  z-index: 1;
+  /* z-index: 1; */
 }
 
 input:focus {
