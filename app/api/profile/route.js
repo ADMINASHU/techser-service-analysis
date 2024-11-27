@@ -3,8 +3,19 @@ import { User } from "../../models/User";
 import connectToServiceEaseDB from "../../../lib/serviceDB";
 
 export async function PUT(request) {
-  const { userID, name, image, designation, region, branch, mobileNo, email, level } =
-    await request.json();
+  const {
+    userID,
+    fName,
+    eName,
+    image,
+    designation,
+    region,
+    branch,
+    mobileNo,
+    email,
+    level,
+    verified,
+  } = await request.json();
 
   try {
     await connectToServiceEaseDB();
@@ -13,7 +24,8 @@ export async function PUT(request) {
       { userID },
       {
         $set: {
-          name,
+          fName,
+          eName,
           image,
           designation,
           region,
@@ -21,7 +33,7 @@ export async function PUT(request) {
           mobileNo,
           email,
           level,
-          verified: false, // Reset verified to false on edit
+          verified, // Reset verified to false on edit
         },
       },
       { new: true }
@@ -38,8 +50,8 @@ export async function PUT(request) {
 }
 export async function POST(request) {
   try {
-  const { userID } = await request.json();
-  console.log("From profile/ post : "+userID);
+    const { userID } = await request.json();
+    console.log("From profile/ post : " + userID);
     await connectToServiceEaseDB();
     const user = await User.findOne({ userID });
     if (!user) {
@@ -47,7 +59,6 @@ export async function POST(request) {
     }
 
     return NextResponse.json({ user }, { status: 200 });
-
   } catch (error) {
     return NextResponse.json({ message: error.message }, { status: 500 });
   }

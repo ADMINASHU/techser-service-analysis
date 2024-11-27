@@ -22,7 +22,7 @@ const UserSchema = new mongoose.Schema({
     default: false,
   },
   level: { type: Number, required: true, default: 4 },
-  verified: { type: Boolean,required: true, default: false },
+  verified: { type: Boolean, required: true, default: false },
   fName: { type: String },
   eName: { type: String },
   image: { type: String },

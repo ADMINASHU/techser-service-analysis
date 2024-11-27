@@ -11,7 +11,8 @@ const ProfilePage = async () => {
 
 
   return (
-    <div>
+    <div style={{height:"80vh", display:"flex"}}>
+
       <Profile LoggedUserID= {LoggedUserID}/>  
     </div>
   );
