@@ -88,12 +88,7 @@ const Profile = ({ LoggedUserID }) => {
           )}
 
           <div className={styles.field}>
-            <input
-              className={styles.input}
-              value={formData.verified ? "Verified" : "Not Verified"}
-              disabled
-              readOnly
-            />
+            <div className={styles.input} style={formData.verified ? {backgroundColor:"green", color: "white", textAlign: "center"}:{backgroundColor:"red", color: "white", textAlign: "center"}}>{formData.verified ? "Verified" : "Not Verified"}</div>
           </div>
 
           <div className={styles.field}>

@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -11,16 +11,16 @@ const Users = ({ LoggedUserLevel }) => {
   const [loading, setLoading] = useState(true);
   const [editFormVisible, setEditFormVisible] = useState(false);
   const [formData, setFormData] = useState({
-    userID: '',
-    fName: '',
-    eName: '',
-    email: '',
-    mobileNo: '',
-    designation: '',
-    branch: '',
-    region: '',
-    level: '',
-    verified: false
+    userID: "",
+    fName: "",
+    eName: "",
+    email: "",
+    mobileNo: "",
+    designation: "",
+    branch: "",
+    region: "",
+    level: "",
+    verified: false,
   });
 
   useEffect(() => {
@@ -109,7 +109,21 @@ const Users = ({ LoggedUserLevel }) => {
                 <div className={styles.field}>
                   <button
                     className={styles.input}
-                    style={{ cursor: "pointer" }}
+                    style={
+                      formData.verified
+                        ? {
+                            cursor: "pointer",
+                            backgroundColor: "green",
+                            color: "white",
+                            textAlign: "center",
+                          }
+                        : {
+                            cursor: "pointer",
+                            backgroundColor: "red",
+                            color: "white",
+                            textAlign: "center",
+                          }
+                    }
                     onClick={() => setFormData({ ...formData, verified: !formData.verified })}
                   >
                     {formData.verified ? "Verified" : "Not Verified"}
