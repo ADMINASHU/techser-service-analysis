@@ -57,12 +57,20 @@ export default function Navbar({ session }) {
             Data
           </Link>
           {isAdmin && (
-            <Link
-              href="/control"
-              className={pathname === "/control" ? styles.activeLink : styles.nlink}
-            >
-              Control
-            </Link>
+            <>
+              <Link
+                href="/users"
+                className={pathname === "/users" ? styles.activeLink : styles.nlink}
+              >
+                Users
+              </Link>
+              <Link
+                href="/control"
+                className={pathname === "/control" ? styles.activeLink : styles.nlink}
+              >
+                Control
+              </Link>
+            </>
           )}
         </div>
         <div className={styles.profileSection}>

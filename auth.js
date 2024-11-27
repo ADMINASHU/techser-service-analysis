@@ -36,7 +36,9 @@ export const {
             id: user._id.toString(),
             userID: user.userID,
             email: user.email,
-            isAdmin: user.isAdmin, // Convert isAdmin to boolean
+            isAdmin: user.isAdmin,
+            level: user.level,
+            verified: user.verified,
           };
         } catch (error) {
           throw new Error(error);
@@ -54,6 +56,8 @@ export const {
         token.userID = user.userID;
         token.email = user.email;
         token.isAdmin = user.isAdmin;
+        token.level = user.level;
+        token.verified = user.verified;
         // Ensure isAdmin is defined
       }
       // console.log("JWT Callback - Token:", token);
@@ -67,6 +71,8 @@ export const {
           userID: token.userID,
           email: token.email,
           isAdmin: token.isAdmin, // Ensure isAdmin is defined
+          level: token.level, // Ensure isAdmin is defined
+          verified: token.verified,
         };
       }
       // console.log("Session Callback - Session:", session); // Console log the session
