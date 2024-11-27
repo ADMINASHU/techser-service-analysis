@@ -8,26 +8,40 @@ import Image from "next/image";
 
 const Profile = ({ LoggedUserID }) => {
   const [profile, setProfile] = useState({});
+  const [image, setImage] = useState(null);
   const [editMode, setEditMode] = useState(false);
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    fName: "",
+    eName: "",
+    email: "",
+    image: "",
+    designation: "",
+    region: "",
+    branch: "",
+    mobileNo: "",
+    level: "",
+    userID: "",
+    verified: false,
+  });
+
   useEffect(() => {
     fetchProfile();
   }, []);
+
   useEffect(() => {
     if (profile) {
       setFormData({
-        ...formData,
-        fName: profile.fName,
-        eName: profile.eName,
-        email: profile.email,
-        image: profile.image,
-        designation: profile.designation,
-        region: profile.region,
-        branch: profile.branch,
-        mobileNo: profile.mobileNo,
-        level: profile.level,
-        userID: profile.userID,
-        verified: profile.verified,
+        fName: profile.fName || "",
+        eName: profile.eName || "",
+        email: profile.email || "",
+        image: profile.image || "",
+        designation: profile.designation || "",
+        region: profile.region || "",
+        branch: profile.branch || "",
+        mobileNo: profile.mobileNo || "",
+        level: profile.level || "",
+        userID: profile.userID || "",
+        verified: profile.verified || false,
       });
     }
   }, [profile]);
@@ -44,6 +58,14 @@ const Profile = ({ LoggedUserID }) => {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleUpload = async () => {
+    setFormData({ ...formData, image: `${LoggedUserID}_${image.name}` });
+    const form = new FormData();
+    form.set("file", image);
+    form.set("id", LoggedUserID);
+    await axios.post("/api/avatar", form);
   };
 
   const handleSave = async () => {
@@ -76,19 +98,44 @@ const Profile = ({ LoggedUserID }) => {
             <div className={styles.field}>
               <input
                 className={styles.input}
-                type="text"
-                name="image"
-                value={formData.image}
-                onChange={handleChange}
+                type="file"
+                name="file"
+                onChange={(e) => setImage(e.target.files?.[0])}
                 disabled={!editMode}
               />
+              <button
+                style={{
+                  backgroundColor: "#dc3545",
+                  color: "white",
+                  marginTop: "20px",
+                  padding: "10px 10px",
+                  border: "none",
+                  borderRadius: "4px",
+                  cursor: "pointer",
+                  fontSize: "10px",
+                  width: "100%",
+                }}
+                onClick={handleUpload}
+                disabled={!editMode}
+              >
+                Upload
+              </button>
             </div>
           ) : (
-            <Image height={140} width={140} src="/user.png" alt="/user.png" />
+            <Image height={140} width={140} src={`/${profile.image}`} alt="image" />
           )}
 
           <div className={styles.field}>
-            <div className={styles.input} style={formData.verified ? {backgroundColor:"green", color: "white", textAlign: "center"}:{backgroundColor:"red", color: "white", textAlign: "center"}}>{formData.verified ? "Verified" : "Blocked"}</div>
+            <div
+              className={styles.input}
+              style={
+                formData.verified
+                  ? { backgroundColor: "green", color: "white", textAlign: "center" }
+                  : { backgroundColor: "red", color: "white", textAlign: "center" }
+              }
+            >
+              {formData.verified ? "Verified" : "Blocked"}
+            </div>
           </div>
 
           <div className={styles.field}>
