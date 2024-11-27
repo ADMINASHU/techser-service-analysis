@@ -84,11 +84,11 @@ const Profile = ({ LoggedUserID }) => {
               />
             </div>
           ) : (
-            <Image height={170} width={170} src="/user.png" alt="/user.png" />
+            <Image height={140} width={140} src="/user.png" alt="/user.png" />
           )}
 
           <div className={styles.field}>
-            <div className={styles.input} style={formData.verified ? {backgroundColor:"green", color: "white", textAlign: "center"}:{backgroundColor:"red", color: "white", textAlign: "center"}}>{formData.verified ? "Verified" : "Not Verified"}</div>
+            <div className={styles.input} style={formData.verified ? {backgroundColor:"green", color: "white", textAlign: "center"}:{backgroundColor:"red", color: "white", textAlign: "center"}}>{formData.verified ? "Verified" : "Blocked"}</div>
           </div>
 
           <div className={styles.field}>
