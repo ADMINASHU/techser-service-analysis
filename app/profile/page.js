@@ -1,19 +1,19 @@
 
 import React from "react";
 import { auth } from "@/auth";
+import Profile from "@/components/Profile";
 
 
 
 const ProfilePage = async () => {
   const session = await auth();
-  // console.log(session);
+  const LoggedUserID = session?.user.userID;
 
 
   return (
-    <div>
-      <div>Profile Page</div>
-      {/* <div>{session?.user.email}</div> */}
-      <div>{JSON.stringify(session)}</div>
+    <div style={{height:"80vh", display:"flex"}}>
+
+      <Profile LoggedUserID= {LoggedUserID}/>  
     </div>
   );
 };

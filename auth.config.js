@@ -9,6 +9,8 @@ export const authConfig = {
         token.userID = user.userID;
         token.email = user.email;
         token.isAdmin = user.isAdmin;
+        token.level = user.level;
+        token.verified = user.verified;
         // Ensure isAdmin is defined
       }
       // console.log("JWT Callback - Token:", token);
@@ -22,6 +24,8 @@ export const authConfig = {
           userID: token.userID,
           email: token.email,
           isAdmin: token.isAdmin, // Ensure isAdmin is defined
+          level: token.level, // Ensure isAdmin is defined
+          verified: token.verified, // Ensure isAdmin is defined
         };
       }
       // console.log("Session Callback - Session:", session); // Console log the session

@@ -1,0 +1,112 @@
+ .page {
+
+   padding: 20px;
+   max-width: 900px;
+   margin: auto;
+   background-color: #f9f9f9;
+   /* background-color: #16d539; */
+   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+   border-radius: 10px;
+ }
+
+ .container {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   padding: 20px;
+   max-width: 1000px;
+   margin: auto;
+   border-radius: 10px;
+ }
+
+ .fContainer {
+ 
+   align-items: center;
+   justify-content: center;
+   display: flex;
+   flex-direction: column;
+ 
+ }
+
+ .sContainer {
+  
+ }
+
+ .tContainer {
+ 
+ }
+
+ .field {
+   /* display: flex; */
+   align-items: center;
+   padding: 10px;
+   width: 100%;
+ }
+
+ .label {
+   font-weight: bold;
+   /* margin-bottom: 10px; */
+   flex: 1;
+   text-align: right;
+ }
+
+ .input {
+   width: 100%;
+   padding: 8px;
+   border: 1px solid #ccc;
+   border-radius: 4px;
+   flex: 2;
+ }
+
+ .buttonContainer {
+   padding-right: 20px;
+   /* background-color: #e11616; */
+   display: flex;
+   justify-content: flex-end;
+ }
+
+ .button {
+   margin: 10px;
+   padding: 10px 20px;
+   border: none;
+   border-radius: 4px;
+   cursor: pointer;
+   font-size: 16px;
+ }
+
+ .editButton {
+   background-color: #0070f3;
+   color: white;
+ }
+
+ .saveButton {
+   background-color: #28a745;
+   color: white;
+ }
+
+ .cancelButton {
+   background-color: #dc3545;
+   color: white;
+ }
+
+ .title {
+   margin-bottom: 20px;
+   font-size: 24px;
+ }
+
+ @media (max-width: 600px) {
+   .field {
+     flex-direction: column;
+     align-items: flex-start;
+   }
+
+   .label {
+     text-align: left;
+     margin-bottom: 5px;
+   }
+
+   .input {
+     width: calc(100% - 16px);
+     /* Adjust for padding */
+   }
+ }

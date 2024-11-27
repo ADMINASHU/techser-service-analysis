@@ -21,6 +21,15 @@ const UserSchema = new mongoose.Schema({
     required: true,
     default: false,
   },
+  level: { type: Number, required: true, default: 4 },
+  verified: { type: Boolean, required: true, default: false },
+  fName: { type: String },
+  eName: { type: String },
+  image: { type: String },
+  designation: { type: String },
+  region: { type: String },
+  branch: { type: String },
+  mobileNo: { type: String },
 });
 
 export const User = mongoose.models?.User ?? mongoose.model("User", UserSchema);
