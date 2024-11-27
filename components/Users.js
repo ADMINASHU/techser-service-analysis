@@ -15,6 +15,7 @@ const Users = ({ LoggedUserLevel }) => {
     fName: "",
     eName: "",
     email: "",
+    image:"",
     mobileNo: "",
     designation: "",
     branch: "",
@@ -105,7 +106,7 @@ const Users = ({ LoggedUserLevel }) => {
           <div className={styles.page}>
             <div className={styles.eContainer}>
               <div className={styles.fContainer}>
-                <Image height={170} width={170} src="/user.png" alt="/user.png" />
+                <Image height={140} width={140} src={`/${formData.image}`}  alt="/user.png" />
                 <div className={styles.field}>
                   <button
                     className={styles.input}
@@ -126,7 +127,7 @@ const Users = ({ LoggedUserLevel }) => {
                     }
                     onClick={() => setFormData({ ...formData, verified: !formData.verified })}
                   >
-                    {formData.verified ? "Verified" : "Not Verified"}
+                    {formData.verified ? "Verified" : " Blocked"}
                   </button>
                 </div>
 
@@ -260,14 +261,14 @@ const Users = ({ LoggedUserLevel }) => {
             <tr key={user.userID}>
               <td>{index + 1}</td>
               <td>{user.userID}</td>
-              <td>{`${user.fName} ${user.eName}`}</td>
+              <td>{`${user?.fName || ""} ${user?.eName || ""}`}</td>
               <td>{user.email}</td>
               <td>{user.mobileNo}</td>
               <td>{user.designation}</td>
               <td>{user.branch}</td>
               <td>{user.region}</td>
               <td>{user.level}</td>
-              <td>{user.verified ? "Yes" : "No"}</td>
+              <td>{user.verified ? "Verified" : "Blocked"}</td>
               <td>
                 {user.level > LoggedUserLevel && (
                   <div className={styles.button}>
