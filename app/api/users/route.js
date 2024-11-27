@@ -3,6 +3,7 @@ import { User } from '../../models/User';
 import connectToServiceEaseDB from "../../../lib/serviceDB";
 
 
+
 export async function GET() {
   try {
     await connectToServiceEaseDB();

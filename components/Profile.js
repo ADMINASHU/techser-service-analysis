@@ -1,13 +1,11 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useSession } from 'next-auth/react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import styles from './Profile.module.css';
 
 const Profile = ({user}) => {
-  // const { data: session, status } = useSession();
   const [editMode, setEditMode] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
