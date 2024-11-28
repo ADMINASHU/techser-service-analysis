@@ -91,7 +91,7 @@ const Profile = ({ LoggedUserID }) => {
 
   return (
     <div className={styles.page}>
-      <h1 className={styles.title}>Profile Page</h1>
+      {/* <h1 className={styles.title}>Profile Page</h1> */}
       <div className={styles.container}>
         <div className={styles.fContainer}>
           {editMode ? (

@@ -11,7 +11,8 @@ const ProfilePage = async () => {
 
 
   return (
-    <div style={{height:"80vh", display:"flex"}}>
+    <div style={{height:"80vh", display:"flex", flexDirection:"column" }}>
+      <h1>Profile Page</h1>
 
       <Profile LoggedUserID= {LoggedUserID}/>  
     </div>
