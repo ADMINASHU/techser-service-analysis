@@ -47,9 +47,9 @@ const WelcomePage = () => {
                 Our application offers a powerful dashboard system with four key types: Engineer,
                 Branch, Region, and Customer. Each dashboard provides insights into various metrics,
                 including Entry Call, New Call, Pending Call, Closed Call, Index, Accuracy, Visits
-                Counts, Engineer's Point, Branch's Point, and Region's Point. These dashboards offer
-                a clear and concise view of performance metrics, helping you manage and optimize
-                operations effectively.
+                Counts, Engineer&apos;s Point, Branch&apos;s Point, and Region&apos;s Point. These
+                dashboards offer a clear and concise view of performance metrics, helping you manage
+                and optimize operations effectively.
               </p>
             </div>
           </SwiperSlide>
