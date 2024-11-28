@@ -10,7 +10,7 @@ import {
   LEVEL1_ROUTES,
   LEVEL2_ROUTES,
   LEVEL3_ROUTES,
-  // LEVEL4_ROUTES,
+  UNAUTHORIZED
 } from "./lib/routes";
 import { authConfig } from "./auth.config";
 
@@ -43,13 +43,13 @@ export async function middleware(request) {
   }
 
   if (isLevel1Route && level > 1) {
-    return NextResponse.redirect(new URL(PROFILE, nextUrl));
+    return NextResponse.redirect(new URL(UNAUTHORIZED, nextUrl));
   }
   if (isLevel2Route && level > 2) {
-    return NextResponse.redirect(new URL(PROFILE, nextUrl));
+    return NextResponse.redirect(new URL(UNAUTHORIZED, nextUrl));
   }
   if (isLevel3Route && level > 3) {
-    return NextResponse.redirect(new URL(PROFILE, nextUrl));
+    return NextResponse.redirect(new URL(UNAUTHORIZED, nextUrl));
   }
 
   return NextResponse.next();
