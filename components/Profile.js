@@ -25,8 +25,17 @@ const Profile = ({ LoggedUserID }) => {
   });
 
   useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const response = await axios.post("/api/profile", { userID: LoggedUserID });
+        console.log(response.data.user);
+        setProfile(response.data.user);
+      } catch (error) {
+        console.error(error);
+      }
+    };
     fetchProfile();
-  }, [image, profile]);
+  }, [image, LoggedUserID]);
 
   useEffect(() => {
     if (profile) {
@@ -45,16 +54,6 @@ const Profile = ({ LoggedUserID }) => {
       });
     }
   }, [profile]);
-
-  const fetchProfile = async () => {
-    try {
-      const response = await axios.post("/api/profile", { userID: LoggedUserID });
-      console.log(response.data.user);
-      setProfile(response.data.user);
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
