@@ -1,20 +1,18 @@
-'use client';
+"use client";
 
-import { createContext, useState, useEffect } from 'react';
+import { createContext, useState, useEffect } from "react";
 
 const DataContext = createContext();
 
-const CHUNK_SIZE = 500; // Number of rows to fetch per chunk
+const CHUNK_SIZE = 400; // Number of rows to fetch per chunk
 
-export const DataProvider = ({ children, isAuthenticated }) => {
+export const DataProvider = ({ children }) => {
   const [processedData, setProcessedData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [startRow, setStartRow] = useState(0);
   const [totalRows, setTotalRows] = useState(0);
-  const [ch, setChSize] = useState(0);
 
   const fetchDataChunk = async (startRow, chunkSize) => {
-
     try {
       const response = await fetch(`/api/proData?startRow=${startRow}&chunkSize=${chunkSize}`);
       if (!response.ok) {
@@ -46,7 +44,7 @@ export const DataProvider = ({ children, isAuthenticated }) => {
             rPoint: parseFloat(item.rPoint),
           })),
         ]);
-        setChSize(ch + result.finalPointData.length);
+
         setTotalRows(result.totalRows);
       }
       setLoading(false);
