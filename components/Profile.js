@@ -61,6 +61,7 @@ const Profile = ({ LoggedUserID }) => {
   };
 
   const handleUpload = async () => {
+     if (!image) return;
     setFormData({ ...formData, image: `${LoggedUserID}_${image.name}` });
     const form = new FormData();
     form.set("file", image);
@@ -91,7 +92,7 @@ const Profile = ({ LoggedUserID }) => {
 
   return (
     <div className={styles.page}>
-      <h1 className={styles.title}>Profile Page</h1>
+      {/* <h1 className={styles.title}>Profile Page</h1> */}
       <div className={styles.container}>
         <div className={styles.fContainer}>
           {editMode ? (
@@ -121,8 +122,10 @@ const Profile = ({ LoggedUserID }) => {
                 Upload
               </button>
             </div>
+          ) : profile.image ? (
+            <Image height={163} width={140} src={`/${profile.image}`} alt="Profile Image" />
           ) : (
-            <Image height={140} width={140} src={`/${profile.image}`} alt="image" />
+            <Image height={163} width={140} src="/user.png" alt="Default Image" />
           )}
 
           <div className={styles.field}>

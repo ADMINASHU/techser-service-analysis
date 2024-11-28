@@ -51,7 +51,7 @@ export async function PUT(request) {
 export async function POST(request) {
   try {
     const { userID } = await request.json();
-    console.log("From profile/ post : " + userID);
+    // console.log("From profile/ post : " + userID);
     await connectToServiceEaseDB();
     const user = await User.findOne({ userID });
     if (!user) {

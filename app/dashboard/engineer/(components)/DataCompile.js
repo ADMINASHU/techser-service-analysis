@@ -140,7 +140,7 @@ const DataCompile = ({ proData, onDataProcessed }) => {
           pClosePM: "P",
           totalVisits: "Visits",
           ePoint: "E Point",
-          index: "Index",
+          index: "Score",
           accuracy: "%",
         };
 
