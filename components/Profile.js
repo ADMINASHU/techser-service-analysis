@@ -122,7 +122,7 @@ const Profile = ({ LoggedUserID }) => {
               </button>
             </div>
           ) : (
-            <Image height={140} width={140} src={`/${profile.image}`} alt="image" />
+            <Image height={163} width={140} src={`/${profile.image}`} alt="image" />
           )}
 
           <div className={styles.field}>
