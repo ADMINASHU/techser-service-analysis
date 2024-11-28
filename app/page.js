@@ -35,7 +35,7 @@ const WelcomePage = () => {
               <h2>Introduction</h2>
               <p>
                 Welcome to our app! We&apos;re thrilled to have you here. Our features provide
-                insights, user management, and control options to optimize your operations. Ready to
+                insights, dashboard view, user management, and control options to optimize your operations. Ready to
                 start? Dive in and explore! 😊✨
               </p>
             </div>
