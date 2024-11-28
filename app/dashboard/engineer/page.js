@@ -14,7 +14,7 @@ const DashboardPage = () => {
   };
   return (
     <div className={styles.dash}>
-      <h1>Dashboard Region</h1>
+      <h1>Dashboard Engineer</h1>
       <DataCompile proData={processedData} onDataProcessed={onDataProcessed} />
       <DashboardTableView data={data} />
     </div>
