@@ -26,7 +26,7 @@ const Profile = ({ LoggedUserID }) => {
 
   useEffect(() => {
     fetchProfile();
-  }, []);
+  }, [image, profile]);
 
   useEffect(() => {
     if (profile) {
@@ -61,7 +61,7 @@ const Profile = ({ LoggedUserID }) => {
   };
 
   const handleUpload = async () => {
-     if (!image) return;
+    if (!image) return;
     setFormData({ ...formData, image: `${LoggedUserID}_${image.name}` });
     const form = new FormData();
     form.set("file", image);
