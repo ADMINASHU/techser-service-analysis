@@ -8,6 +8,7 @@ import Image from "next/image";
 
 const Users = ({ LoggedUserLevel }) => {
   const [users, setUsers] = useState([]);
+  const [levels, setLevels] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editFormVisible, setEditFormVisible] = useState(false);
   const [formData, setFormData] = useState({
@@ -25,8 +26,12 @@ const Users = ({ LoggedUserLevel }) => {
   });
 
   useEffect(() => {
+    const newLevels = Array.from({ length: 4 }, (_, i) => i + 1).filter(
+      (level) => level >= LoggedUserLevel
+    );
+    setLevels(newLevels);
     fetchUsers();
-  }, []);
+  }, [LoggedUserLevel]);
 
   const fetchUsers = async () => {
     try {
@@ -100,7 +105,6 @@ const Users = ({ LoggedUserLevel }) => {
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Users</h1>
-
       {editFormVisible && (
         <div className={styles.modalOverlay}>
           <div className={styles.page}>
@@ -202,14 +206,21 @@ const Users = ({ LoggedUserLevel }) => {
                 </div>
                 <div className={styles.field}>
                   <label className={styles.label}>Level:</label>
-                  <input
+
+                  <select
                     className={styles.input}
-                    type="number"
                     name="level"
                     value={formData.level}
                     onChange={handleChange}
-                  />
+                  >
+                    {levels.map((level) => (
+                      <option key={level} value={level}>
+                        Level {level}
+                      </option>
+                    ))}
+                  </select>
                 </div>
+
                 <div className={styles.field}>
                   <label className={styles.label}>Email:</label>
                   <input
@@ -262,7 +273,7 @@ const Users = ({ LoggedUserLevel }) => {
           </tr>
         </thead>
         <tbody>
-          {users.map((user, index) => (
+          {users?.map((user, index) => (
             <tr key={user.userID}>
               <td>{index + 1}</td>
               <td>{user.userID}</td>
@@ -275,7 +286,7 @@ const Users = ({ LoggedUserLevel }) => {
               <td>{user.level}</td>
               <td>{user.verified ? "Verified" : "Blocked"}</td>
               <td>
-                {user.level > LoggedUserLevel && (
+                {user.level >= LoggedUserLevel && (
                   <div className={styles.button}>
                     <button className={styles.editButton} onClick={() => handleEdit(user)}>
                       Edit
