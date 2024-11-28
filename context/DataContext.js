@@ -6,7 +6,7 @@ const DataContext = createContext();
 
 const CHUNK_SIZE = 500; // Number of rows to fetch per chunk
 
-export const DataProvider = ({ children }) => {
+export const DataProvider = ({ children, isAuthenticated }) => {
   const [processedData, setProcessedData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [startRow, setStartRow] = useState(0);
@@ -14,6 +14,7 @@ export const DataProvider = ({ children }) => {
   const [ch, setChSize] = useState(0);
 
   const fetchDataChunk = async (startRow, chunkSize) => {
+
     try {
       const response = await fetch(`/api/proData?startRow=${startRow}&chunkSize=${chunkSize}`);
       if (!response.ok) {
