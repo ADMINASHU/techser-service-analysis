@@ -19,7 +19,7 @@ const WelcomePage = () => {
   return (
     <div className={styles.container}>
       <h1>Welcome to Our Application!</h1>
-      <p>We're excited to have you here. Let's get you started with a quick overview.</p>
+      <p>We&apos;re excited to have you here. Let&apos;s get you started with a quick overview.</p>
 
       <div className={styles.sliderContainer}>
         <Swiper
@@ -34,9 +34,9 @@ const WelcomePage = () => {
             <div className={styles.slide} onClick={() => handleSlideClick()}>
               <h2>Introduction</h2>
               <p>
-                Welcome to our app! We're thrilled to have you here. Our features provide insights,
-                user management, and control options to optimize your operations. Ready to start?
-                Dive in and explore! 😊✨
+                Welcome to our app! We&apos;re thrilled to have you here. Our features provide
+                insights, user management, and control options to optimize your operations. Ready to
+                start? Dive in and explore! 😊✨
               </p>
             </div>
           </SwiperSlide>
