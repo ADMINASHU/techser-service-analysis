@@ -11,10 +11,11 @@ import { usePathname } from "next/navigation";
 export default function Navbar({ session }) {
   const isAuthenticated = !!session?.user;
   const isAdmin = session?.user?.isAdmin;
+  const level = session?.user?.level;
   const [menuOpen, setMenuOpen] = useState(false);
   const [dashOpen, setDashOpen] = useState(false);
 
-  const profileName = session?.user?.userID || "User" // Replace with actual logic to get profile name
+  const profileName = session?.user?.userID || "User"; // Replace with actual logic to get profile name
   const pathname = usePathname();
 
   const toggleMenu = () => {
@@ -53,25 +54,21 @@ export default function Navbar({ session }) {
           >
             Dashboard
           </Link>
+
           <Link href="/data" className={pathname === "/data" ? styles.activeLink : styles.nlink}>
             Data
           </Link>
-          {isAdmin && (
-            <>
-              <Link
-                href="/users"
-                className={pathname === "/users" ? styles.activeLink : styles.nlink}
-              >
-                Users
-              </Link>
-              <Link
-                href="/control"
-                className={pathname === "/control" ? styles.activeLink : styles.nlink}
-              >
-                Control
-              </Link>
-            </>
-          )}
+
+          <Link href="/users" className={pathname === "/users" ? styles.activeLink : styles.nlink}>
+            Users
+          </Link>
+
+          <Link
+            href="/control"
+            className={pathname === "/control" ? styles.activeLink : styles.nlink}
+          >
+            Control
+          </Link>
         </div>
         <div className={styles.profileSection}>
           <Link href="/profile" className={styles.profileName}>

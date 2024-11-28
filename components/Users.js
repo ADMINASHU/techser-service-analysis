@@ -15,7 +15,7 @@ const Users = ({ LoggedUserLevel }) => {
     fName: "",
     eName: "",
     email: "",
-    image:"",
+    image: "",
     mobileNo: "",
     designation: "",
     branch: "",
@@ -106,7 +106,12 @@ const Users = ({ LoggedUserLevel }) => {
           <div className={styles.page}>
             <div className={styles.eContainer}>
               <div className={styles.fContainer}>
-                <Image height={170} width={140} src={`/${formData.image}`}  alt="/user.png" />
+                {formData.image ? (
+                  <Image height={170} width={140} src={`/${formData.image}`} alt="/user.png" />
+                ) : (
+                  <Image height={170} width={140} src="/user.png" alt="Default Image" />
+                )}
+
                 <div className={styles.field}>
                   <button
                     className={styles.input}
