@@ -1,0 +1,14 @@
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 90vh;
+    text-align: center;
+    background-color: #f8f8f8;
+}
+
+.container h1 {
+    font-size: 24px;
+    color: #dc3545;
+    /* Red color for emphasis */
+}
