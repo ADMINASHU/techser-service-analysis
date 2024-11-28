@@ -1,134 +1,120 @@
 "use client";
-import Loading from "@/components/Loading";
-import { useEffect, useContext, useState } from "react";
-import DataContext from "../context/DataContext";
 
-const CHUNK_SIZE = 500; // Number of rows to fetch per chunk
+import React, { useRef } from "react";
+import styles from "./page.module.css";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import { Navigation, Pagination } from "swiper/modules";
+import Link from "next/link";
 
-const HomePage = () => {
-  const { processedData, setProcessedData } = useContext(DataContext);
-  const [loading, setLoading] = useState(true);
-  const [startRow, setStartRow] = useState(0);
-  const [totalRows, setTotalRows] = useState(0);
-  const [ch, setChSize] = useState(0);
+const WelcomePage = () => {
+  const swiperRef = useRef(null);
 
-  const fetchDataChunk = async (startRow, chunkSize) => {
-    try {
-      const response = await fetch(`/api/proData?startRow=${startRow}&chunkSize=${chunkSize}`);
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const result = await response.json();
-      if (result.error) {
-        console.error("Error fetching data:", result.error);
-      } else {
-        setProcessedData((prevData) => [
-          ...prevData,
-          ...result.finalPointData.map((item) => ({
-            complaintID: item.complaintID,
-            natureOfComplaint: item.natureOfComplaint,
-            regDate: item.regDate,
-            closedDate: item.closedDate,
-            duration: item.duration,
-            realStatus: item.realStatus,
-            assignedTo: item.assignedTo,
-            region: item.region,
-            branch: item.branch,
-            month: item.month,
-            year: item.year,
-            count: item.count,
-            isPending: item.isPending,
-            cPoint: parseFloat(item.cPoint),
-            ePoint: parseFloat(item.ePoint),
-            bPoint: parseFloat(item.bPoint),
-            rPoint: parseFloat(item.rPoint),
-          })),
-        ]);
-        setChSize(ch + result.finalPointData.length);
-        setTotalRows(result.totalRows);
-      }
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      setLoading(false);
-    }
+  const handleSlideClick = () => {
+    swiperRef.current.swiper.slideNext();
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      // Start fetching the first chunk
-      await fetchDataChunk(0, CHUNK_SIZE);
-    };
-
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    if (startRow < totalRows || totalRows === 0) {
-      setLoading(true);
-      const timer = setTimeout(async () => {
-        await fetchDataChunk(startRow, CHUNK_SIZE);
-        setStartRow((prevStartRow) => prevStartRow + CHUNK_SIZE);
-      }, 500); // Adding a slight delay to prevent too many rapid requests
-
-      return () => clearTimeout(timer);
-    }
-  }, [startRow, totalRows]);
-
   return (
-    <div
-      style={{
-        // display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "80vh",
-        margin: "40px",
-        textAlign: "center",
-        fontSize: "20px",
-        fontWeight: "bold",
-        padding: "20px",
-        zIndex: "2",
-        textShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)",
-      
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "20vh",
-          // width: "600px",
-          marginTop: "30vh",
-          textAlign: "center",
-          fontSize: "20px",
-          fontWeight: "bold",
-          padding: "20px",
-          zIndex: "2",
-          textShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)",
-          // backgroundColor: "green",
-        }}
-      >
-        {loading ? (
-          <Loading />
-        ) : (
-          <div>
-            <div
-              style={{
-                marginBottom: "50px",
-              }}
-            >
-              Fetched Data till Date:
-              {processedData[processedData.length - 1]?.regDate}
+    <div className={styles.container}>
+      <h1>Welcome to Our Application!</h1>
+      <p>We&apos;re excited to have you here. Let&apos;s get you started with a quick overview.</p>
+
+      <div className={styles.sliderContainer}>
+        <Swiper
+          spaceBetween={50}
+          slidesPerView={1}
+          navigation
+          pagination={{ clickable: true }}
+          modules={[Navigation, Pagination]}
+          ref={swiperRef}
+        >
+          <SwiperSlide>
+            <div className={styles.slide} onClick={() => handleSlideClick()}>
+              <h2>Introduction</h2>
+              <p>
+                Welcome to our app! We&apos;re thrilled to have you here. Our features provide
+                insights, user management, and control options to optimize your operations. Ready to
+                start? Dive in and explore! 😊✨
+              </p>
             </div>
-          </div>
-        )}
-      </div>
-      <div style={{ justifyContent: "center" }}>
-        {ch}/{totalRows}
+          </SwiperSlide>
+          <SwiperSlide>
+            <div className={styles.slide} onClick={() => handleSlideClick()}>
+              <h2>Dashboard Page</h2>
+              <p>
+                Our application offers a powerful dashboard system with four key types: Engineer,
+                Branch, Region, and Customer. Each dashboard provides insights into various metrics,
+                including Entry Call, New Call, Pending Call, Closed Call, Index, Accuracy, Visits
+                Counts, Engineer&apos;s Point, Branch&apos;s Point, and Region&apos;s Point. These
+                dashboards offer a clear and concise view of performance metrics, helping you manage
+                and optimize operations effectively.
+              </p>
+            </div>
+          </SwiperSlide>
+          <SwiperSlide>
+            <div className={styles.slide} onClick={() => handleSlideClick()}>
+              <h2>Data Page</h2>
+              <p>
+                Our application includes a comprehensive score page that displays key information
+                such as Complaint ID, Nature of Complaint, Register Date, Closed Date, Duration,
+                Status, Engineer, Region, Branch, Month, Year, Is Pending, Engineer Point, Branch
+                Point, and Region Point. This page is equipped with powerful filter options,
+                allowing users to refine their views by year, month, region, branch, and more. These
+                features ensure that users can easily track and analyze their performance metrics
+                with precision.
+              </p>
+            </div>
+          </SwiperSlide>
+          <SwiperSlide>
+            <div className={styles.slide} onClick={() => handleSlideClick()}>
+              <h2>Users Page</h2>
+              <p>
+                Our application includes a robust user management page where authorized users can
+                view, edit, and delete user details, as well as block and verify user profiles.
+                Authorized users have comprehensive control over user profiles, which include
+                information like user id, contact details, designation, profile status and access
+                level. This functionality ensures efficient and secure management of user profiles
+                across the organization.
+              </p>
+            </div>
+          </SwiperSlide>
+          <SwiperSlide>
+            <div className={styles.slide} onClick={() => handleSlideClick()}>
+              <h2>Control Page</h2>
+              <p>
+                Our application features a control page where authorized users can adjust point
+                values based on the nature of calls—breakdown, installation, and preventive
+                maintenance. Adjustments can be made for closed, pending, and new calls. This
+                ensures the system remains adaptable and provides accurate performance tracking.
+              </p>
+            </div>
+          </SwiperSlide>
+          <SwiperSlide>
+            <div className={styles.slide} onClick={() => handleSlideClick()}>
+              <h2>Profile Page</h2>
+              <p>
+                Our application features a profile page where users can easily update their personal
+                details such as image, name, email, mobile number, designation, branch, and region.
+                This ensures accurate and relevant information within the system.
+              </p>
+            </div>
+          </SwiperSlide>
+          <SwiperSlide>
+            <div className={styles.slide} onClick={() => handleSlideClick()}>
+              <h2>Get Started</h2>
+              <p>
+                Ready to dive in? Let&apos;s get you started on your journey with our app. Explore
+                dashboards, review performance metrics, manage user profiles, and adjust point
+                values as needed. Happy exploring! 😊✨
+              </p>
+            </div>
+          </SwiperSlide>
+        </Swiper>
       </div>
     </div>
   );
 };
 
-export default HomePage;
+export default WelcomePage;
