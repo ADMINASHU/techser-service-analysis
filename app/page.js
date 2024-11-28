@@ -96,8 +96,8 @@ const WelcomePage = () => {
               <h2>Profile Page</h2>
               <p>
                 Our application features a profile page where users can easily update their personal
-                details such as image, name, email, mobile number, designation, branch, and region. This
-                ensures accurate and relevant information within the system.
+                details such as image, name, email, mobile number, designation, branch, and region.
+                This ensures accurate and relevant information within the system.
               </p>
             </div>
           </SwiperSlide>
@@ -105,7 +105,7 @@ const WelcomePage = () => {
             <div className={styles.slide} onClick={() => handleSlideClick()}>
               <h2>Get Started</h2>
               <p>
-                Ready to dive in? Let's get you started on your journey with our app. Explore
+                Ready to dive in? Let&apos;s get you started on your journey with our app. Explore
                 dashboards, review performance metrics, manage user profiles, and adjust point
                 values as needed. Happy exploring! 😊✨
               </p>
