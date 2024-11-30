@@ -8,6 +8,7 @@ const DashboardTableView = ({ data }) => {
   const [filters, setFilters] = useState({
     region: "ALL Region",
     branch: "ALL Branch",
+    engineer: "",
   });
   const [filteredData, setFilteredData] = useState([]);
 
@@ -60,6 +61,7 @@ const DashboardTableView = ({ data }) => {
             filters.branch === "ALL Branch" || !filters.branch || row.branch === filters.branch
           );
         })
+        .filter((row) => row.engineer.toLowerCase().includes(filters.engineer.toLowerCase()))
         .filter((row) => row.totalVisits > 30);
     } else {
       newFilteredData = data
@@ -73,7 +75,8 @@ const DashboardTableView = ({ data }) => {
           return (
             filters.branch === "ALL Branch" || !filters.branch || row.branch === filters.branch
           );
-        });
+        })
+        .filter((row) => row.engineer.toLowerCase().includes(filters.engineer.toLowerCase()));
     }
 
     setFilteredData(newFilteredData);
@@ -111,6 +114,14 @@ const DashboardTableView = ({ data }) => {
             </option>
           ))}
         </select>
+
+        <input
+          type="text"
+          name="engineer"
+          value={filters.engineer}
+          placeholder="Search Engineer"
+          onChange={handleFilterChange}
+        />
       </div>
       <table>
         <thead>
@@ -125,7 +136,7 @@ const DashboardTableView = ({ data }) => {
             <th colSpan={1}>Index</th>
             <th colSpan={1}>Accuracy</th>
           </tr>
-          {data.length > 0 && (
+          {data?.length > 0 && (
             <tr>
               {Object.values(data[0])?.map((key, index) => (
                 <th key={index}>{key}</th>
@@ -134,7 +145,7 @@ const DashboardTableView = ({ data }) => {
           )}
         </thead>
         <tbody>
-          {filteredData.map((row, rowIndex) => (
+          {filteredData?.map((row, rowIndex) => (
             <tr key={rowIndex}>
               {Object.values(row)?.map((value, colIndex) => (
                 <td key={colIndex}>{value}</td>
