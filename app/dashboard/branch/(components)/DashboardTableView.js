@@ -7,7 +7,6 @@ const DashboardTableView = ({ data }) => {
     region: "ALL Region",
   });
   const [filteredData, setFilteredData] = useState([]);
-  if (!data || data.length === 0) return <div>No data available</div>;
 
   const regionList = [
     "AP & TELANGANA",
@@ -33,6 +32,11 @@ const DashboardTableView = ({ data }) => {
   };
 
   useEffect(() => {
+    if (!data || data.length === 0) {
+      setFilteredData([]);
+      return;
+    }
+
     let newFilteredData;
 
     if (smartFilter) {
@@ -56,6 +60,8 @@ const DashboardTableView = ({ data }) => {
 
     setFilteredData(newFilteredData);
   }, [data, filters, smartFilter]);
+
+  if (!data || data.length === 0) return <div>No data available</div>;
 
   return (
     <div className={styles.page}>
