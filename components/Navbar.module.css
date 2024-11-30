@@ -14,6 +14,21 @@
   transition: background-color 0.3s ease, backdrop-filter 0.3s ease;
 }
 
+.progressBarContainer {
+  position: absolute;
+  top: 55px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.progressBar {
+  height: 100%;
+  background-color: #ee1313;
+  transition: width 0.3s ease;
+}
+
 .navLinks,
 .profileSection {
   display: flex;
@@ -26,20 +41,15 @@
   text-decoration: none;
   transition: color 0.3s ease;
 }
-.nlink{
-  /* margin-right: 20px; */
+
+.nlink {
   color: white;
-  /* text-decoration: none; */
-  /* transition: color 0.3s ease; */
 }
 
 .navLinks a:hover,
 .activeLink {
   color: #ee1313;
-  /* font-weight: 600; */
-
 }
-
 
 .profileSection {
   display: flex;
@@ -83,14 +93,14 @@
   position: absolute;
   top: 50px;
   left: 50px;
-  /* width: 200px; */
   border-radius: 8px;
-  background: linear-gradient(135deg,  rgba(248, 47, 32, 0.5), rgba(211, 211, 211, 0.4)), rgba(0, 0, 0, 0.9); /* Updated glossy gradient */
+  background: linear-gradient(135deg, rgba(248, 47, 32, 0.5), rgba(211, 211, 211, 0.4)), rgba(0, 0, 0, 0.9); /* Updated glossy gradient */
   backdrop-filter: blur(10px); /* Glassy effect */
   padding: 10px;
   z-index: 1001;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(255, 255, 255, 0.1) inset; /* Outer and inner shadow */
 }
+
 .responsiveDash {
   display: flex;
   font-size: 18px;
@@ -100,7 +110,7 @@
   width: 200px;
   border-radius: 8px;
   left: 150px;
-  background: linear-gradient(135deg,  rgba(248, 47, 32, 0.5), rgba(211, 211, 211, 0.4)), rgba(0, 0, 0, 0.9); /* Updated glossy gradient */
+  background: linear-gradient(135deg, rgba(248, 47, 32, 0.5), rgba(211, 211, 211, 0.4)), rgba(0, 0, 0, 0.9); /* Updated glossy gradient */
   backdrop-filter: blur(10px); /* Glassy effect */
   padding: 10px;
   z-index: 1001;
@@ -128,9 +138,9 @@
 .responsiveMenu a:hover {
   background-color: #333;
 }
-.responsiveDash a:hover {
-  background-color: #333
 
+.responsiveDash a:hover {
+  background-color: #333;
 }
 
 .logo {

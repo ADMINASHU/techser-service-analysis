@@ -88,7 +88,7 @@ export const DataProvider = ({ children }) => {
   }, [startRow, totalRows]);
 
   return (
-    <DataContext.Provider value={{ processedData, setProcessedData, loading }}>
+    <DataContext.Provider value={{ processedData, setProcessedData, loading, totalRows }}>
       {children}
     </DataContext.Provider>
   );
