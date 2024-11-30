@@ -94,16 +94,18 @@ const DashboardTableView = ({ data }) => {
             <th colSpan={1}>Index</th>
             <th colSpan={1}>Accuracy</th>
           </tr>
-          <tr>
-            {Object.keys(data[0]).map((key, index) => (
-              <th key={index}>{key}</th>
-            ))}
-          </tr>
+          {data.length > 0 && (
+            <tr>
+              {Object.values(data[0])?.map((value, index) => (
+                <th key={index}>{value}</th>
+              ))}
+            </tr>
+          )}
         </thead>
         <tbody>
           {filteredData.map((row, rowIndex) => (
             <tr key={rowIndex}>
-              {Object.values(row).map((value, colIndex) => (
+              {Object.values(row)?.map((value, colIndex) => (
                 <td key={colIndex}>{value}</td>
               ))}
             </tr>
