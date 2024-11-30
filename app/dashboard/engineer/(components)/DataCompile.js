@@ -153,7 +153,7 @@ const DataCompile = ({ proData, onDataProcessed }) => {
       };
       processData();
     }
-  }, [proData, onDataProcessed]);
+  }, [proData, onDataProcessed,processed]);
   return null;
 };
 

@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import styles from "../../Dashboard.module.css";
 
 const DashboardTableView = ({ data }) => {
-  if (!data || data.length === 0) return <div>No data available</div>;
   const [smartFilter, setSmartFilter] = useState(false);
   const [filters, setFilters] = useState({
     region: "ALL Region",
   });
   const [filteredData, setFilteredData] = useState([]);
+  if (!data || data.length === 0) return <div>No data available</div>;
 
   const regionList = [
     "AP & TELANGANA",
