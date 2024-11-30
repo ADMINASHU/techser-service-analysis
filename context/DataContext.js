@@ -8,7 +8,6 @@ const CHUNK_SIZE = 400; // Number of rows to fetch per chunk
 
 export const DataProvider = ({ children }) => {
   const [processedData, setProcessedData] = useState([]);
-  const [callData, setCallData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [startRow, setStartRow] = useState(0);
   const [totalRows, setTotalRows] = useState(0);
@@ -43,11 +42,10 @@ export const DataProvider = ({ children }) => {
           rPoint: parseFloat(item.rPoint),
         }));
 
-        setCallData((prevData) => {
+        setProcessedData((prevData) => {
           const updatedData = [...prevData, ...finalData];
           const uniqueFinalData = removeDuplicates(updatedData, 'complaintID');
-          setProcessedData(uniqueFinalData);
-          return updatedData;
+          return uniqueFinalData;
         });
 
         setTotalRows(result.totalRows);
