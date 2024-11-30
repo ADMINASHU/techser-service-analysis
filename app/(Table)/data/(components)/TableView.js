@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import styles from "./page.module.css";
 
 const TableView = ({ data }) => {
-  // console.log("page: " +  JSON.stringify(data));
   const selectedColumns = [
     "complaintID",
     "natureOfComplaint",
@@ -24,15 +23,15 @@ const TableView = ({ data }) => {
   ];
 
   const [filters, setFilters] = useState({
-    year:  data[data.length - 1]?.year,
-    month:  data[data.length - 1]?.month,
+    year: data[data.length - 1]?.year,
+    month: data[data.length - 1]?.month,
     region: "ALL Region",
     branch: "",
     natureOfComplaint: "",
     realStatus: "",
     assignedTo: "",
+    complaintID: "",
   });
-
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
@@ -40,7 +39,6 @@ const TableView = ({ data }) => {
   };
 
   useEffect(() => {
-    // Reset branch and assignedTo filters if their dependencies change
     if (!filters.region || filters.region === "ALL Region") {
       setFilters((prevFilters) => ({ ...prevFilters, branch: "", assignedTo: "" }));
     } else if (!filters.branch) {
@@ -56,7 +54,8 @@ const TableView = ({ data }) => {
       (!filters.branch || row.branch === filters.branch) &&
       (!filters.natureOfComplaint || row.natureOfComplaint === filters.natureOfComplaint) &&
       (!filters.realStatus || row.realStatus === filters.realStatus) &&
-      (!filters.assignedTo || row.assignedTo === filters.assignedTo)
+      (!filters.assignedTo || row.assignedTo === filters.assignedTo) &&
+      (!filters.complaintID || row.complaintID.toLowerCase().includes(filters.complaintID.toLowerCase()))
     );
   });
 
@@ -78,7 +77,7 @@ const TableView = ({ data }) => {
       <div className={styles.filterContainer}>
         <select name="year" value={filters.year} onChange={handleFilterChange}>
           <option value="">Select Year</option>
-          {Array.from(new Set(data.slice(1).map((row) => row.year))).map((year) => (
+          {Array.from(new Set(data.map((row) => row.year))).map((year) => (
             <option key={year} value={year}>
               {year}
             </option>
@@ -86,7 +85,7 @@ const TableView = ({ data }) => {
         </select>
         <select name="month" value={filters.month} onChange={handleFilterChange}>
           <option value="">Select Month</option>
-          {Array.from(new Set(data.slice(1).map((row) => row.month))).map((month) => (
+          {Array.from(new Set(data.map((row) => row.month))).map((month) => (
             <option key={month} value={month}>
               {month}
             </option>
@@ -94,7 +93,7 @@ const TableView = ({ data }) => {
         </select>
         <select name="region" value={filters.region} onChange={handleFilterChange}>
           <option value="ALL Region">ALL Region</option>
-          {Array.from(new Set(data.slice(1).map((row) => row.region))).map((region) => (
+          {Array.from(new Set(data.map((row) => row.region))).map((region) => (
             <option key={region} value={region}>
               {region}
             </option>
@@ -135,6 +134,15 @@ const TableView = ({ data }) => {
             </option>
           ))}
         </select>
+
+        <input
+          type="text"
+          name="complaintID"
+          value={filters.complaintID}
+          placeholder="Search Complaint ID"
+          onChange={handleFilterChange}
+          style={{ marginLeft: "10px" }}
+        />
       </div>
       <table border="1" cellPadding="5">
         <thead>
