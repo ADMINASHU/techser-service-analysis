@@ -1,14 +1,16 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Link from "next/link";
 import Logout from "./Logout";
 import { useRouter } from "next/navigation";
 import styles from "./Navbar.module.css"; // Import CSS module
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import DataContext from "../context/DataContext";
 
 export default function Navbar({ session }) {
+  const { processedData, totalRows, loading } = useContext(DataContext); // Use DataContext to access processedData and loading state
   const isAuthenticated = !!session?.user;
   const isAdmin = session?.user?.isAdmin;
   const level = session?.user?.level;
@@ -24,9 +26,18 @@ export default function Navbar({ session }) {
   const toggleDash = () => {
     setDashOpen(!dashOpen);
   };
+
+  // Calculate progress
+  const progress = (processedData.length / totalRows) * 100;
+
   if (isAuthenticated) {
     return (
       <nav className={styles.navbar}>
+        {loading && (
+          <div className={styles.progressBarContainer}>
+            <div className={styles.progressBar} style={{ width: `${progress}%` }}></div>
+          </div>
+        )}
         <div className={styles.navLinks}>
           <Link href="/" className={pathname === "/" ? styles.activeLink : ""}>
             <Image
@@ -37,9 +48,6 @@ export default function Navbar({ session }) {
               className={styles.logo} // Display height
             />
           </Link>
-          {/* <Link href="/" className={pathname === "/" ? styles.activeLink : ""}>
-            Home
-          </Link> */}
           <Link
             href=""
             className={
