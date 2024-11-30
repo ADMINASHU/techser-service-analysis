@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect } from 'react';
 
 const DataContext = createContext();
 
@@ -8,6 +8,7 @@ const CHUNK_SIZE = 400; // Number of rows to fetch per chunk
 
 export const DataProvider = ({ children }) => {
   const [processedData, setProcessedData] = useState([]);
+  const [callData, setCallData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [startRow, setStartRow] = useState(0);
   const [totalRows, setTotalRows] = useState(0);
@@ -22,31 +23,36 @@ export const DataProvider = ({ children }) => {
       if (result.error) {
         console.error("Error fetching data:", result.error);
       } else {
-        setProcessedData((prevData) => [
-          ...prevData,
-          ...result.finalPointData.map((item) => ({
-            complaintID: item.complaintID,
-            natureOfComplaint: item.natureOfComplaint,
-            regDate: item.regDate,
-            closedDate: item.closedDate,
-            duration: item.duration,
-            realStatus: item.realStatus,
-            assignedTo: item.assignedTo,
-            region: item.region,
-            branch: item.branch,
-            month: item.month,
-            year: item.year,
-            count: item.count,
-            isPending: item.isPending,
-            cPoint: parseFloat(item.cPoint),
-            ePoint: parseFloat(item.ePoint),
-            bPoint: parseFloat(item.bPoint),
-            rPoint: parseFloat(item.rPoint),
-          })),
-        ]);
+        const finalData = result.finalPointData.map((item) => ({
+          complaintID: item.complaintID,
+          natureOfComplaint: item.natureOfComplaint,
+          regDate: item.regDate,
+          closedDate: item.closedDate,
+          duration: item.duration,
+          realStatus: item.realStatus,
+          assignedTo: item.assignedTo,
+          region: item.region,
+          branch: item.branch,
+          month: item.month,
+          year: item.year,
+          count: item.count,
+          isPending: item.isPending,
+          cPoint: parseFloat(item.cPoint),
+          ePoint: parseFloat(item.ePoint),
+          bPoint: parseFloat(item.bPoint),
+          rPoint: parseFloat(item.rPoint),
+        }));
+
+        setCallData((prevData) => {
+          const updatedData = [...prevData, ...finalData];
+          const uniqueFinalData = removeDuplicates(updatedData, 'complaintID');
+          setProcessedData(uniqueFinalData);
+          return updatedData;
+        });
 
         setTotalRows(result.totalRows);
       }
+
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -54,12 +60,20 @@ export const DataProvider = ({ children }) => {
     }
   };
 
+  const removeDuplicates = (array, key) => {
+    const seen = new Set();
+    return array.filter(item => {
+      const duplicate = seen.has(item[key]);
+      seen.add(item[key]);
+      return !duplicate;
+    });
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       // Start fetching the first chunk
       await fetchDataChunk(0, CHUNK_SIZE);
     };
-
     fetchData();
   }, []);
 

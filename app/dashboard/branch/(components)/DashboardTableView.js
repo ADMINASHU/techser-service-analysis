@@ -95,7 +95,7 @@ const DashboardTableView = ({ data }) => {
             <th colSpan={1}>Accuracy</th>
           </tr>
           <tr>
-            {Object.values(data[0]).map((key, index) => (
+            {Object.keys(data[0]).map((key, index) => (
               <th key={index}>{key}</th>
             ))}
           </tr>
