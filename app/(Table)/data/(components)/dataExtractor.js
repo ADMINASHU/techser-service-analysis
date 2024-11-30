@@ -307,7 +307,7 @@ const DataExtractor = ({ data, onDataProcessed, points }) => {
     });
     // console.log("extracted: " + finalPendingData);
     onDataProcessed(finalPointData);
-  }, [data, onDataProcessed, points, regionList]);
+  }, [data, onDataProcessed, points]);
 
   return null;
 };
