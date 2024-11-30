@@ -7,6 +7,7 @@ import DataContext from "../../../context/DataContext";
 const DataPage = () => {
   const { processedData } = useContext(DataContext);
 
+
   return (
     <div>
       <h1>Complaint Data</h1>

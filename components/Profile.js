@@ -35,7 +35,7 @@ const Profile = ({ LoggedUserID }) => {
       }
     };
     fetchProfile();
-  }, [image, LoggedUserID]);
+  }, [image, LoggedUserID, setProfile]);
 
   useEffect(() => {
     if (profile) {

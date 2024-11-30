@@ -2,3 +2,34 @@
     margin: 10px;
     scroll-behavior: smooth;
 }
+
+/* Styles for the filter section */
+.page {
+    margin: 20px;
+}
+
+.filterContainer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.filterContainer select,
+.filterContainer input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.button {
+    width: 100px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+}

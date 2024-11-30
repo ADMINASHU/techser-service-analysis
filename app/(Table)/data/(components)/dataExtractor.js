@@ -4,26 +4,24 @@ import { parse, differenceInHours, format } from "date-fns";
 const DataExtractor = ({ data, onDataProcessed, points }) => {
   // console.log("Extractor Page: " + JSON.stringify(points));
 
-  const regionList = [
-    "AP & TELANGANA",
-    "CHATTISGARH",
-    "GOA",
-    "KALKA",
-    "KARNATAKA",
-    "KERALA",
-    "MADHYA PRADESH",
-    "MUMBAI",
-    "RAJASTHAN",
-    "TAMIL NADU",
-    "West Bengal",
-  ];
-
   useEffect(() => {
     if (!data) {
       console.log("no data coming");
       return;
     }
-
+    const regionList = [
+      "AP & TELANGANA",
+      "CHATTISGARH",
+      "GOA",
+      "KALKA",
+      "KARNATAKA",
+      "KERALA",
+      "MADHYA PRADESH",
+      "MUMBAI",
+      "RAJASTHAN",
+      "TAMIL NADU",
+      "West Bengal",
+    ];
     // Process the data to add the new columns with extracted date, duration, complaint ID, original complaint ID, nature of complaint, status, assigned to, region, branch, month, and year
     const newData = data
       .map((item, index) => {
