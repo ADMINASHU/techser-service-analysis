@@ -7,7 +7,7 @@ const DashboardTableView = ({ data }) => {
   const [smartFilter, setSmartFilter] = useState(false);
   const [filters, setFilters] = useState({
     region: "ALL Region",
-    branch: "",
+    branch: "ALL Branch",
   });
   const [filteredData, setFilteredData] = useState([]);
 
@@ -127,7 +127,7 @@ const DashboardTableView = ({ data }) => {
           </tr>
           {data.length > 0 && (
             <tr>
-              {Object.values(data[0]).map((key, index) => (
+              {Object.values(data[0])?.map((key, index) => (
                 <th key={index}>{key}</th>
               ))}
             </tr>
@@ -136,7 +136,7 @@ const DashboardTableView = ({ data }) => {
         <tbody>
           {filteredData.map((row, rowIndex) => (
             <tr key={rowIndex}>
-              {Object.values(row).map((value, colIndex) => (
+              {Object.values(row)?.map((value, colIndex) => (
                 <td key={colIndex}>{value}</td>
               ))}
             </tr>
