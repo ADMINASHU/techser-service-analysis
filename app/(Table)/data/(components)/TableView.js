@@ -22,6 +22,20 @@ const TableView = ({ data }) => {
     "rPoint",
   ];
 
+  const regionList = [
+    "AP & TELANGANA",
+    "CHATTISGARH",
+    "GOA",
+    "KALKA",
+    "KARNATAKA",
+    "KERALA",
+    "MADHYA PRADESH",
+    "MUMBAI",
+    "RAJASTHAN",
+    "TAMIL NADU",
+    "West Bengal",
+  ];
+
   const [filters, setFilters] = useState({
     year: data[data.length - 1]?.year,
     month: data[data.length - 1]?.month,
@@ -93,7 +107,7 @@ const TableView = ({ data }) => {
         </select>
         <select name="region" value={filters.region} onChange={handleFilterChange}>
           <option value="ALL Region">ALL Region</option>
-          {Array.from(new Set(data.map((row) => row.region))).map((region) => (
+          {regionList.map((region) => (
             <option key={region} value={region}>
               {region}
             </option>
