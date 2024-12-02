@@ -53,7 +53,7 @@ const Profile = ({ LoggedUserID }) => {
         verified: profile.verified || false,
       });
     }
-  }, [profile]);
+  }, [profile, image]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -65,7 +65,16 @@ const Profile = ({ LoggedUserID }) => {
     const form = new FormData();
     form.set("file", image);
     form.set("id", LoggedUserID);
-    await axios.post("/api/avatar", form);
+    const res = await axios.post("/api/avatar", form);
+    if (res.data.success) {
+      // setProfile({ ...profile, image: res.data.message });
+      Swal.fire({
+        title: "Success!",
+        text: "Image upload successfully!",
+        icon: "success",
+        confirmButtonText: "OK",
+      });
+    }
   };
 
   const handleSave = async () => {
