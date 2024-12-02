@@ -47,6 +47,9 @@ const TableView = ({ data }) => {
     complaintID: "",
   });
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const rowsPerPage = 100;
+
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFilters((prevFilters) => ({ ...prevFilters, [name]: value }));
@@ -85,6 +88,17 @@ const TableView = ({ data }) => {
     : Array.from(
         new Set(data.filter((row) => row.branch === filters.branch).map((row) => row.assignedTo))
       );
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
+
+  const paginatedData = filteredData.slice(
+    (currentPage - 1) * rowsPerPage,
+    currentPage * rowsPerPage
+  );
+
+  const totalPages = Math.ceil(filteredData.length / rowsPerPage);
 
   return (
     <div className={styles.page}>
@@ -167,7 +181,7 @@ const TableView = ({ data }) => {
           </tr>
         </thead>
         <tbody>
-          {filteredData.map((row, rowIndex) => (
+          {paginatedData.map((row, rowIndex) => (
             <tr key={rowIndex}>
               {selectedColumns.map((col, index) => (
                 <td key={index}>{row[col] !== undefined ? row[col] : ""}</td>
@@ -176,6 +190,17 @@ const TableView = ({ data }) => {
           ))}
         </tbody>
       </table>
+      <div className={styles.paginationContainer}>
+        {Array.from({ length: totalPages }, (_, i) => (
+          <button
+            key={i + 1}
+            onClick={() => handlePageChange(i + 1)}
+            className={i + 1 === currentPage ? styles.activePageButton : styles.pageButton}
+          >
+            {i + 1}
+          </button>
+        ))}
+      </div>
     </div>
   );
 };
