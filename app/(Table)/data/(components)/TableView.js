@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styles from "./page.module.css";
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/solid";
 
 const TableView = ({ data }) => {
   const selectedColumns = [
@@ -48,7 +49,7 @@ const TableView = ({ data }) => {
   });
 
   const [currentPage, setCurrentPage] = useState(1);
-  const rowsPerPage = 100;
+  const rowsPerPage = 10;
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
@@ -191,6 +192,13 @@ const TableView = ({ data }) => {
         </tbody>
       </table>
       <div className={styles.paginationContainer}>
+        <button
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          className={styles.pageButton}
+        >
+          <ChevronLeftIcon className={styles.icon} />
+        </button>
         {Array.from({ length: totalPages }, (_, i) => (
           <button
             key={i + 1}
@@ -200,6 +208,13 @@ const TableView = ({ data }) => {
             {i + 1}
           </button>
         ))}
+        <button
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className={styles.pageButton}
+        >
+          <ChevronRightIcon className={styles.icon} />
+        </button>
       </div>
     </div>
   );
