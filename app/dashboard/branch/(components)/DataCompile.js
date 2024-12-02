@@ -75,6 +75,9 @@ const DataCompile = ({ proData, onDataProcessed }) => {
           return acc;
         }, {});
         // Map unique engineers to regions and branches
+
+        // Map unique engineers to regions and branches
+        let totalVisitsSum = 0;
         const finalData = uniqueBranch.map((branch) => {
           // console.log(uniqueEngineersPerBranch[branch]);
 
@@ -84,6 +87,7 @@ const DataCompile = ({ proData, onDataProcessed }) => {
           const newInstallation = branchCallCount[`${branch}_newInstallation`] || 0;
           const newPM = branchCallCount[`${branch}_newPM`] || 0;
           const totalVisits = totalAssigned - (newBreakdown + newInstallation + newPM);
+          totalVisitsSum += totalVisits;
           const ePoint = branchCallCount[`${branch}_ePoint`].toFixed(2) || 0;
           const bPoint = branchCallCount[`${branch}_bPoint`].toFixed(2) || 0;
           const rPoint = branchCallCount[`${branch}_rPoint`].toFixed(2) || 0;
@@ -133,7 +137,8 @@ const DataCompile = ({ proData, onDataProcessed }) => {
             accuracy,
           };
         });
-
+        // Calculate average totalVisits
+        const averageTotalVisits = (totalVisitsSum / uniqueBranch.length).toFixed(2);
         // Create header row
         const header = {
           region: "Region",
@@ -161,13 +166,13 @@ const DataCompile = ({ proData, onDataProcessed }) => {
 
         // Combine header with data
         const finalDataWithHeader = [header, ...finalData].filter((row) => row.region !== "");
-        onDataProcessed(finalDataWithHeader);
+        onDataProcessed(finalDataWithHeader, averageTotalVisits);
 
         setProcessed(true);
       };
       processData();
     }
-  }, [proData, onDataProcessed,processed]);
+  }, [proData, onDataProcessed, processed]);
   return null;
 };
 
