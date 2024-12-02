@@ -5,7 +5,6 @@ import Navbar from "@/components/Navbar";
 import { auth } from "@/auth";
 import { DataProvider } from "../context/DataContext";
 
-
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -24,7 +23,7 @@ export const metadata = {
 
 export default async function RootLayout({ children }) {
   const session = await auth();
-  const isAuthenticated =!!session?.user;
+  const isAuthenticated = !!session?.user;
 
   return (
     <DataProvider isAuthenticated={isAuthenticated}>
