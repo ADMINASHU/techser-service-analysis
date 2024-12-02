@@ -67,6 +67,7 @@ const DataCompile = ({ proData, onDataProcessed }) => {
         }, {});
 
         // Map unique engineers to regions and branches
+        let totalVisitsSum = 0;
         const finalData = uniqueEngineers.map((engineer) => {
           const engineerData = proData.find((item) => item.assignedTo === engineer);
           const totalAssigned = engineerCallCount[engineer];
@@ -74,9 +75,10 @@ const DataCompile = ({ proData, onDataProcessed }) => {
           const newInstallation = engineerCallCount[`${engineer}_newInstallation`] || 0;
           const newPM = engineerCallCount[`${engineer}_newPM`] || 0;
           const totalVisits = totalAssigned - (newBreakdown + newInstallation + newPM);
+          totalVisitsSum += totalVisits;
           const ePoint = engineerCallCount[`${engineer}_ePoint`].toFixed(2) || 0;
-          const bPoint = engineerCallCount[`${engineer}_bPoint`].toFixed(2) || 0;
-          const rPoint = engineerCallCount[`${engineer}_rPoint`].toFixed(2) || 0;
+          // const bPoint = engineerCallCount[`${engineer}_bPoint`].toFixed(2) || 0;
+          // const rPoint = engineerCallCount[`${engineer}_rPoint`].toFixed(2) || 0;
           const closeBreakdown = engineerCallCount[`${engineer}_closeBreakdown`] || 0;
           const closeInstallation = engineerCallCount[`${engineer}_closeInstallation`] || 0;
           const closePM = engineerCallCount[`${engineer}_closePM`] || 0;
@@ -120,6 +122,9 @@ const DataCompile = ({ proData, onDataProcessed }) => {
           };
         });
 
+        // Calculate average totalVisits
+        const averageTotalVisits = (totalVisitsSum / uniqueEngineers.length).toFixed(2);
+
         // Create header row
         const header = {
           region: "Region",
@@ -147,13 +152,14 @@ const DataCompile = ({ proData, onDataProcessed }) => {
         // Combine header with data
         const finalDataWithHeader = [header, ...finalData];
 
-        onDataProcessed(finalDataWithHeader);
+        onDataProcessed(finalDataWithHeader, averageTotalVisits);
 
         setProcessed(true);
       };
       processData();
     }
-  }, [proData, onDataProcessed,processed]);
+  }, [proData, onDataProcessed, processed]);
+
   return null;
 };
 

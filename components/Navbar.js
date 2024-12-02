@@ -8,17 +8,36 @@ import styles from "./Navbar.module.css"; // Import CSS module
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import DataContext from "../context/DataContext";
+import Swal from "sweetalert2";
 
 export default function Navbar({ session }) {
   const { processedData, totalRows, loading } = useContext(DataContext); // Use DataContext to access processedData and loading state
   const isAuthenticated = !!session?.user;
   const isAdmin = session?.user?.isAdmin;
-  const level = session?.user?.level;
+  const verified = session?.user?.verified;
   const [menuOpen, setMenuOpen] = useState(false);
   const [dashOpen, setDashOpen] = useState(false);
 
   const profileName = session?.user?.userID || "User"; // Replace with actual logic to get profile name
   const pathname = usePathname();
+
+  useEffect(() => {
+    if (isAuthenticated && !verified) {
+      Swal.fire({
+        title: "Profile not verified!",
+        text: "Please contact your organization.",
+        icon: "info",
+        confirmButtonText: "Go to Profile",
+        showCancelButton: true,
+        cancelButtonText: "OK",
+        html: `<p>Please contact your organization.</p>`,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = "/profile";
+        }
+      });
+    }
+  }, [verified]);
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -102,9 +121,16 @@ export default function Navbar({ session }) {
               Home
             </Link>
             <Link
-              href="/dashboard"
-              className={pathname === "/dashboard" ? styles.activeLink : ""}
-              onClick={toggleMenu}
+              href=""
+              className={
+                pathname === "/dashboard/engineer" ||
+                pathname === "/dashboard/branch" ||
+                pathname === "/dashboard/region" ||
+                pathname === "/dashboard/customer"
+                  ? styles.activeLink
+                  : styles.nlink
+              }
+              onClick={toggleDash}
             >
               Dashboard
             </Link>
@@ -115,15 +141,20 @@ export default function Navbar({ session }) {
             >
               Data
             </Link>
-            {isAdmin && (
-              <Link
-                href="/control"
-                className={pathname === "/control" ? styles.activeLink : ""}
-                onClick={toggleMenu}
-              >
-                Control
-              </Link>
-            )}
+
+            <Link
+              href="/users"
+              className={pathname === "/users" ? styles.activeLink : styles.nlink}
+            >
+              Users
+            </Link>
+
+            <Link
+              href="/control"
+              className={pathname === "/control" ? styles.activeLink : styles.nlink}
+            >
+              Control
+            </Link>
             <Logout onClick={() => toggleMenu()} />
           </div>
         )}

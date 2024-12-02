@@ -27,3 +27,63 @@
 .tableContainer {
     overflow-x: auto;
 }
+
+/*.................................................*/
+.page {
+  margin: 20px;
+}
+
+.filterContainer {
+  margin-bottom: 20px;
+}
+
+.paginationContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pageButton,
+.activePageButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  margin: 0 5px;
+  padding: 5px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.pageButton {
+  background-color: #f0f0f0;
+}
+
+.activePageButton {
+  background-color: #007bff;
+  color: white;
+}
+
+.pageButton:disabled {
+  background-color: #d0d0d0;
+  cursor: not-allowed;
+}
+
+.pageButton:hover:not(:disabled) {
+  background-color: #e0e0e0;
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+}
+
+.ellipsis {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+}

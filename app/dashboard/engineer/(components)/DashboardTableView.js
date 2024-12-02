@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "../../Dashboard.module.css";
 
-const DashboardTableView = ({ data }) => {
+const DashboardTableView = ({ data, averageTotalVisits }) => {
   const [smartFilter, setSmartFilter] = useState(false);
   const [filters, setFilters] = useState({
     region: "ALL Region",
@@ -23,6 +23,7 @@ const DashboardTableView = ({ data }) => {
     "TAMIL NADU",
     "West Bengal",
   ];
+  // console.log(averageTotalVisits);
 
   const getBranchesForRegion = (region) => {
     const branches = new Set();
@@ -65,7 +66,7 @@ const DashboardTableView = ({ data }) => {
           );
         })
         .filter((row) => row.engineer.toLowerCase().includes(filters.engineer.toLowerCase()))
-        .filter((row) => row.totalVisits > 30);
+        .filter((row) => row.totalVisits > averageTotalVisits);
     } else {
       newFilteredData = data
         .filter((row) => row.region !== "Region")

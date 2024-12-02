@@ -47,6 +47,9 @@ const TableView = ({ data }) => {
     complaintID: "",
   });
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const rowsPerPage = 50;
+
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFilters((prevFilters) => ({ ...prevFilters, [name]: value }));
@@ -69,7 +72,8 @@ const TableView = ({ data }) => {
       (!filters.natureOfComplaint || row.natureOfComplaint === filters.natureOfComplaint) &&
       (!filters.realStatus || row.realStatus === filters.realStatus) &&
       (!filters.assignedTo || row.assignedTo === filters.assignedTo) &&
-      (!filters.complaintID || row.complaintID.toLowerCase().includes(filters.complaintID.toLowerCase()))
+      (!filters.complaintID ||
+        row.complaintID.toLowerCase().includes(filters.complaintID.toLowerCase()))
     );
   });
 
@@ -85,6 +89,77 @@ const TableView = ({ data }) => {
     : Array.from(
         new Set(data.filter((row) => row.branch === filters.branch).map((row) => row.assignedTo))
       );
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
+
+  const paginatedData = filteredData.slice(
+    (currentPage - 1) * rowsPerPage,
+    currentPage * rowsPerPage
+  );
+
+  const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+
+  const getPaginationButtons = () => {
+    const buttons = [];
+    const maxButtons = 5;
+    let startPage = Math.max(1, currentPage - Math.floor(maxButtons / 2));
+    let endPage = Math.min(totalPages, startPage + maxButtons - 1);
+
+    if (endPage - startPage + 1 < maxButtons) {
+      startPage = Math.max(1, endPage - maxButtons + 1);
+    }
+
+    if (startPage > 1) {
+      buttons.push(
+        <button
+          key={1}
+          onClick={() => handlePageChange(1)}
+          className={currentPage === 1 ? styles.activePageButton : styles.pageButton}
+        >
+          1
+        </button>
+      );
+      buttons.push(
+        <span key="start-ellipsis" className={styles.ellipsis}>
+          ...
+        </span>
+      );
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      if (i === 1) continue;
+      buttons.push(
+        <button
+          key={i}
+          onClick={() => handlePageChange(i)}
+          className={i === currentPage ? styles.activePageButton : styles.pageButton}
+        >
+          {i}
+        </button>
+      );
+    }
+
+    if (endPage < totalPages) {
+      buttons.push(
+        <span key="end-ellipsis" className={styles.ellipsis}>
+          ...
+        </span>
+      );
+      buttons.push(
+        <button
+          key={totalPages}
+          onClick={() => handlePageChange(totalPages)}
+          className={currentPage === totalPages ? styles.activePageButton : styles.pageButton}
+        >
+          {totalPages}
+        </button>
+      );
+    }
+
+    return buttons;
+  };
 
   return (
     <div className={styles.page}>
@@ -167,7 +242,7 @@ const TableView = ({ data }) => {
           </tr>
         </thead>
         <tbody>
-          {filteredData.map((row, rowIndex) => (
+          {paginatedData.map((row, rowIndex) => (
             <tr key={rowIndex}>
               {selectedColumns.map((col, index) => (
                 <td key={index}>{row[col] !== undefined ? row[col] : ""}</td>
@@ -176,6 +251,45 @@ const TableView = ({ data }) => {
           ))}
         </tbody>
       </table>
+
+      <div className={styles.paginationContainer}>
+        <button
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          className={styles.pageButton}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            className={styles.icon}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M15 19l-7-7 7-7"
+            />
+          </svg>
+        </button>
+        {getPaginationButtons()}
+        <button
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className={styles.pageButton}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            className={styles.icon}
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
     </div>
   );
 };
