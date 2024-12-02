@@ -10,7 +10,6 @@ import { usePathname } from "next/navigation";
 import DataContext from "../context/DataContext";
 import Swal from "sweetalert2";
 
-
 export default function Navbar({ session }) {
   const { processedData, totalRows, loading } = useContext(DataContext); // Use DataContext to access processedData and loading state
   const isAuthenticated = !!session?.user;
@@ -122,9 +121,16 @@ export default function Navbar({ session }) {
               Home
             </Link>
             <Link
-              href="/dashboard"
-              className={pathname === "/dashboard" ? styles.activeLink : ""}
-              onClick={toggleMenu}
+              href=""
+              className={
+                pathname === "/dashboard/engineer" ||
+                pathname === "/dashboard/branch" ||
+                pathname === "/dashboard/region" ||
+                pathname === "/dashboard/customer"
+                  ? styles.activeLink
+                  : styles.nlink
+              }
+              onClick={toggleDash}
             >
               Dashboard
             </Link>
@@ -135,15 +141,20 @@ export default function Navbar({ session }) {
             >
               Data
             </Link>
-            {isAdmin && (
-              <Link
-                href="/control"
-                className={pathname === "/control" ? styles.activeLink : ""}
-                onClick={toggleMenu}
-              >
-                Control
-              </Link>
-            )}
+
+            <Link
+              href="/users"
+              className={pathname === "/users" ? styles.activeLink : styles.nlink}
+            >
+              Users
+            </Link>
+
+            <Link
+              href="/control"
+              className={pathname === "/control" ? styles.activeLink : styles.nlink}
+            >
+              Control
+            </Link>
             <Logout onClick={() => toggleMenu()} />
           </div>
         )}
