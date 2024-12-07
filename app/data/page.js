@@ -2,7 +2,7 @@
 
 import React, { useContext, useEffect, useState } from "react";
 import TableView from "./(components)/TableView";
-import DataContext from "../../../context/DataContext";
+import DataContext from "../../context/DataContext";
 
 const DataPage = () => {
   const { processedData } = useContext(DataContext);
