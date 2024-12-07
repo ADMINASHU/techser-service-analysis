@@ -1,31 +1,31 @@
 /* Styles for the filter section */
 .page {
-    margin: 20px;
+  margin: 20px;
 }
 
 .filterContainer {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
 }
 
 .filterContainer select,
 .filterContainer input {
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    outline: none;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
 
 }
 
 /* Styles for the search bar */
 .searchBar {
-    flex-grow: 1;
+  flex-grow: 1;
 }
 
 .tableContainer {
-    overflow-x: auto;
+  overflow-x: auto;
 }
 
 /*.................................................*/
@@ -39,7 +39,7 @@
 
 .paginationContainer {
   display: flex;
-  justify-content: center;
+  justify-content: left;
   margin-top: 20px;
 }
 
@@ -62,7 +62,7 @@
 }
 
 .activePageButton {
-  background-color: #007bff;
+  background-color: #ff4c4c;
   color: white;
 }
 
@@ -72,12 +72,20 @@
 }
 
 .pageButton:hover:not(:disabled) {
-  background-color: #e0e0e0;
+  background-color: #ff4c4c;
+  color: white;
+
 }
 
 .icon {
   width: 20px;
   height: 20px;
+  color: #ff4c4c;
+}
+
+.icon:hover {
+  color: white;
+
 }
 
 .ellipsis {

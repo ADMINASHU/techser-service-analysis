@@ -233,6 +233,14 @@ const TableView = ({ data }) => {
           style={{ marginLeft: "10px" }}
         />
       </div>
+
+      <div className={styles.countDisplay}>
+        Showing {(currentPage - 1) * rowsPerPage + 1} to{" "}
+        {Math.min(currentPage * rowsPerPage, filteredData.length)} {`of `}
+        <span style={{ color: "#e63946" }}>{filteredData.length}</span>
+        {` entries`}
+      </div>
+
       <table border="1" cellPadding="5">
         <thead>
           <tr>
