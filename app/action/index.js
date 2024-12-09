@@ -14,9 +14,8 @@ export async function doLogin(cred) {
       password: password,
       redirect: false,
     });
-    console.log("from server: "+response);
+    console.log("from server: " + response);
     return response;
-    
   } catch (error) {
     throw new Error(error);
   }

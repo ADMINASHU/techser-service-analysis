@@ -1,6 +1,6 @@
 "use client";
-
 import { useState, useEffect } from "react";
+import { regionList } from "@/lib/regions";
 import axios from "axios";
 import Swal from "sweetalert2";
 import styles from "./Profile.module.css";
@@ -196,14 +196,20 @@ const Profile = ({ LoggedUserID }) => {
           </div>
           <div className={styles.field}>
             <label className={styles.label}>Region:</label>
-            <input
+            <select
               className={styles.input}
-              type="text"
               name="region"
               value={formData.region}
               onChange={handleChange}
               disabled={!editMode}
-            />
+            >
+              <option value="">Select Region</option>
+              {regionList.map((region) => (
+                <option key={region} value={region}>
+                  {region}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
         <div className={styles.tContainer}>

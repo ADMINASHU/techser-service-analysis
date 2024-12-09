@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styles from "./page.module.css";
+import { regionList } from "@/lib/regions";
 
 const TableView = ({ data }) => {
   const selectedColumns = [
@@ -22,19 +23,7 @@ const TableView = ({ data }) => {
     "rPoint",
   ];
 
-  const regionList = [
-    "AP & TELANGANA",
-    "CHATTISGARH",
-    "GOA",
-    "KALKA",
-    "KARNATAKA",
-    "KERALA",
-    "MADHYA PRADESH",
-    "MUMBAI",
-    "RAJASTHAN",
-    "TAMIL NADU",
-    "West Bengal",
-  ];
+
 
   const [filters, setFilters] = useState({
     year: data[data.length - 1]?.year,
