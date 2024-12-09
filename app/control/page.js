@@ -131,8 +131,10 @@ const Control = () => {
                     onChange={(e) => handleChange(category, "branch", "new", 0, e.target.value)}
                     className={styles["input-field"]}
                   />
-                ) : (
+                ) : (<>
                   <span className={styles["input-field"]}>{points[category].branch.new}</span>
+                  {category==="BREAKDOWN" && <span>/ day; after 3 day</span>}
+                  </>
                 )}
               </td>
               <td>
@@ -167,8 +169,11 @@ const Control = () => {
                     onChange={(e) => handleChange(category, "branch", "pending", 0, e.target.value)}
                     className={styles["input-field"]}
                   />
-                ) : (
+                ) : (<>
                   <span className={styles["input-field"]}>{points[category].branch.pending}</span>
+                  {category==="BREAKDOWN" ? <span>/ day; after 3 day</span> : <span> per visit</span>}
+                  
+                  </>
                 )}
               </td>
               <td>
@@ -227,10 +232,13 @@ const Control = () => {
                     onChange={(e) => handleChange(category, "branch", "closed", 0, e.target.value)}
                     className={styles["input-field"]}
                   />
-                ) : (
+                ) : (<>
                   <span className={styles["input-field"]}>
                     {displayClosedValue(points[category].branch.closed)}
                   </span>
+                  {category==="BREAKDOWN" ? <span>/ day; after 3 day</span> : <span> per visit</span>}
+
+                  </>
                 )}
               </td>
               <td>
