@@ -1,7 +1,33 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styles from "../../Dashboard.module.css";
 
-const DashboardTableView = ({ data }) => {
+const DashboardTableView = ({ data, averageTotalVisits }) => {
+  const [smartFilter, setSmartFilter] = useState(false);
+  const [filteredData, setFilteredData] = useState([]);
+
+  const handleSmartFilterToggle = () => {
+    setSmartFilter((prevSmartFilter) => !prevSmartFilter);
+  };
+
+  useEffect(() => {
+    if (!data || data.length === 0) {
+      setFilteredData([]);
+      return;
+    }
+
+    let newFilteredData;
+
+    if (smartFilter) {
+      newFilteredData = data
+        .filter((row) => row.region !== "Region")
+        .filter((row) => row.totalVisits > averageTotalVisits);
+    } else {
+      newFilteredData = data.filter((row) => row.region !== "Region");
+    }
+
+    setFilteredData(newFilteredData);
+  }, [data, smartFilter]);
+
   const getColor = (value) => {
     const minpoint = 1000;
     const midpoint = 1800;
@@ -24,29 +50,46 @@ const DashboardTableView = ({ data }) => {
   if (!data || data.length === 0) return <div>No data available</div>;
 
   return (
-    <table>
-      <thead>
-        <tr>
-          <th colSpan={3}>Dashboard Region</th>
-          <th colSpan={1}>Entry</th>
-          <th colSpan={3}>New</th>
-          <th colSpan={3}>Pending</th>
-          <th colSpan={3}>Closed in 1st Attempt</th>
-          <th colSpan={3}>Pending Call Closed</th>
-          <th colSpan={4}>Total</th>
-          <th colSpan={1}>Index</th>
-          <th colSpan={1}>Accuracy</th>
-        </tr>
-        <tr>
-          {Object.values(data[0]).map((key, index) => (
-            <th key={index}>{key}</th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {data.slice(1).map((row, rowIndex) => (
-          <tr key={rowIndex}>
-               {Object.values(row)?.map((value, colIndex) => (
+    <div className={styles.page}>
+      <div className={styles.filterContainer}>
+        <button
+          className={styles.button}
+          style={
+            smartFilter
+              ? { backgroundColor: "green", color: "white", textAlign: "center" }
+              : { backgroundColor: "#e90c0c", color: "white", textAlign: "center" }
+          }
+          onClick={handleSmartFilterToggle}
+        >
+          {smartFilter ? "Smart" : "Regular"}
+        </button>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th colSpan={3}>Dashboard Region</th>
+            <th colSpan={1}>Entry</th>
+            <th colSpan={3}>New</th>
+            <th colSpan={3}>Pending</th>
+            <th colSpan={3}>Closed in 1st Attempt</th>
+            <th colSpan={3}>Pending Call Closed</th>
+            <th colSpan={4}>Total</th>
+            <th colSpan={1}>Index</th>
+            <th colSpan={1}>Accuracy</th>
+          </tr>
+          {data?.length > 0 && (
+            <tr>
+              {Object.values(data[0])?.map((value, index) => (
+                <th key={index}>{value}</th>
+              ))}
+            </tr>
+          )}
+        </thead>
+        <tbody>
+          {filteredData?.map((row, rowIndex) => (
+            <tr key={rowIndex}>
+              {Object.values(row)?.map((value, colIndex) => (
                 <td
                   key={colIndex}
                   style={colIndex === 20 ? { backgroundColor: getColor(value) } : {}}
@@ -54,10 +97,11 @@ const DashboardTableView = ({ data }) => {
                   {value}
                 </td>
               ))}
-          </tr>
-        ))}
-      </tbody>
-    </table>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 };
 

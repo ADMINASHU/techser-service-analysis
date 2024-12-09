@@ -7,16 +7,20 @@ import DataContext from "../../../context/DataContext";
 
 const DashboardPage = () => {
   const [data, setData] = useState([]);
+  const [averageTotalVisits, setAverageTotalVisits] = useState(0);
+
   const { processedData } = useContext(DataContext);
 
-  const onDataProcessed = (data) => {
-    setData(data);
+  const onDataProcessed = (finalDataWithHeader, averageTotalVisits ) => {
+    setData(finalDataWithHeader);
+    setAverageTotalVisits(averageTotalVisits);
   };
   return (
     <div className={styles.dash}>
       <h1>Dashboard Region</h1>
       <DataCompile proData={processedData} onDataProcessed={onDataProcessed} />
-      <DashboardTableView data={data} />
+      <DashboardTableView data={data} averageTotalVisits = {averageTotalVisits}/>
+
     </div>
   );
 };
