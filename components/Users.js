@@ -1,10 +1,12 @@
 "use client";
+import React, { useContext } from "react";
 import { useEffect, useState } from "react";
 import { regionList } from "@/lib/regions";
 import axios from "axios";
 import Swal from "sweetalert2";
 import styles from "./Users.module.css";
 import Image from "next/image";
+import DataContext from "@/context/DataContext";
 
 const Users = ({ LoggedUserLevel }) => {
   const [users, setUsers] = useState([]);
@@ -25,6 +27,15 @@ const Users = ({ LoggedUserLevel }) => {
     verified: false,
   });
 
+  const { processedData } = useContext(DataContext);
+
+  const filteredBranches = !formData.region
+    ? Array.from(new Set(processedData.map((row) => row.branch)))
+    : Array.from(
+        new Set(
+          processedData.filter((row) => row.region === formData.region).map((row) => row.branch)
+        )
+      );
   useEffect(() => {
     const newLevels = Array.from({ length: 4 }, (_, i) => i + 1).filter(
       (level) => level >= LoggedUserLevel
@@ -240,13 +251,19 @@ const Users = ({ LoggedUserLevel }) => {
                 </div>
                 <div className={styles.field}>
                   <label className={styles.label}>Branch:</label>
-                  <input
-                    className={styles.input}
-                    type="text"
-                    name="branch"
-                    value={formData.branch}
-                    onChange={handleChange}
-                  />
+                  <select
+              className={styles.input}
+              name="branch"
+              value={formData.branch}
+              onChange={handleChange}
+            >
+              <option value="">Select Branch</option>
+              {filteredBranches.map((branch) => (
+                <option key={branch} value={branch}>
+                  {branch}
+                </option>
+              ))}
+            </select>
                 </div>
               </div>
             </div>
@@ -295,7 +312,7 @@ const Users = ({ LoggedUserLevel }) => {
               <td>{user.designation}</td>
               <td>{user.branch}</td>
               <td>{user.region}</td>
-              <td>{user.level}</td>
+              <td>Level {user.level}</td>
               <td
                 style={
                   user.verified

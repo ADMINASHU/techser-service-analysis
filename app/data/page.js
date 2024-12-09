@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext} from "react";
 import TableView from "./(components)/TableView";
 import DataContext from "../../context/DataContext";
 
