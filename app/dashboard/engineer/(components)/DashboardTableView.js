@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styles from "../../Dashboard.module.css";
+import { regionList } from "@/lib/regions";
 
 const DashboardTableView = ({ data, averageTotalVisits }) => {
   const [smartFilter, setSmartFilter] = useState(false);
@@ -9,20 +10,6 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
     engineer: "",
   });
   const [filteredData, setFilteredData] = useState([]);
-
-  const regionList = [
-    "AP & TELANGANA",
-    "CHATTISGARH",
-    "GOA",
-    "KALKA",
-    "KARNATAKA",
-    "KERALA",
-    "MADHYA PRADESH",
-    "MUMBAI",
-    "RAJASTHAN",
-    "TAMIL NADU",
-    "West Bengal",
-  ];
 
   const getBranchesForRegion = (region) => {
     const branches = new Set();

@@ -1,26 +1,14 @@
 import React, { useState, useEffect } from "react";
 import styles from "../../Dashboard.module.css";
+import { regionList } from "@/lib/regions";
 
 const DashboardTableView = ({ data, averageTotalVisits }) => {
   const [smartFilter, setSmartFilter] = useState(false);
   const [filters, setFilters] = useState({
     region: "ALL Region",
+    branch: "",
   });
   const [filteredData, setFilteredData] = useState([]);
-
-  const regionList = [
-    "AP & TELANGANA",
-    "CHATTISGARH",
-    "GOA",
-    "KALKA",
-    "KARNATAKA",
-    "KERALA",
-    "MADHYA PRADESH",
-    "MUMBAI",
-    "RAJASTHAN",
-    "TAMIL NADU",
-    "West Bengal",
-  ];
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
@@ -47,6 +35,7 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
             filters.region === "ALL Region" || !filters.region || row.region === filters.region
           );
         })
+        .filter((row) => row.branch.toLowerCase().includes(filters.branch.toLowerCase()))
         .filter((row) => row.totalVisits > averageTotalVisits);
     } else {
       newFilteredData = data
@@ -55,7 +44,8 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
           return (
             filters.region === "ALL Region" || !filters.region || row.region === filters.region
           );
-        });
+        })
+        .filter((row) => row.branch.toLowerCase().includes(filters.branch.toLowerCase()));
     }
 
     setFilteredData(newFilteredData);
@@ -106,6 +96,14 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
             </option>
           ))}
         </select>
+
+        <input
+          type="text"
+          name="branch"
+          value={filters.branch}
+          placeholder="Search Branch"
+          onChange={handleFilterChange}
+        />
       </div>
       <table>
         <thead>
@@ -131,7 +129,7 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
         <tbody>
           {filteredData?.map((row, rowIndex) => (
             <tr key={rowIndex}>
-                 {Object.values(row)?.map((value, colIndex) => (
+              {Object.values(row)?.map((value, colIndex) => (
                 <td
                   key={colIndex}
                   style={colIndex === 19 ? { backgroundColor: getColor(value) } : {}}
