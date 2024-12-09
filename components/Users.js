@@ -281,7 +281,13 @@ const Users = ({ LoggedUserLevel }) => {
         <tbody>
           {users?.map((user, index) => (
             <tr key={user.userID}>
-              <td>{index + 1}</td>
+              <td
+                style={{
+                  textAlign: "center",
+                }}
+              >
+                {index + 1}
+              </td>
               <td>{user.userID}</td>
               <td>{`${user?.fName || ""} ${user?.eName || ""}`}</td>
               <td>{user.email}</td>
@@ -290,7 +296,21 @@ const Users = ({ LoggedUserLevel }) => {
               <td>{user.branch}</td>
               <td>{user.region}</td>
               <td>{user.level}</td>
-              <td>{user.verified ? "Verified" : "Blocked"}</td>
+              <td
+                style={
+                  user.verified
+                    ? {
+                        color: "green",
+                        textAlign: "center",
+                      }
+                    : {
+                        color: "red",
+                        textAlign: "center",
+                      }
+                }
+              >
+                {user.verified ? "Verified" : "Blocked"}
+              </td>
               <td>
                 {user.level >= LoggedUserLevel && (
                   <div className={styles.button}>
