@@ -25,7 +25,7 @@ const Profile = ({ LoggedUserID }) => {
     userID: "",
     verified: false,
   });
-  const { processedData } = useContext(DataContext);
+  const { processedData, setUserProfile } = useContext(DataContext);
 
   const filteredBranches = !formData.region
     ? Array.from(new Set(processedData.map((row) => row.branch)))
@@ -39,8 +39,9 @@ const Profile = ({ LoggedUserID }) => {
     const fetchProfile = async () => {
       try {
         const response = await axios.post("/api/profile", { userID: LoggedUserID });
-        console.log(response.data.user);
+        // console.log(response.data.user);
         setProfile(response.data.user);
+        setUserProfile(response.data.user);
       } catch (error) {
         console.error(error);
       }

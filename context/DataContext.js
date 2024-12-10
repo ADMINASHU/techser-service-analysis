@@ -1,16 +1,26 @@
-'use client';
-
-import { createContext, useState, useEffect } from 'react';
-
+"use client";
+import axios from "axios";
+import { createContext, useState, useEffect } from "react";
+import { doLogout } from "@/app/action";
 const DataContext = createContext();
 
 const CHUNK_SIZE = 400; // Number of rows to fetch per chunk
 
-export const DataProvider = ({ children }) => {
+export const DataProvider = ({ children, session }) => {
   const [processedData, setProcessedData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [startRow, setStartRow] = useState(0);
   const [totalRows, setTotalRows] = useState(0);
+  const [userProfile, setUserProfile] = useState([]);
+
+  const fetchUsers = async () => {
+    try {
+      const response = await axios.get("/api/users");
+      setUserProfile(response.data.users);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const fetchDataChunk = async (startRow, chunkSize) => {
     try {
@@ -44,7 +54,7 @@ export const DataProvider = ({ children }) => {
 
         setProcessedData((prevData) => {
           const updatedData = [...prevData, ...finalData];
-          const uniqueFinalData = removeDuplicates(updatedData, 'complaintID');
+          const uniqueFinalData = removeDuplicates(updatedData, "complaintID");
           return uniqueFinalData;
         });
 
@@ -60,7 +70,7 @@ export const DataProvider = ({ children }) => {
 
   const removeDuplicates = (array, key) => {
     const seen = new Set();
-    return array.filter(item => {
+    return array.filter((item) => {
       const duplicate = seen.has(item[key]);
       seen.add(item[key]);
       return !duplicate;
@@ -76,19 +86,41 @@ export const DataProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  useEffect(() => {
     if (startRow < totalRows || totalRows === 0) {
       setLoading(true);
       const timer = setTimeout(async () => {
         await fetchDataChunk(startRow, CHUNK_SIZE);
         setStartRow((prevStartRow) => prevStartRow + CHUNK_SIZE);
-      }, 500); // Adding a slight delay to prevent too many rapid requests
+      }, 100); // Adding a slight delay to prevent too many rapid requests
 
       return () => clearTimeout(timer);
     }
   }, [startRow, totalRows]);
 
+  useEffect(() => {
+    if (userProfile && session?.user) {
+      const isAdmin = session?.user?.isAdmin;
+      const verified = session?.user?.verified;
+      const level = session?.user?.level;
+
+      if (
+        isAdmin !== userProfile.isAdmin ||
+        verified !== userProfile.verified ||
+        level !== userProfile.level
+      ) {
+        doLogout();
+      }
+    }
+  }, [userProfile, session]);
+
   return (
-    <DataContext.Provider value={{ processedData, setProcessedData, loading, totalRows }}>
+    <DataContext.Provider
+      value={{ processedData, setProcessedData, loading, totalRows, setUserProfile }}
+    >
       {children}
     </DataContext.Provider>
   );
