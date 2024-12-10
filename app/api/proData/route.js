@@ -6,8 +6,8 @@ import { parse, differenceInHours, format, isValid } from "date-fns";
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
-  const startRow = parseInt(searchParams.get('startRow')) || 0;
-  const chunkSize = parseInt(searchParams.get('chunkSize')) || 100;
+  const startRow = parseInt(searchParams.get("startRow")) || 0;
+  const chunkSize = parseInt(searchParams.get("chunkSize")) || 100;
 
   try {
     const db = await connectToServiceEaseDB();
@@ -100,7 +100,7 @@ export async function GET(request) {
         status,
         assignedTo,
         region,
-        branch: branch==="BHOOPAL" ? "BHOPAL" : branch,
+        branch: branch === "BHOOPAL" ? "BHOPAL" : branch,
         month,
         year,
       });
@@ -148,7 +148,7 @@ export async function GET(request) {
           realStatus === "NEW"
             ? points[natureOfComplaint].eng.new
             : realStatus === "IN PROCESS"
-            ? points[natureOfComplaint].eng.pending
+            ? (item.closedDate ? points[natureOfComplaint].eng.pending : 0)
             : cPoint;
 
         const bPoint = (() => {
@@ -198,13 +198,16 @@ export async function GET(request) {
 
     const totalRows = await Data.countDocuments();
     // console.log(finalPointData);
-    
-    return NextResponse.json({ finalPointData, totalRows }, {
-      status: 200,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+
+    return NextResponse.json(
+      { finalPointData, totalRows },
+      {
+        status: 200,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
   } catch (error) {
     console.error("Error in GET request:", error);
     return NextResponse.json({ error: error.message }, { status: 500 });

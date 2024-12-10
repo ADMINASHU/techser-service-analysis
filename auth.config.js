@@ -6,17 +6,34 @@ export const authConfig = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.userID = user.userID;
-        token.email = user.email;
-        token.isAdmin = user.isAdmin;
-        token.level = user.level;
-        token.verified = user.verified;
-        // Ensure isAdmin is defined
+        return { ...token, ...user };
       }
-      // console.log("JWT Callback - Token:", token);
-      // Console log the token
+    
+      const currentTime = Math.floor(Date.now() / 1000);
+      if (currentTime - token.iat > 1 * 60) { // 1 minute
+        try {
+          await connectToServiceEaseDB();
+          const currentUser = await User.findOne({ userID: token.userID });
+    
+          if (currentUser) {
+            return {
+              ...token,
+              userID: currentUser.userID,
+              email: currentUser.email,
+              isAdmin: currentUser.isAdmin,
+              level: currentUser.level,
+              verified: currentUser.verified,
+              iat: currentTime,
+            };
+          }
+        } catch (error) {
+          console.error("JWT callback error:", error);
+        }
+      }
+    
       return token;
-    },
+    }
+    
     async session({ session, token }) {
       if (token) {
         session.user = {

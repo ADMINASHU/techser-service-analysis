@@ -24,6 +24,10 @@ const DataCompile = ({ proData, onDataProcessed }) => {
           if (item.branch) {
             acc[item.branch] = (acc[item.branch] || 0) + 1;
 
+            if (!item.closedDate && item.realStatus != "NEW") {
+              acc[`${item.branch}_openCall`] = (acc[`${item.branch}_openCall`] || 0) + 1;
+            }
+
             if (item.realStatus === "NEW") {
               if (item.natureOfComplaint === "BREAKDOWN") {
                 acc[`${item.branch}_newBreakdown`] = (acc[`${item.branch}_newBreakdown`] || 0) + 1;
@@ -86,7 +90,9 @@ const DataCompile = ({ proData, onDataProcessed }) => {
           const newBreakdown = branchCallCount[`${branch}_newBreakdown`] || 0;
           const newInstallation = branchCallCount[`${branch}_newInstallation`] || 0;
           const newPM = branchCallCount[`${branch}_newPM`] || 0;
-          const totalVisits = totalAssigned - (newBreakdown + newInstallation + newPM);
+          const openCall = branchCallCount[`${branch}_openCall`] || 0;
+          const totalVisits = totalAssigned - (newBreakdown + newInstallation + newPM + openCall);
+          // const totalVisits = totalAssigned - openCall;
           totalVisitsSum += totalVisits;
           const ePoint = branchCallCount[`${branch}_ePoint`].toFixed(2) || 0;
           const bPoint = branchCallCount[`${branch}_bPoint`].toFixed(2) || 0;
@@ -131,6 +137,7 @@ const DataCompile = ({ proData, onDataProcessed }) => {
             pCloseInstallation,
             pClosePM,
             totalVisits,
+            // openCall,
             ePoint,
             bPoint,
             index,
@@ -158,6 +165,7 @@ const DataCompile = ({ proData, onDataProcessed }) => {
           pCloseInstallation: "I",
           pClosePM: "P",
           totalVisits: "Visits",
+          // openCall: "open call",
           ePoint: "E Point",
           bPoint: "B Point",
           index: "Score",
