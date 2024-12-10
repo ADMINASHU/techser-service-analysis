@@ -3,7 +3,6 @@ import CredentialProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { User } from "./app/models/User";
 import connectToServiceEaseDB from "./lib/serviceDB";
-import { NextResponse } from "next/server";
 import { authConfig } from "./auth.config";
 
 export const {
@@ -46,6 +45,5 @@ export const {
       },
     }),
   ],
-
   secret: process.env.AUTH_SECRET,
 });
