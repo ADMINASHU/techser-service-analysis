@@ -10,7 +10,7 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
     engineer: "",
   });
   const [filteredData, setFilteredData] = useState([]);
-  const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
 
   const getBranchesForRegion = (region) => {
     const branches = new Set();
@@ -32,9 +32,9 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
   };
 
   const handleSort = (key) => {
-    let direction = "asc";
-    if (sortConfig.key === key && sortConfig.direction === "asc") {
-      direction = "desc";
+    let direction = 'asc';
+    if (sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
     }
     setSortConfig({ key, direction });
   };
@@ -84,10 +84,10 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
         const bValue = isNaN(b[sortConfig.key]) ? b[sortConfig.key] : parseFloat(b[sortConfig.key]);
 
         if (aValue < bValue) {
-          return sortConfig.direction === "asc" ? -1 : 1;
+          return sortConfig.direction === 'asc' ? -1 : 1;
         }
         if (aValue > bValue) {
-          return sortConfig.direction === "asc" ? 1 : -1;
+          return sortConfig.direction === 'asc' ? 1 : -1;
         }
         return 0;
       });
@@ -102,7 +102,7 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
     const midPoint = 1800;
     const greenPoint = 2000;
     const maxPoint = 3000;
-  
+
     if (value <= strPoint) {
       return `rgb(139,0,0)`; // Dark red for very low values
     } else if (value <= minPoint) {
@@ -121,8 +121,6 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
       return `rgb(0,100,0)`; // Dark green for values above maxPoint
     }
   };
-  
-  
 
   if (!data || data.length === 0) return <div>No data available</div>;
 
@@ -170,7 +168,7 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
       <table>
         <thead>
           <tr>
-            <th colSpan={3}>Dashboard Engineer</th>
+            <th colSpan={4}>Dashboard Engineer</th>
             <th colSpan={1}>Assigned</th>
             <th colSpan={3}>New</th>
             <th colSpan={3}>Pending</th>
@@ -182,6 +180,7 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
           </tr>
           {data?.length > 0 && (
             <tr>
+              <th>S.No.</th>
               {Object.values(data[0])?.map((value, index) => (
                 <th key={index} onClick={() => handleSort(Object.keys(data[0])[index])}>
                   {value}{" "}
@@ -198,6 +197,7 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
         <tbody>
           {filteredData?.map((row, rowIndex) => (
             <tr key={rowIndex}>
+              <td>{rowIndex + 1}</td>
               {Object.values(row)?.map((value, colIndex) => (
                 <td
                   key={colIndex}

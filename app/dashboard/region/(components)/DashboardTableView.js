@@ -100,7 +100,7 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
       <table>
         <thead>
           <tr>
-            <th colSpan={3}>Dashboard Region</th>
+            <th colSpan={4}>Dashboard Region</th>
             <th colSpan={1}>Entry</th>
             <th colSpan={3}>New</th>
             <th colSpan={3}>Pending</th>
@@ -112,6 +112,7 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
           </tr>
           {data?.length > 0 && (
             <tr>
+              <th>S.No.</th>
               {Object.values(data[0])?.map((value, index) => (
                 <th key={index} onClick={() => handleSort(Object.keys(data[0])[index])}>
                   {value} {sortConfig.key === Object.keys(data[0])[index] ? (sortConfig.direction === 'asc' ? '▲' : '▼') : ''}
@@ -123,6 +124,7 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
         <tbody>
           {filteredData?.map((row, rowIndex) => (
             <tr key={rowIndex}>
+              <td>{rowIndex + 1}</td>
               {Object.values(row)?.map((value, colIndex) => (
                 <td
                   key={colIndex}
