@@ -3,6 +3,7 @@ import { Data } from "../../models/Data";
 import Point from "../../models/Point";
 import { NextResponse } from "next/server";
 import { parse, differenceInHours, format, isValid } from "date-fns";
+import { regionList } from "@/lib/regions";
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
@@ -30,20 +31,6 @@ export async function GET(request) {
       acc[item.category] = item.data;
       return acc;
     }, {});
-
-    const regionList = [
-      "AP & TELANGANA",
-      "CHATTISGARH",
-      "GOA",
-      "KALKA",
-      "KARNATAKA",
-      "KERALA",
-      "MADHYA PRADESH",
-      "MUMBAI",
-      "RAJASTHAN",
-      "TAMIL NADU",
-      "West Bengal",
-    ];
 
     const parseDate = (dateStr) => {
       const dates = dateStr.match(/\d{2}\.\w{3}\.\d{4} \d{2}:\d{2}/g);

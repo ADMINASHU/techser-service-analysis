@@ -10,6 +10,7 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
     engineer: "",
   });
   const [filteredData, setFilteredData] = useState([]);
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
 
   const getBranchesForRegion = (region) => {
     const branches = new Set();
@@ -28,6 +29,14 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
 
   const handleSmartFilterToggle = () => {
     setSmartFilter((prevSmartFilter) => !prevSmartFilter);
+  };
+
+  const handleSort = (key) => {
+    let direction = 'asc';
+    if (sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
   };
 
   useEffect(() => {
@@ -69,25 +78,40 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
         .filter((row) => row.engineer.toLowerCase().includes(filters.engineer.toLowerCase()));
     }
 
+    if (sortConfig.key) {
+      newFilteredData = [...newFilteredData].sort((a, b) => {
+        const aValue = isNaN(a[sortConfig.key]) ? a[sortConfig.key] : parseFloat(a[sortConfig.key]);
+        const bValue = isNaN(b[sortConfig.key]) ? b[sortConfig.key] : parseFloat(b[sortConfig.key]);
+
+        if (aValue < bValue) {
+          return sortConfig.direction === 'asc' ? -1 : 1;
+        }
+        if (aValue > bValue) {
+          return sortConfig.direction === 'asc' ? 1 : -1;
+        }
+        return 0;
+      });
+    }
+
     setFilteredData(newFilteredData);
-  }, [data, filters, smartFilter, averageTotalVisits]);
+  }, [data, filters, smartFilter, sortConfig, averageTotalVisits]);
 
   const getColor = (value) => {
-    const minpoint = 1000;
-    const midpoint = 1800;
-    const maxpoint = 3000;
+    const minPoint = 1000;
+    const midPoint = 1800;
+    const maxPoint = 3000;
 
-    if (value <= minpoint) {
-      const ratio = value / minpoint;
+    if (value <= minPoint) {
+      const ratio = value / minPoint;
       return `rgb(255, ${Math.round(255 * ratio)}, ${Math.round(255 * ratio)})`; // Gradient to darker red
-    } else if (value >= maxpoint) {
-      const ratio = (value - midpoint) / (maxpoint - midpoint);
+    } else if (value >= maxPoint) {
+      const ratio = (value - midPoint) / (maxPoint - midPoint);
       return `rgb(${Math.round(255 * (1 - ratio))}, 255, ${Math.round(255 * (1 - ratio))})`; // Gradient to darker green
-    } else if (value < midpoint) {
-      const ratio = (value - minpoint) / (midpoint - minpoint);
+    } else if (value < midPoint) {
+      const ratio = (value - minPoint) / (midPoint - minPoint);
       return `rgb(255, ${Math.round(255 * ratio)}, 0)`; // Gradient from red to yellow
     } else {
-      const ratio = (value - midpoint) / (maxpoint - midpoint);
+      const ratio = (value - midPoint) / (maxPoint - midPoint);
       return `rgb(${Math.round(255 * (1 - ratio))}, 255, 0)`; // Gradient from yellow to green
     }
   };
@@ -150,8 +174,10 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
           </tr>
           {data?.length > 0 && (
             <tr>
-              {Object.values(data[0])?.map((key, index) => (
-                <th key={index}>{key}</th>
+              {Object.values(data[0])?.map((value, index) => (
+                <th key={index} onClick={() => handleSort(Object.keys(data[0])[index])}>
+                  {value} {sortConfig.key === Object.keys(data[0])[index] ? (sortConfig.direction === 'asc' ? '▲' : '▼') : ''}
+                </th>
               ))}
             </tr>
           )}
