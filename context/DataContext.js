@@ -75,9 +75,7 @@ export const DataProvider = ({ children }) => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
+
 
   useEffect(() => {
     if (startRow < totalRows || totalRows === 0) {
