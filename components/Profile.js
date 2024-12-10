@@ -39,7 +39,7 @@ const Profile = ({ LoggedUserID }) => {
     const fetchProfile = async () => {
       try {
         const response = await axios.post("/api/profile", { userID: LoggedUserID });
-        console.log(response.data.user);
+        // console.log(response.data.user);
         setProfile(response.data.user);
       } catch (error) {
         console.error(error);

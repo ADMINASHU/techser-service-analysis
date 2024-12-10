@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { createContext, useState, useEffect } from 'react';
+import { createContext, useState, useEffect } from "react";
 
 const DataContext = createContext();
 
@@ -44,7 +44,7 @@ export const DataProvider = ({ children }) => {
 
         setProcessedData((prevData) => {
           const updatedData = [...prevData, ...finalData];
-          const uniqueFinalData = removeDuplicates(updatedData, 'complaintID');
+          const uniqueFinalData = removeDuplicates(updatedData, "complaintID");
           return uniqueFinalData;
         });
 
@@ -60,7 +60,7 @@ export const DataProvider = ({ children }) => {
 
   const removeDuplicates = (array, key) => {
     const seen = new Set();
-    return array.filter(item => {
+    return array.filter((item) => {
       const duplicate = seen.has(item[key]);
       seen.add(item[key]);
       return !duplicate;
@@ -75,13 +75,15 @@ export const DataProvider = ({ children }) => {
     fetchData();
   }, []);
 
+
+
   useEffect(() => {
     if (startRow < totalRows || totalRows === 0) {
       setLoading(true);
       const timer = setTimeout(async () => {
         await fetchDataChunk(startRow, CHUNK_SIZE);
         setStartRow((prevStartRow) => prevStartRow + CHUNK_SIZE);
-      }, 500); // Adding a slight delay to prevent too many rapid requests
+      }, 100); // Adding a slight delay to prevent too many rapid requests
 
       return () => clearTimeout(timer);
     }

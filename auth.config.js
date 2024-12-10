@@ -1,6 +1,8 @@
 export const authConfig = {
   session: {
     strategy: "jwt",
+    maxAge: 60 * 60, // 1 hour
+    updateAge: 1 * 60, // 1 minute
   },
   providers: [],
   callbacks: {
@@ -11,10 +13,7 @@ export const authConfig = {
         token.isAdmin = user.isAdmin;
         token.level = user.level;
         token.verified = user.verified;
-        // Ensure isAdmin is defined
       }
-      // console.log("JWT Callback - Token:", token);
-      // Console log the token
       return token;
     },
     async session({ session, token }) {
@@ -25,10 +24,9 @@ export const authConfig = {
           email: token.email,
           isAdmin: token.isAdmin, // Ensure isAdmin is defined
           level: token.level, // Ensure isAdmin is defined
-          verified: token.verified, // Ensure isAdmin is defined
+          verified: token.verified,
         };
       }
-      // console.log("Session Callback - Session:", session); // Console log the session
       return session;
     },
   },

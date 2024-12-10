@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 
 const DataCompile = ({ proData, onDataProcessed }) => {
   const [processed, setProcessed] = useState(false);
+
   useEffect(() => {
     if (proData.length > 0 && !processed) {
       const processData = async () => {
@@ -13,6 +14,10 @@ const DataCompile = ({ proData, onDataProcessed }) => {
         const engineerCallCount = proData.reduce((acc, item) => {
           if (item.assignedTo) {
             acc[item.assignedTo] = (acc[item.assignedTo] || 0) + 1;
+
+            if (!item.closedDate && item.realStatus !== "NEW" ) {
+              acc[`${item.assignedTo}_openCall`] = (acc[`${item.assignedTo}_openCall`] || 0) + 1;
+            }
 
             if (item.realStatus === "NEW") {
               if (item.natureOfComplaint === "BREAKDOWN") {
@@ -74,11 +79,11 @@ const DataCompile = ({ proData, onDataProcessed }) => {
           const newBreakdown = engineerCallCount[`${engineer}_newBreakdown`] || 0;
           const newInstallation = engineerCallCount[`${engineer}_newInstallation`] || 0;
           const newPM = engineerCallCount[`${engineer}_newPM`] || 0;
-          const totalVisits = totalAssigned - (newBreakdown + newInstallation + newPM);
+          const openCall = engineerCallCount[`${engineer}_openCall`] || 0;
+          const totalVisits = totalAssigned - (newBreakdown + newInstallation + newPM + openCall);
+          // const totalVisits = totalAssigned - openCall;
           totalVisitsSum += totalVisits;
           const ePoint = engineerCallCount[`${engineer}_ePoint`].toFixed(2) || 0;
-          // const bPoint = engineerCallCount[`${engineer}_bPoint`].toFixed(2) || 0;
-          // const rPoint = engineerCallCount[`${engineer}_rPoint`].toFixed(2) || 0;
           const closeBreakdown = engineerCallCount[`${engineer}_closeBreakdown`] || 0;
           const closeInstallation = engineerCallCount[`${engineer}_closeInstallation`] || 0;
           const closePM = engineerCallCount[`${engineer}_closePM`] || 0;
@@ -117,6 +122,7 @@ const DataCompile = ({ proData, onDataProcessed }) => {
             pClosePM,
             totalVisits,
             ePoint,
+            // openCall, // Add openCall to the final data
             index,
             accuracy,
           };
@@ -145,6 +151,7 @@ const DataCompile = ({ proData, onDataProcessed }) => {
           pClosePM: "P",
           totalVisits: "Visits",
           ePoint: "E Point",
+          // openCall: "Open Call", // Add openCall to the header row
           index: "Score",
           accuracy: "%",
         };
@@ -156,6 +163,7 @@ const DataCompile = ({ proData, onDataProcessed }) => {
 
         setProcessed(true);
       };
+
       processData();
     }
   }, [proData, onDataProcessed, processed]);

@@ -4,9 +4,18 @@ import styles from "../../Dashboard.module.css";
 const DashboardTableView = ({ data, averageTotalVisits }) => {
   const [smartFilter, setSmartFilter] = useState(false);
   const [filteredData, setFilteredData] = useState([]);
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
 
   const handleSmartFilterToggle = () => {
     setSmartFilter((prevSmartFilter) => !prevSmartFilter);
+  };
+
+  const handleSort = (key) => {
+    let direction = 'asc';
+    if (sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
   };
 
   useEffect(() => {
@@ -25,28 +34,51 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
       newFilteredData = data.filter((row) => row.region !== "Region");
     }
 
+    if (sortConfig.key) {
+      newFilteredData = [...newFilteredData].sort((a, b) => {
+        const aValue = isNaN(a[sortConfig.key]) ? a[sortConfig.key] : parseFloat(a[sortConfig.key]);
+        const bValue = isNaN(b[sortConfig.key]) ? b[sortConfig.key] : parseFloat(b[sortConfig.key]);
+
+        if (aValue < bValue) {
+          return sortConfig.direction === 'asc' ? -1 : 1;
+        }
+        if (aValue > bValue) {
+          return sortConfig.direction === 'asc' ? 1 : -1;
+        }
+        return 0;
+      });
+    }
+
     setFilteredData(newFilteredData);
-  }, [data, smartFilter]);
+  }, [data, smartFilter, sortConfig, averageTotalVisits]);
 
   const getColor = (value) => {
-    const minpoint = 1000;
-    const midpoint = 1800;
-    const maxpoint = 3000;
-
-    if (value <= minpoint) {
-      const ratio = value / minpoint;
-      return `rgb(255, ${Math.round(255 * ratio)}, ${Math.round(255 * ratio)})`; // Gradient to darker red
-    } else if (value >= maxpoint) {
-      const ratio = (value - midpoint) / (maxpoint - midpoint);
-      return `rgb(${Math.round(255 * (1 - ratio))}, 255, ${Math.round(255 * (1 - ratio))})`; // Gradient to darker green
-    } else if (value < midpoint) {
-      const ratio = (value - minpoint) / (midpoint - minpoint);
-      return `rgb(255, ${Math.round(255 * ratio)}, 0)`; // Gradient from red to yellow
+    const strPoint = -3000;
+    const minPoint = 1000;
+    const midPoint = 1800;
+    const greenPoint = 2000;
+    const maxPoint = 3000;
+  
+    if (value <= strPoint) {
+      return `rgb(139,0,0)`; // Dark red for very low values
+    } else if (value <= minPoint) {
+      const ratio = (value - strPoint) / (minPoint - strPoint);
+      return `rgb(255, ${Math.round(64 * ratio)}, ${Math.round(64 * ratio)})`; // Gradient from dark red to light red
+    } else if (value <= midPoint) {
+      const ratio = (value - minPoint) / (midPoint - minPoint);
+      return `rgb(255, ${Math.round(255 * ratio)}, 0)`; // Gradient from light red to light green
+    } else if (value <= greenPoint) {
+      const ratio = (value - midPoint) / (greenPoint - midPoint);
+      return `rgb(${Math.round(255 * (1 - ratio))}, 255, 0)`; // Gradient from light green to green
+    } else if (value <= maxPoint) {
+      const ratio = (value - greenPoint) / (maxPoint - greenPoint);
+      return `rgb(0, ${Math.round(255 * (1 - ratio))}, 0)`; // Gradient from green to dark green
     } else {
-      const ratio = (value - midpoint) / (maxpoint - midpoint);
-      return `rgb(${Math.round(255 * (1 - ratio))}, 255, 0)`; // Gradient from yellow to green
+      return `rgb(0,100,0)`; // Dark green for values above maxPoint
     }
   };
+  
+
   if (!data || data.length === 0) return <div>No data available</div>;
 
   return (
@@ -81,7 +113,9 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
           {data?.length > 0 && (
             <tr>
               {Object.values(data[0])?.map((value, index) => (
-                <th key={index}>{value}</th>
+                <th key={index} onClick={() => handleSort(Object.keys(data[0])[index])}>
+                  {value} {sortConfig.key === Object.keys(data[0])[index] ? (sortConfig.direction === 'asc' ? '▲' : '▼') : ''}
+                </th>
               ))}
             </tr>
           )}
