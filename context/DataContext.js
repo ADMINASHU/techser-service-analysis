@@ -83,7 +83,7 @@ export const DataProvider = ({ children }) => {
       const timer = setTimeout(async () => {
         await fetchDataChunk(startRow, CHUNK_SIZE);
         setStartRow((prevStartRow) => prevStartRow + CHUNK_SIZE);
-      }, 100); // Adding a slight delay to prevent too many rapid requests
+      }, 50); // Adding a slight delay to prevent too many rapid requests
 
       return () => clearTimeout(timer);
     }

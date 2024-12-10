@@ -1,19 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+
 import styles from "../../Dashboard.module.css";
 
 const DashboardTableView = ({ data, averageTotalVisits }) => {
+  const tableRef = useRef();
+
   const [smartFilter, setSmartFilter] = useState(false);
   const [filteredData, setFilteredData] = useState([]);
-  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
 
   const handleSmartFilterToggle = () => {
     setSmartFilter((prevSmartFilter) => !prevSmartFilter);
   };
 
   const handleSort = (key) => {
-    let direction = 'asc';
-    if (sortConfig.key === key && sortConfig.direction === 'asc') {
-      direction = 'desc';
+    let direction = "asc";
+    if (sortConfig.key === key && sortConfig.direction === "asc") {
+      direction = "desc";
     }
     setSortConfig({ key, direction });
   };
@@ -40,10 +43,10 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
         const bValue = isNaN(b[sortConfig.key]) ? b[sortConfig.key] : parseFloat(b[sortConfig.key]);
 
         if (aValue < bValue) {
-          return sortConfig.direction === 'asc' ? -1 : 1;
+          return sortConfig.direction === "asc" ? -1 : 1;
         }
         if (aValue > bValue) {
-          return sortConfig.direction === 'asc' ? 1 : -1;
+          return sortConfig.direction === "asc" ? 1 : -1;
         }
         return 0;
       });
@@ -58,7 +61,7 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
     const midPoint = 1800;
     const greenPoint = 2000;
     const maxPoint = 3000;
-  
+
     if (value <= strPoint) {
       return `rgb(139,0,0)`; // Dark red for very low values
     } else if (value <= minPoint) {
@@ -77,7 +80,25 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
       return `rgb(0,100,0)`; // Dark green for values above maxPoint
     }
   };
-  
+
+  const handlePrint = () => {
+    const printContent = tableRef.current;
+    const printWindow = window.open("", "", "width=800,height=600");
+    printWindow.document.write(
+      ` <html> 
+    <head> 
+    <title>Print Table</title> 
+    <style> 
+    table { width: 100%; border-collapse: collapse; } 
+    th, td { border: 1px solid black; padding: 8px; text-align: left; }
+     </style> 
+     </head> 
+     <body> ${printContent.outerHTML} </body>
+      </html> `
+    );
+    printWindow.document.close();
+    printWindow.print();
+  };
 
   if (!data || data.length === 0) return <div>No data available</div>;
 
@@ -96,11 +117,14 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
           {smartFilter ? "Smart" : "Regular"}
         </button>
       </div>
+      <button className={styles.print} onClick={handlePrint}>
+        Print
+      </button>
 
-      <table>
+      <table ref={tableRef}>
         <thead>
           <tr>
-            <th colSpan={3}>Dashboard Region</th>
+            <th colSpan={4}>Dashboard Region</th>
             <th colSpan={1}>Entry</th>
             <th colSpan={3}>New</th>
             <th colSpan={3}>Pending</th>
@@ -112,9 +136,15 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
           </tr>
           {data?.length > 0 && (
             <tr>
+              <th>S.No.</th>
               {Object.values(data[0])?.map((value, index) => (
                 <th key={index} onClick={() => handleSort(Object.keys(data[0])[index])}>
-                  {value} {sortConfig.key === Object.keys(data[0])[index] ? (sortConfig.direction === 'asc' ? '▲' : '▼') : ''}
+                  {value}{" "}
+                  {sortConfig.key === Object.keys(data[0])[index]
+                    ? sortConfig.direction === "asc"
+                      ? "▲"
+                      : "▼"
+                    : ""}
                 </th>
               ))}
             </tr>
@@ -123,6 +153,7 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
         <tbody>
           {filteredData?.map((row, rowIndex) => (
             <tr key={rowIndex}>
+              <td>{rowIndex + 1}</td>
               {Object.values(row)?.map((value, colIndex) => (
                 <td
                   key={colIndex}

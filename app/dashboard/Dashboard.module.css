@@ -33,3 +33,14 @@
     cursor: pointer;
     font-size: 12px;
 }
+.print {
+    width: 90px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    background-color: #0070f3;
+    color: white;
+
+}
