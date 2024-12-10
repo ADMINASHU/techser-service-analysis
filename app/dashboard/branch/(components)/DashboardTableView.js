@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+
 import styles from "../../Dashboard.module.css";
 import { regionList } from "@/lib/regions";
 
 const DashboardTableView = ({ data, averageTotalVisits }) => {
+  const tableRef = useRef();
+
   const [smartFilter, setSmartFilter] = useState(false);
   const [filters, setFilters] = useState({
     region: "ALL Region",
@@ -101,7 +104,24 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
     }
   };
   
-  
+  const handlePrint = () => {
+    const printContent = tableRef.current;
+    const printWindow = window.open("", "", "width=800,height=600");
+    printWindow.document.write(
+      ` <html> 
+      <head> 
+      <title>Print Table</title> 
+      <style> 
+      table { width: 100%; border-collapse: collapse; } 
+      th, td { border: 1px solid black; padding: 8px; text-align: left; }
+       </style> 
+       </head> 
+       <body> ${printContent.outerHTML} </body>
+        </html> `
+    );
+    printWindow.document.close();
+    printWindow.print();
+  };
   
 
   if (!data || data.length === 0) return <div>No data available</div>;
@@ -137,8 +157,11 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
           placeholder="Search Branch"
           onChange={handleFilterChange}
         />
+         <button className={styles.print} onClick={handlePrint}>
+          Print
+        </button>
       </div>
-      <table>
+      <table ref={tableRef}>
         <thead>
           <tr>
             <th colSpan={4}>Dashboard Branch</th>

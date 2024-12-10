@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styles from "../../Dashboard.module.css";
 import { regionList } from "@/lib/regions";
 
 const DashboardTableView = ({ data, averageTotalVisits }) => {
+  const tableRef = useRef();
   const [smartFilter, setSmartFilter] = useState(false);
   const [filters, setFilters] = useState({
     region: "ALL Region",
@@ -10,7 +11,7 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
     engineer: "",
   });
   const [filteredData, setFilteredData] = useState([]);
-  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
 
   const getBranchesForRegion = (region) => {
     const branches = new Set();
@@ -32,9 +33,9 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
   };
 
   const handleSort = (key) => {
-    let direction = 'asc';
-    if (sortConfig.key === key && sortConfig.direction === 'asc') {
-      direction = 'desc';
+    let direction = "asc";
+    if (sortConfig.key === key && sortConfig.direction === "asc") {
+      direction = "desc";
     }
     setSortConfig({ key, direction });
   };
@@ -84,10 +85,10 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
         const bValue = isNaN(b[sortConfig.key]) ? b[sortConfig.key] : parseFloat(b[sortConfig.key]);
 
         if (aValue < bValue) {
-          return sortConfig.direction === 'asc' ? -1 : 1;
+          return sortConfig.direction === "asc" ? -1 : 1;
         }
         if (aValue > bValue) {
-          return sortConfig.direction === 'asc' ? 1 : -1;
+          return sortConfig.direction === "asc" ? 1 : -1;
         }
         return 0;
       });
@@ -120,6 +121,25 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
     } else {
       return `rgb(0,100,0)`; // Dark green for values above maxPoint
     }
+  };
+
+  const handlePrint = () => {
+    const printContent = tableRef.current;
+    const printWindow = window.open("", "", "width=800,height=600");
+    printWindow.document.write(
+      ` <html> 
+      <head> 
+      <title>Print Table</title> 
+      <style> 
+      table { width: 100%; border-collapse: collapse; } 
+      th, td { border: 1px solid black; padding: 8px; text-align: left; }
+       </style> 
+       </head> 
+       <body> ${printContent.outerHTML} </body>
+        </html> `
+    );
+    printWindow.document.close();
+    printWindow.print();
   };
 
   if (!data || data.length === 0) return <div>No data available</div>;
@@ -164,8 +184,11 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
           placeholder="Search Engineer"
           onChange={handleFilterChange}
         />
+        <button className={styles.print} onClick={handlePrint}>
+          Print
+        </button>
       </div>
-      <table>
+      <table ref={tableRef}>
         <thead>
           <tr>
             <th colSpan={4}>Dashboard Engineer</th>
