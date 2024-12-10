@@ -1,26 +1,16 @@
 "use client";
-import axios from "axios";
+
 import { createContext, useState, useEffect } from "react";
-import { doLogout } from "@/app/action";
+
 const DataContext = createContext();
 
 const CHUNK_SIZE = 400; // Number of rows to fetch per chunk
 
-export const DataProvider = ({ children, session }) => {
+export const DataProvider = ({ children }) => {
   const [processedData, setProcessedData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [startRow, setStartRow] = useState(0);
   const [totalRows, setTotalRows] = useState(0);
-  const [userProfile, setUserProfile] = useState([]);
-
-  const fetchUsers = async () => {
-    try {
-      const response = await axios.get("/api/users");
-      setUserProfile(response.data.users);
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   const fetchDataChunk = async (startRow, chunkSize) => {
     try {
@@ -101,26 +91,8 @@ export const DataProvider = ({ children, session }) => {
     }
   }, [startRow, totalRows]);
 
-  useEffect(() => {
-    if (userProfile && session?.user) {
-      const isAdmin = session?.user?.isAdmin;
-      const verified = session?.user?.verified;
-      const level = session?.user?.level;
-
-      if (
-        isAdmin !== userProfile.isAdmin ||
-        verified !== userProfile.verified ||
-        level !== userProfile.level
-      ) {
-        doLogout();
-      }
-    }
-  }, [userProfile, session]);
-
   return (
-    <DataContext.Provider
-      value={{ processedData, setProcessedData, loading, totalRows, setUserProfile }}
-    >
+    <DataContext.Provider value={{ processedData, setProcessedData, loading, totalRows }}>
       {children}
     </DataContext.Provider>
   );
