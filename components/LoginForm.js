@@ -6,6 +6,7 @@ import { doLogin } from "@/app/action";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { AuthError } from "next-auth";
 const LoginForm = () => {
   const [userID, setUserID] = useState("");
   const [password, setPassword] = useState("");
@@ -25,25 +26,32 @@ const LoginForm = () => {
     const cred = { userID, password };
     try {
       const response = await doLogin(cred);
-      if (!!response.error) {
+      if (response.error) {
         Swal.fire({
           title: "Error!",
-          text: "Login failed. Please check your credentials.",
+          text: response.error,
           icon: "error",
           confirmButtonText: "OK",
         });
-        console.log(response.error);
       } else {
         router.push("/");
       }
     } catch (error) {
-      console.log(error);
       Swal.fire({
         title: "Error!",
-        text: "Login failed. Please check your credentials.",
+        text: "Login failed. Please try again later.",
         icon: "error",
         confirmButtonText: "OK",
       });
+      if (error instanceof AuthError) {
+        switch (error.type) {
+          case "CredentialsSignin":
+            return { error: "Invalid Credentials!" };
+          default:
+            return { error: "Something went wrong!" };
+        }
+      }
+      throw error;
     }
   }
 
@@ -51,18 +59,18 @@ const LoginForm = () => {
     <div className={styles.container}>
       <div className={styles.loginContainer}>
         <Image
-          src="/logo.jpg" // Path to your image
-          alt="Company image" // Alt text for accessibility
+          src="/logo.jpg"
+          alt="Company logo"
           priority={true}
-          width={180} // Display width
+          width={180}
           height={101}
-          className={styles.logo} // Display height
+          className={styles.logo}
         />
         <form onSubmit={handleSubmit}>
           <input
             type="text"
-            id="userId"
-            name="userId"
+            id="userID"
+            name="userID"
             placeholder="User ID"
             value={userID}
             onChange={(e) => setUserID(e.target.value)}
@@ -77,17 +85,16 @@ const LoginForm = () => {
           />
           <button type="submit">Sign in</button>
           <p>
-            <Link href={"/forgot-password"} className={styles.forgotPasswordLink}>
+            <Link href="/forgot-password" className={styles.forgotPasswordLink}>
               Forgot Password?
             </Link>
           </p>
           <p>
-            Don&apos;t you have an account?
-            <Link href={"/register"} className={styles.signupLink}>
+            Don't have an account?
+            <Link href="/register" className={styles.signupLink}>
               Register
             </Link>
           </p>
-      
         </form>
       </div>
     </div>
