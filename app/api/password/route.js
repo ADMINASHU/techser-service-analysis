@@ -4,7 +4,7 @@ import { User } from "../../models/User";
 import connectToServiceEaseDB from "../../../lib/serviceDB";
 
 export async function POST(request) {
-  console.log("running: ##########################################");
+  console.log("running: ##########################################"+ request);
   try {
     const { token, password } = await request.json(); // Destructure token and password
 
