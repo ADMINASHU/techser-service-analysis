@@ -1,6 +1,5 @@
 "use client";
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import styles from "./LoginForm.module.css";
 import Link from "next/link";
 import { doLogin } from "@/app/action";
@@ -54,6 +53,7 @@ const LoginForm = () => {
         <Image
           src="/logo.jpg" // Path to your image
           alt="Company image" // Alt text for accessibility
+          priority={true}
           width={180} // Display width
           height={101}
           className={styles.logo} // Display height
@@ -77,11 +77,17 @@ const LoginForm = () => {
           />
           <button type="submit">Sign in</button>
           <p>
+            <Link href={"/forgot-password"} className={styles.forgotPasswordLink}>
+              Forgot Password?
+            </Link>
+          </p>
+          <p>
             Don&apos;t you have an account?
             <Link href={"/register"} className={styles.signupLink}>
               Register
             </Link>
           </p>
+      
         </form>
       </div>
     </div>
