@@ -28,10 +28,9 @@ const RegisterForm = () => {
           icon: "success",
           confirmButtonText: "OK",
         });
-        router.push("/");
+        router.push("/login");
       }
     } catch (error) {
-      // console.log(error.message);
       Swal.fire({
         title: "Error!",
         text: error.message,

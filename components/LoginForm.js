@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { startTransition } from "react";
 import { useState } from "react";
 import styles from "./LoginForm.module.css";
 import Link from "next/link";
@@ -14,38 +14,28 @@ const LoginForm = () => {
 
   async function handleSubmit(event) {
     event.preventDefault();
-    if (!userID || !password) {
-      Swal.fire({
-        title: "Warning!",
-        text: "Please fill in all the fields.",
-        icon: "warning",
-        confirmButtonText: "OK",
-      });
-      return;
-    }
+
     const cred = { userID, password };
-    try {
-      const response = await doLogin(cred);
-      if (!!response.error) {
-        Swal.fire({
-          title: "Error!",
-          text: "Login failed. Please check your credentials.",
-          icon: "error",
-          confirmButtonText: "OK",
-        });
-        console.log(response.error);
-      } else {
-        router.push("/");
-      }
-    } catch (error) {
-      console.log(error);
-      Swal.fire({
-        title: "Error!",
-        text: "Login failed. Please check your credentials.",
-        icon: "error",
-        confirmButtonText: "OK",
+    startTransition(() => {
+      doLogin(cred).then((data) => {
+        if (data.error) {
+          Swal.fire({
+            title: "Warning!",
+            text: data.error,
+            icon: "warning",
+            confirmButtonText: "OK",
+          });
+        }
+        if (data.success) {
+          Swal.fire({
+            title: "Warning!",
+            text: data.success,
+            icon: "warning",
+            confirmButtonText: "OK",
+          });
+        }
       });
-    }
+    });
   }
 
   return (

@@ -1,6 +1,8 @@
 "use server";
 
 import { signIn, signOut } from "@/auth";
+import { DEFAULT_LOGIN_REDIRECT } from "@/lib/routes";
+import { AuthError } from "next-auth";
 
 export async function doLogout() {
   await signOut({ redirect: "/" });
@@ -8,15 +10,25 @@ export async function doLogout() {
 
 export async function doLogin(cred) {
   const { userID, password } = await cred;
+  if (!userID || !password) {
+    return { error: "Please provide a valid userID and password" };
+  }
   try {
-    const response = await signIn("credentials", {
+    await signIn("credentials", {
       userID: userID,
       password: password,
-      redirect: false,
+      redirectTo: "/test",
     });
-    console.log("from server: " + response);
-    return response;
+    return { success: "Login successful" };
   } catch (error) {
-    throw new Error(error);
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case "CredentialsSignin":
+          return { error: "Invalid credentials" };
+        default:
+          return { error: "An error occurred while attempting to login" };
+      }
+    }
+    throw error;
   }
 }
