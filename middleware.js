@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import NextAuth from "next-auth";
-import { auth } from "@/auth";
 import {
   PUBLIC_ROUTES,
   LOGIN,
@@ -16,7 +15,9 @@ import {
   AUTH_API_ROUTES,
   DEFAULT_LOGIN_REDIRECT,
 } from "./lib/routes";
+import { authConfig } from "./auth.config";
 
+const { auth } = NextAuth(authConfig);
 export default async function middleware(req) {
   const session = await auth();
 
