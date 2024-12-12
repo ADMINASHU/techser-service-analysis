@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import NextAuth from "next-auth";
+
+
 import {
   PUBLIC_ROUTES,
   LOGIN,
@@ -15,39 +17,40 @@ import {
   AUTH_API_ROUTES,
   DEFAULT_LOGIN_REDIRECT,
 } from "./lib/routes";
-import { authConfig } from "./auth.config";
 
-const { auth } = NextAuth(authConfig);
-export default async function middleware(req) {
-  const session = await auth();
-
-  const { nextUrl } = auth();
-  const isLoggedIn = !!session?.user;
+export default async function middleware(request) {
+  const { nextUrl } = request;
+  const isLoggedIn = !!request.auth;
   console.log(isLoggedIn);
 
   // const isVerified = session?.user?.verified;
   // const level = session?.user?.level,
-  // const isVerified = undefined;
-  // const level = undefined;
+  const isVerified = undefined;
+  const level =  undefined;
 
-  // const isPublicRoute = PUBLIC_ROUTES.find((route) => nextUrl.pathname.startsWith(route));
-  // const isLevel1Route = LEVEL1_ROUTES.find((route) => nextUrl.pathname.startsWith(route));
-  // const isLevel2Route = LEVEL2_ROUTES.find((route) => nextUrl.pathname.startsWith(route));
-  // const isLevel3Route = LEVEL3_ROUTES.find((route) => nextUrl.pathname.startsWith(route));
-  // const isVerifiedRoute = VERIFIED_ROUTES.find((route) => nextUrl.pathname.startsWith(route));
-  // const isAuthRoute = AUTH_ROUTES.find((route) => nextUrl.pathname.startsWith(route));
-  // const isAuthApiRoute = AUTH_API_ROUTES.find((route) => nextUrl.pathname.startsWith(route));
+  const isPublicRoute =
+    PUBLIC_ROUTES.find((route) => nextUrl.pathname.startsWith(route)) &&
+    !PROTECTED_ROUTES.find((route) => nextUrl.pathname.includes(route));
 
-  // if (isAuthApiRoute) {
-  //   return null;
-  // }
+  const isLevel1Route = LEVEL1_ROUTES.find((route) => nextUrl.pathname.startsWith(route));
+  const isLevel2Route = LEVEL2_ROUTES.find((route) => nextUrl.pathname.startsWith(route));
+  const isLevel3Route = LEVEL3_ROUTES.find((route) => nextUrl.pathname.startsWith(route));
+  const isVerifiedRoute = VERIFIED_ROUTES.find((route) => nextUrl.pathname.startsWith(route));
+  const isAuthRoute = AUTH_ROUTES.find((route) => nextUrl.pathname.startsWith(route));
+  const isAuthApiRoute = AUTH_API_ROUTES.find((route) => nextUrl.pathname.startsWith(route));
 
-  // if (isAuthRoute) {
-  //   if (isLoggedIn) {
-  //     return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
-  //   }
-  //   return null;
-  // }
+
+
+  if (isAuthApiRoute) {
+    return null;
+  }
+
+  if (isAuthRoute) {
+    if (isLoggedIn) {
+      return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
+    }
+    return null;
+  }
 
   // if (!isLoggedIn && !isPublicRoute) {
   //   return NextResponse.redirect(new URL(LOGIN, nextUrl));
@@ -66,10 +69,10 @@ export default async function middleware(req) {
   // if (isLevel3Route && level > 3) {
   //   return NextResponse.redirect(new URL(UNAUTHORIZED, nextUrl));
   // }
-  // return null;
+  return null;
 
   // return NextResponse.next();
-}
+};
 
 export const config = {
   matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
