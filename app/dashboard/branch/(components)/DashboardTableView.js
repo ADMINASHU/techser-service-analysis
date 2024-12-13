@@ -12,7 +12,7 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
     branch: "",
   });
   const [filteredData, setFilteredData] = useState([]);
-  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
@@ -24,9 +24,9 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
   };
 
   const handleSort = (key) => {
-    let direction = 'asc';
-    if (sortConfig.key === key && sortConfig.direction === 'asc') {
-      direction = 'desc';
+    let direction = "asc";
+    if (sortConfig.key === key && sortConfig.direction === "asc") {
+      direction = "desc";
     }
     setSortConfig({ key, direction });
   };
@@ -66,17 +66,17 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
         const bValue = isNaN(b[sortConfig.key]) ? b[sortConfig.key] : parseFloat(b[sortConfig.key]);
 
         if (aValue < bValue) {
-          return sortConfig.direction === 'asc' ? -1 : 1;
+          return sortConfig.direction === "asc" ? -1 : 1;
         }
         if (aValue > bValue) {
-          return sortConfig.direction === 'asc' ? 1 : -1;
+          return sortConfig.direction === "asc" ? 1 : -1;
         }
         return 0;
       });
     }
 
     setFilteredData(newFilteredData);
-  }, [data, filters, smartFilter, sortConfig]);
+  }, [data, filters, smartFilter, sortConfig, averageTotalVisits]);
 
   const getColor = (value) => {
     const strPoint = -3000;
@@ -84,7 +84,7 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
     const midPoint = 1800;
     const greenPoint = 2000;
     const maxPoint = 3000;
-  
+
     if (value <= strPoint) {
       return `rgb(139,0,0)`; // Dark red for very low values
     } else if (value <= minPoint) {
@@ -103,7 +103,7 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
       return `rgb(0,100,0)`; // Dark green for values above maxPoint
     }
   };
-  
+
   const handlePrint = () => {
     const printContent = tableRef.current;
     const printWindow = window.open("", "", "width=800,height=600");
@@ -122,7 +122,6 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
     printWindow.document.close();
     printWindow.print();
   };
-  
 
   if (!data || data.length === 0) return <div>No data available</div>;
 
@@ -157,7 +156,7 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
           placeholder="Search Branch"
           onChange={handleFilterChange}
         />
-         <button className={styles.print} onClick={handlePrint}>
+        <button className={styles.print} onClick={handlePrint}>
           Print
         </button>
       </div>
@@ -179,7 +178,12 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
               <th>S.No.</th>
               {Object.values(data[0])?.map((value, index) => (
                 <th key={index} onClick={() => handleSort(Object.keys(data[0])[index])}>
-                  {value} {sortConfig.key === Object.keys(data[0])[index] ? (sortConfig.direction === 'asc' ? '▲' : '▼') : ''}
+                  {value}{" "}
+                  {sortConfig.key === Object.keys(data[0])[index]
+                    ? sortConfig.direction === "asc"
+                      ? "▲"
+                      : "▼"
+                    : ""}
                 </th>
               ))}
             </tr>

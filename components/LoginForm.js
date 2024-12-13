@@ -92,7 +92,7 @@ const LoginForm = () => {
             </Link>
           </p>
           <p>
-            Don't have an account?
+            Don&apos;t have an account?
             <Link href="/register" className={styles.signupLink}>
               Register
             </Link>
