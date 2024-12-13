@@ -47,6 +47,8 @@ const LoginForm = () => {
         switch (error.type) {
           case "CredentialsSignin":
             return { error: "Invalid Credentials!" };
+          case "CallbackRouteError":
+            return { error: "Invalid credentials" };
           default:
             return { error: "Something went wrong!" };
         }

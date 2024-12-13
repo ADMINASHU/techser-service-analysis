@@ -1,6 +1,7 @@
 "use server";
 
 import { signIn, signOut } from "@/auth";
+import { AuthError } from "next-auth";
 
 export async function doLogout() {
   await signOut({ redirect: "/" });
@@ -23,6 +24,16 @@ export async function doLogin(cred) {
     }
     return response;
   } catch (error) {
-    return { error: "An unexpected error occurred. Please try again." };
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case "CredentialsSignin":
+          return { error: "Invalid credentials" };
+        case "CallbackRouteError":
+          return { error: "Invalid credentials" };
+        default:
+          return { error: "An error occurred while attempting to login" };
+      }
+    }
+    throw error;
   }
 }
