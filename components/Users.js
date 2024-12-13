@@ -122,9 +122,21 @@ const Users = ({ LoggedUserLevel }) => {
             <div className={styles.eContainer}>
               <div className={styles.fContainer}>
                 {formData.image ? (
-                  <Image height={170} width={140} src={`/${formData.image}`} alt="/user.png" />
+                  <Image
+                    height={170}
+                    width={140}
+                    src={`/${formData.image}`}
+                    alt="/user.png"
+                    priority={true}
+                  />
                 ) : (
-                  <Image height={170} width={140} src="/user.png" alt="Default Image" />
+                  <Image
+                    height={170}
+                    width={140}
+                    src="/user.png"
+                    alt="Default Image"
+                    priority={true}
+                  />
                 )}
 
                 <div className={styles.field}>
@@ -252,18 +264,18 @@ const Users = ({ LoggedUserLevel }) => {
                 <div className={styles.field}>
                   <label className={styles.label}>Branch:</label>
                   <select
-              className={styles.input}
-              name="branch"
-              value={formData.branch}
-              onChange={handleChange}
-            >
-              <option value="">Select Branch</option>
-              {filteredBranches.map((branch) => (
-                <option key={branch} value={branch}>
-                  {branch}
-                </option>
-              ))}
-            </select>
+                    className={styles.input}
+                    name="branch"
+                    value={formData.branch}
+                    onChange={handleChange}
+                  >
+                    <option value="">Select Branch</option>
+                    {filteredBranches.map((branch) => (
+                      <option key={branch} value={branch}>
+                        {branch}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </div>
             </div>

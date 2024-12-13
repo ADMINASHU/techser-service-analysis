@@ -37,7 +37,7 @@ export default function Navbar({ session }) {
         }
       });
     }
-  }, [verified]);
+  }, [verified, isAuthenticated]);
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);

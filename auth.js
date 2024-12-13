@@ -23,14 +23,10 @@ export const {
         try {
           await connectToServiceEaseDB();
           const user = await User.findOne({ userID: credentials.userID });
-          if (!user) {
-            throw new Error("User not found");
-          }
           const isValidPassword = await bcrypt.compare(credentials.password, user.password);
-          if (!isValidPassword) {
+          if (!user || !isValidPassword) {
             throw new Error("Invalid credentials");
           }
-          // console.log("user data : " + JSON.stringify(user));
           return {
             id: user._id.toString(),
             userID: user.userID,
@@ -46,4 +42,8 @@ export const {
     }),
   ],
   secret: process.env.AUTH_SECRET,
+  pages: {
+    signIn: "/login", // Redirect to the login page on sign-in errors
+    error: "/login", // Redirect to the login page on errors
+  },
 });

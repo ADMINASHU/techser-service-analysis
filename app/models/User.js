@@ -1,4 +1,3 @@
-// app/models/User.js
 import mongoose from "mongoose";
 
 const UserSchema = new mongoose.Schema({
@@ -30,6 +29,8 @@ const UserSchema = new mongoose.Schema({
   region: { type: String },
   branch: { type: String },
   mobileNo: { type: String },
+  resetToken: { type: String }, // Add resetToken field
+  resetTokenExpiry: { type: Date } // Add resetTokenExpiry field
 });
 
 export const User = mongoose.models?.User ?? mongoose.model("User", UserSchema);
