@@ -22,9 +22,7 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }) {
-  // const session = await auth();
-  // const isAuthenticated = !!session?.user;
-
+  
   return (
     <DataProvider >
       <html lang="en">
