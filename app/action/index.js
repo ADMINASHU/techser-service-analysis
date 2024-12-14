@@ -9,26 +9,27 @@ import { signIn, signOut } from "@/auth";
 import { AuthError } from "next-auth";
 
 export async function doLogout() {
-  await signOut({ redirect: "/" });
+  await signOut({ redirectTo: "/login" });// redirect: false; when middleware apply
 }
 
 export async function doLogin({ userID, password }) {
-  const result = SignInSchema.safeParse({
-    userID,
-    password,
-  });
-
-  if (!result.success) {
-    if (result.error) {
-      return { error: result.error.errors[0].message };
-    } else {
-      return { error: "Please provide a valid credentials" };
-    }
-  }
-  // const { userID, password } = result.data; // No need to use await here
   try {
+    const result = SignInSchema.safeParse({
+      userID,
+      password,
+    });
+
+    if (!result.success) {
+      if (result.error) {
+        return { error: result.error.errors[0].message };
+      } else {
+        return { error: "Please provide a valid credentials" };
+      }
+    }
+  
     await signIn("credentials", {
       ...result.data,
+      redirect: false,
     });
 
     return { success: true, message: "Signin successful" };
