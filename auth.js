@@ -2,7 +2,7 @@ import NextAuth, { CredentialsSignin } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { SignInSchema } from "./lib/zod";
 import bcrypt from "bcryptjs";
-import { signIn } from "./app/action";
+import { signInCredentials } from "./app/action";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   pages: {
@@ -17,7 +17,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       authorize: async (credentials) => {
         const { userID, password } = credentials;
     
-        const user = await signIn({ userID, password });
+        const user = await signInCredentials({ userID, password });
 
         if(user.error) {
             throw new CredentialsSignin(user.error);

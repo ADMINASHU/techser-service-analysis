@@ -3,8 +3,40 @@
 import bcrypt from "bcryptjs";
 import connectToServiceEaseDB from "@/lib/serviceDB";
 import { User } from "../models/User";
-import { RegisterSchema } from "@/lib/zod";
+import { SignInSchema, RegisterSchema } from "@/lib/zod";
 import { CredentialsSignin } from "next-auth";
+import { signIn, signOut } from "@/auth";
+import { AuthError } from "next-auth";
+
+export async function doLogout() {
+  await signOut({ redirect: "/" });
+}
+
+export async function doLogin(data) {
+  const result = SignInSchema.safeParse({
+    userID: data.userID,
+    password: data.password,
+  });
+
+  if (!result.success) {
+    if (result.error) {
+      return { error: result.error.errors[0].message };
+    } else {
+      return { error: "Please provide a valid credentials" };
+    }
+  }
+  const { userID, password } = result.data; // No need to use await here
+  try {
+    await signIn("credentials", {
+      userID,
+      password,
+    });
+
+    return { success: true };
+  } catch (error) {
+    return { success: false, error: error.message };
+  }
+}
 
 export const signUp = async ({ data }) => {
   // Validate data using Zod schema
@@ -53,29 +85,14 @@ export const signUp = async ({ data }) => {
   }
 };
 
-export const signIn = async ({ data }) => {
-  // Validate data using Zod schema
-
-  const result = SignInSchema.safeParse({
-    userID: data.userID,
-    password: data.password,
-  });
-
-  if (!result.success) {
-    if (result.error) {
-      return { error: result.error.errors[0].message };
-    } else {
-      return { error: "Please provide a valid credentials" };
-    }
-  }
-
+export const signInCredentials = async ({ data }) => {
   try {
     const db = await connectToServiceEaseDB();
     if (!db) {
       return { error: "Error connecting to the database" };
     }
 
-    const { userID, password } = result.data;
+    const { userID, password } = data;
 
     // Check if user already exists
     const user = await User.findOne({ userID });

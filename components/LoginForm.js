@@ -6,16 +6,16 @@ import Link from "next/link";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { AuthError } from "next-auth";
-import { signIn } from "@/auth";
+import { doLogin } from "@/app/action";
+
 const LoginForm = () => {
   const [userID, setUserID] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
 
   async function handleSubmit(event) {
-    event.preventDefault();
-
+    // event.preventDefault();
+    await doLogin(userID, password);
   }
 
   return (
@@ -29,7 +29,7 @@ const LoginForm = () => {
           height={101}
           className={styles.logo}
         />
-        <form onSubmit={handleSubmit}>
+        <form action={handleSubmit}>
           <input
             type="text"
             id="userID"
