@@ -7,6 +7,7 @@ import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { AuthError } from "next-auth";
+import { signIn } from "@/auth";
 const LoginForm = () => {
   const [userID, setUserID] = useState("");
   const [password, setPassword] = useState("");
@@ -14,47 +15,7 @@ const LoginForm = () => {
 
   async function handleSubmit(event) {
     event.preventDefault();
-  //   if (!userID || !password) {
-  //     Swal.fire({
-  //       title: "Warning!",
-  //       text: "Please fill in all the fields.",
-  //       icon: "warning",
-  //       confirmButtonText: "OK",
-  //     });
-  //     return;
-  //   }
-  //   const cred = { userID, password };
-  //   try {
-  //     const response = await doLogin(cred);
-  //     if (response.error) {
-  //       Swal.fire({
-  //         title: "Error!",
-  //         text: response.error,
-  //         icon: "error",
-  //         confirmButtonText: "OK",
-  //       });
-  //     } else {
-  //       router.push("/");
-  //     }
-  //   } catch (error) {
-  //     Swal.fire({
-  //       title: "Error!",
-  //       text: "Login failed. Please try again later.",
-  //       icon: "error",
-  //       confirmButtonText: "OK",
-  //     });
-  //     if (error instanceof AuthError) {
-  //       switch (error.type) {
-  //         case "CredentialsSignin":
-  //           return { error: "Invalid Credentials!" };
-  //         case "CallbackRouteError":
-  //           return { error: "Invalid credentials" };
-  //         default:
-  //           return { error: "Something went wrong!" };
-  //       }
-  //     }
-  //     throw error;
-  //   }
+
   }
 
   return (

@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs";
 import connectToServiceEaseDB from "@/lib/serviceDB";
 import { User } from "../models/User";
 import { RegisterSchema } from "@/lib/zod";
-import NextAuth, { CredentialsSignin } from "next-auth";
+import { CredentialsSignin } from "next-auth";
 
 export const signUp = async ({ data }) => {
   // Validate data using Zod schema
@@ -52,6 +52,7 @@ export const signUp = async ({ data }) => {
     return { error: error.message };
   }
 };
+
 export const signIn = async ({ data }) => {
   // Validate data using Zod schema
 
@@ -62,9 +63,9 @@ export const signIn = async ({ data }) => {
 
   if (!result.success) {
     if (result.error) {
-      throw new CredentialsSignin(result.error.errors[0].message);
+      return { error: result.error.errors[0].message };
     } else {
-      throw new CredentialsSignin("Please provide a valid credentials");
+      return { error: "Please provide a valid credentials" };
     }
   }
 
@@ -77,24 +78,16 @@ export const signIn = async ({ data }) => {
     const { userID, password } = result.data;
 
     // Check if user already exists
-    const existingUserID = await User.findOne({ userID });
+    const user = await User.findOne({ userID });
 
-    if (!existingUserID) {
-      return { error: "User not found" };
+    if (user) {
+      const isValidPassword = await bcrypt.compare(password, user.password);
+      if (!user || !isValidPassword) {
+        return { error: "Invalid credentials" };
+      }
+      return user;
     }
-
-  
-
-    // Create a new user
-    const newUser = new User({
-      userID,
-      email,
-      password: hashedPassword,
-      isAdmin: false, // Ensure isAdmin is defined if it's necessary
-    });
-
-    await newUser.save();
-    return { message: "User registered successfully" };
+    return null;
   } catch (error) {
     return { error: error.message };
   }

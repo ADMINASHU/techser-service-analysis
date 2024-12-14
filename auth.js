@@ -19,10 +19,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     
         const user = await signIn({ userID, password });
 
-        if (credentials.userID === "admin" && credentials.password === "qwer") {
-          return { id: 1, name: "Admin", email: "admin@example.com" };
+        if(user.error) {
+            throw new CredentialsSignin(user.error);
         }
-
+        if(user) {
+            return user;
+        }
         return null;
       },
     }),
