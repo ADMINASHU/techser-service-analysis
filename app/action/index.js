@@ -7,9 +7,10 @@ import { SignInSchema, RegisterSchema } from "@/lib/zod";
 import { CredentialsSignin } from "next-auth";
 import { signIn, signOut } from "@/auth";
 import { AuthError } from "next-auth";
+import { redirect } from "next/navigation";
 
 export async function doLogout() {
-  await signOut({ redirectTo: "/login" });// redirect: false; when middleware apply
+  await signOut({ redirectTo: "/login" }); // redirect: false; when middleware apply
 }
 
 export async function doLogin({ userID, password }) {
@@ -26,7 +27,7 @@ export async function doLogin({ userID, password }) {
         return { error: "Please provide a valid credentials" };
       }
     }
-  
+
     await signIn("credentials", {
       ...result.data,
       redirect: false,
@@ -34,7 +35,18 @@ export async function doLogin({ userID, password }) {
 
     return { success: true, message: "Signin successful" };
   } catch (error) {
-    return { success: false, error: error.message };
+    // return { success: false, error: error.message };
+
+    let msg = "";
+
+    if (error instanceof Error && error.message === "NEXT_REDIRECT") {
+      redirect("/");
+    } else if (error instanceof AuthError) {
+      msg = error.message;
+    } else {
+      msg = error.message;
+    }
+    return { success: false, error: msg };
   }
 }
 
