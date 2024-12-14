@@ -14,8 +14,26 @@ const LoginForm = () => {
   const router = useRouter();
 
   async function handleSubmit(event) {
-    // event.preventDefault();
-    await doLogin(userID, password);
+    event.preventDefault();
+    const response = await doLogin({ userID, password });
+
+    if (!response.success) {
+      Swal.fire({
+        title: "Error!",
+        text: response.error,
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+    } else {
+      Swal.fire({
+        title: "Success!",
+        text: response.message,
+        icon: "success",
+        confirmButtonText: "OK",
+      }).then(() => {
+        router.push("/");
+      });
+    }
   }
 
   return (
@@ -29,7 +47,7 @@ const LoginForm = () => {
           height={101}
           className={styles.logo}
         />
-        <form action={handleSubmit}>
+        <form onSubmit={handleSubmit}>
           <input
             type="text"
             id="userID"

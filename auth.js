@@ -11,20 +11,23 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     Credentials({
       credentials: {
-        userID: { label: "userID", type: "string", required: true },
-        password: { label: "password", type: "password", required: true },
+        userID: {},
+        password: {},
       },
       authorize: async (credentials) => {
         const { userID, password } = credentials;
-    
+
         const user = await signInCredentials({ userID, password });
 
-        if(user.error) {
-            throw new CredentialsSignin(user.error);
+        if (user.error) {
+          throw new CredentialsSignin(user.error);
         }
-        if(user) {
-            return user;
+        console.log(user);
+
+        if (user) {
+          return user;
         }
+
         return null;
       },
     }),

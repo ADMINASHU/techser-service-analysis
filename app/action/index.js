@@ -12,10 +12,10 @@ export async function doLogout() {
   await signOut({ redirect: "/" });
 }
 
-export async function doLogin(data) {
+export async function doLogin({ userID, password }) {
   const result = SignInSchema.safeParse({
-    userID: data.userID,
-    password: data.password,
+    userID,
+    password,
   });
 
   if (!result.success) {
@@ -25,14 +25,13 @@ export async function doLogin(data) {
       return { error: "Please provide a valid credentials" };
     }
   }
-  const { userID, password } = result.data; // No need to use await here
+  // const { userID, password } = result.data; // No need to use await here
   try {
     await signIn("credentials", {
-      userID,
-      password,
+      ...result.data,
     });
 
-    return { success: true };
+    return { success: true, message: "Signin successful" };
   } catch (error) {
     return { success: false, error: error.message };
   }
@@ -85,14 +84,12 @@ export const signUp = async ({ data }) => {
   }
 };
 
-export const signInCredentials = async ({ data }) => {
+export const signInCredentials = async ({ userID, password }) => {
   try {
     const db = await connectToServiceEaseDB();
     if (!db) {
       return { error: "Error connecting to the database" };
     }
-
-    const { userID, password } = data;
 
     // Check if user already exists
     const user = await User.findOne({ userID });
