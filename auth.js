@@ -1,12 +1,14 @@
 import NextAuth, { CredentialsSignin } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import { SignInSchema } from "./lib/zod";
-import bcrypt from "bcryptjs";
 import { signInCredentials } from "./app/action";
 
-export const { handlers, signIn, signOut, auth, unstable_update } = NextAuth({
+export const { handlers, signIn, signOut, auth } = NextAuth({
   pages: {
     signIn: "/login",
+  },
+  session: {
+    strategy: "jwt",
+    maxAge: 2 * 60 * 60,
   },
   providers: [
     Credentials({
@@ -49,8 +51,6 @@ export const { handlers, signIn, signOut, auth, unstable_update } = NextAuth({
     },
     session({ session, token }) {
       session.user = token;
-      console.log("session: "+ JSON.stringify(session));
-      console.log("token: "+ JSON.stringify(token));
       return session;
     },
   },
