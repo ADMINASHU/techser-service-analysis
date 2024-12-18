@@ -4,7 +4,6 @@ import { signInCredentials } from "./app/action";
 import { NextResponse } from "next/server";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-
   pages: {
     signIn: "/login",
   },
@@ -36,17 +35,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   callbacks: {
-    authorized({auth, request:{nextUrl}}){ 
+    authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
       const protectedRoutes = ["/"];
-      const publicRoutes = ["/test","/login"];
+      const publicRoutes = ["/test", "/login"];
 
       if (!isLoggedIn && !publicRoutes.includes(nextUrl.pathname)) {
         return NextResponse.redirect(new URL("/login", nextUrl));
-
       }
       return true;
-
     },
     jwt({ token, user }) {
       if (user) {

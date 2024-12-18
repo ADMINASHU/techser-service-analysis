@@ -6,7 +6,7 @@ const TestPage = async () => {
   return (
     <div>
       <div>TestPage no login required</div>
-      <div>{JSON.stringify(session?.user)}</div>
+      <div>{session?.user && JSON.stringify(session?.user)}</div>
     </div>
   );
 };

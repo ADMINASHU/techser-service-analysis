@@ -2,7 +2,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import Navbar from "@/components/Navbar";
-// import { auth } from "@/auth";
+import { auth } from "@/auth";
 import { DataProvider } from "../context/DataContext";
 
 const geistSans = localFont({
@@ -22,9 +22,11 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }) {
+
+  const session = await auth();
   
   return (
-    <DataProvider >
+    <DataProvider session={session}>
       <html lang="en">
         <body className={`${geistSans.variable} ${geistMono.variable}`}>
           <Navbar  />
