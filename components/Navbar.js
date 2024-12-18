@@ -102,9 +102,9 @@ export default function Navbar() {
         <Link href="/profile" className={styles.profileName}>
           {profileName}
         </Link>
-        <button className={styles.logoutButton} onClick={() => signIn()}>
+        {/* <button className={styles.logoutButton} onClick={() => signIn()}>
           SignIn
-        </button>
+        </button> */}
         <Logout />
       </div>
       <button className={styles.menuButton} onClick={toggleMenu}>

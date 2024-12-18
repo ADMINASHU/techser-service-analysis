@@ -1,8 +1,10 @@
 import NextAuth, { CredentialsSignin } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { signInCredentials } from "./app/action";
+import { NextResponse } from "next/server";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+
   pages: {
     signIn: "/login",
   },
@@ -24,7 +26,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         if (user.error) {
           throw new CredentialsSignin(user.error);
         }
-        // console.log(user);
 
         if (user) {
           return user;
@@ -35,6 +36,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   callbacks: {
+    authorized({auth, request:{nextUrl}}){ 
+      const isLoggedIn = !!auth?.user;
+      const protectedRoutes = ["/"];
+
+      if (!isLoggedIn && protectedRoutes.includes(nextUrl.pathname)) {
+        return NextResponse()
+      }
+      return true;
+
+    },
     jwt({ token, user }) {
       if (user) {
         const newToken = {
@@ -46,7 +57,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         };
         token = { ...token, ...newToken };
       }
-      // console.log(JSON.stringify(token));
       return token;
     },
     session({ session, token }) {
