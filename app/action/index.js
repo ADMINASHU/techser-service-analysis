@@ -98,24 +98,24 @@ export const signUp = async ({ data }) => {
 };
 
 export const signInCredentials = async ({ userID, password }) => {
-  try {
-    const db = await connectToServiceEaseDB();
-    if (!db) {
-      return { error: "Error connecting to the database" };
-    }
+  // try {
+  //   const db = await connectToServiceEaseDB();
+  //   if (!db) {
+  //     return { error: "Error connecting to the database" };
+  //   }
 
-    // Check if user already exists
-    const user = await User.findOne({ userID });
+  //   // Check if user already exists
+  //   const user = await User.findOne({ userID });
 
-    if (user) {
-      const isValidPassword = await bcrypt.compare(password, user.password);
-      if (!user || !isValidPassword) {
-        return { error: "Invalid credentials" };
-      }
-      return user;
-    }
-    return null;
-  } catch (error) {
-    return { error: error.message };
-  }
+  //   if (user) {
+  //     const isValidPassword = await bcrypt.compare(password, user.password);
+  //     if (!user || !isValidPassword) {
+  //       return { error: "Invalid credentials" };
+  //     }
+  //     return user;
+  //   }
+  //   return null;
+  // } catch (error) {
+  //   return { error: error.message };
+  // }
 };
