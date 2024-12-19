@@ -9,37 +9,36 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import DataContext from "../context/DataContext";
 import Swal from "sweetalert2";
-import { signIn } from "next-auth/react";
+import { auth } from "@/auth";
 
+export default function Navbar({ session }) {
 
-export default function Navbar() {
   const { processedData, totalRows, loading } = useContext(DataContext); // Use DataContext to access processedData and loading state
-  // const isAuthenticated = !!session?.user;
-  // const isAdmin = session?.user?.isAdmin;
-  // const verified = session?.user?.verified;
+  const isAuthenticated = !!session?.user;
+  const verified = session?.user?.verified;
   const [menuOpen, setMenuOpen] = useState(false);
   const [dashOpen, setDashOpen] = useState(false);
 
-  const profileName = "User"; // Replace with actual logic to get profile name
+  const profileName = session?.user?.fName || "GUEST"; // Replace with actual logic to get profile name
   const pathname = usePathname();
 
-  // useEffect(() => {
-  //   if (isAuthenticated && !verified) {
-  //     Swal.fire({
-  //       title: "Profile not verified!",
-  //       text: "Please contact your organization.",
-  //       icon: "info",
-  //       confirmButtonText: "Go to Profile",
-  //       showCancelButton: true,
-  //       cancelButtonText: "OK",
-  //       html: `<p>Please contact your organization.</p>`,
-  //     }).then((result) => {
-  //       if (result.isConfirmed) {
-  //         window.location.href = "/profile";
-  //       }
-  //     });
-  //   }
-  // }, [verified, isAuthenticated]);
+  useEffect(() => {
+    if (isAuthenticated && !verified) {
+      Swal.fire({
+        title: "Profile not verified!",
+        text: "Please contact your organization.",
+        icon: "info",
+        confirmButtonText: "Go to Profile",
+        showCancelButton: true,
+        cancelButtonText: "OK",
+        html: `<p>Please contact your organization.</p>`,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = "/profile";
+        }
+      });
+    }
+  }, [verified, isAuthenticated]);
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -50,6 +49,10 @@ export default function Navbar() {
 
   // Calculate progress
   const progress = (processedData.length / totalRows) * 100;
+
+  if (!isAuthenticated) {
+    return null;
+  }
 
   return (
     <nav className={styles.navbar}>

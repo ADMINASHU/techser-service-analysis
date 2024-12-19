@@ -22,14 +22,15 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }) {
-
   const session = await auth();
-  
+
+  console.log("from layout: " + JSON.stringify(session));
+
   return (
     <DataProvider session={session}>
       <html lang="en">
         <body className={`${geistSans.variable} ${geistMono.variable}`}>
-          <Navbar  />
+          <Navbar session={session} />
           {children}
           <SpeedInsights />
         </body>
