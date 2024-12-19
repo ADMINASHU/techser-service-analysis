@@ -25,11 +25,13 @@ export default async function RootLayout({ children }) {
   const session = await auth();
   const isAuthenticated = !!session?.user;
 
+  const loggedUser = session?.user;
+
   return (
     <DataProvider isAuthenticated={isAuthenticated} session={session}>
       <html lang="en">
         <body className={`${geistSans.variable} ${geistMono.variable}`}>
-          <Navbar session={session} />
+          <Navbar isAuthenticated={isAuthenticated} session={session} loggedUser={loggedUser} />
           {children}
           <SpeedInsights />
         </body>

@@ -10,7 +10,7 @@ import { AuthError } from "next-auth";
 import { redirect } from "next/navigation";
 
 export async function doLogout() {
-  await signOut({ redirect: "/" });
+  await signOut({ redirect: true, redirectTo: "/login" });
 }
 export async function doLogin({ userID, password }) {
   try {
@@ -29,7 +29,8 @@ export async function doLogin({ userID, password }) {
 
     await signIn("credentials", {
       ...result.data,
-      redirect: false,
+      redirect: true,
+      // redirectTo: "/profile",
     });
 
     return { success: true, message: "Signin successful" };
