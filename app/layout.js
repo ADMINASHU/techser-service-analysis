@@ -23,11 +23,10 @@ export const metadata = {
 
 export default async function RootLayout({ children }) {
   const session = await auth();
-
-  console.log("from layout: " + JSON.stringify(session));
+  const isAuthenticated = !!session?.user;
 
   return (
-    <DataProvider session={session}>
+    <DataProvider isAuthenticated={isAuthenticated} session={session}>
       <html lang="en">
         <body className={`${geistSans.variable} ${geistMono.variable}`}>
           <Navbar session={session} />
