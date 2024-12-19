@@ -3,8 +3,9 @@
   "version": "5.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "postinstall": "prisma generate",
     "build": "next build",
+    "dev": "next dev",
     "start": "next start",
     "lint": "next lint"
   },
