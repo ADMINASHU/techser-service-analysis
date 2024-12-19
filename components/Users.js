@@ -343,14 +343,47 @@ const Users = ({ LoggedUserLevel }) => {
               <td>
                 {user.level >= LoggedUserLevel && (
                   <div className={styles.button}>
-                    <button className={styles.editButton} onClick={() => handleEdit(user)}>
-                      Edit
-                    </button>
+                 <button className={styles.editButton} onClick={() => handleEdit(user)}>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    width="24"
+    height="24"
+    fill="none"
+    stroke="purple"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M12 20h9"></path>
+    <path d="M14.5 4.5a2.12 2.12 0 0 1 3 0l1.5 1.5a2.12 2.12 0 0 1 0 3L7 19l-4 4-1-4L14.5 4.5z"></path>
+    <path d="M18 2l4 4"></path>
+    <path d="M2 21l1 1"></path>
+  </svg>
+</button>
+
+
                     <button
                       className={styles.deleteButton}
                       onClick={() => handleDelete(user.userID)}
                     >
-                      Delete
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        width="24"
+                        height="24"
+                        fill="none"
+                        stroke="red"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6l-2 14H7L5 6"></path>
+                        <line x1="10" y1="11" x2="10" y2="17"></line>
+                        <line x1="14" y1="11" x2="14" y2="17"></line>
+                        <path d="M15 4l-1-1H10L9 4H4v2h16V4h-5z"></path>
+                      </svg>
                     </button>
                   </div>
                 )}
