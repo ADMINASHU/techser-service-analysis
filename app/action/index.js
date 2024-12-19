@@ -10,9 +10,8 @@ import { AuthError } from "next-auth";
 import { redirect } from "next/navigation";
 
 export async function doLogout() {
-  await signOut({ redirectTo: "/login" }); // redirect: false; when middleware apply
+  await signOut({ redirect: "/" });
 }
-
 export async function doLogin({ userID, password }) {
   try {
     const result = SignInSchema.safeParse({
