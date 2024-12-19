@@ -8,7 +8,7 @@ import styles from "./Users.module.css";
 import Image from "next/image";
 import DataContext from "@/context/DataContext";
 
-const Users = ({ LoggedUserLevel }) => {
+const Users = ({ LoggedUserLevel, LoggedUser }) => {
   const [users, setUsers] = useState([]);
   const [levels, setLevels] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -341,27 +341,26 @@ const Users = ({ LoggedUserLevel }) => {
                 {user.verified ? "Verified" : "Blocked"}
               </td>
               <td>
-                {user.level >= LoggedUserLevel && (
+                {user.level >= LoggedUserLevel && user._id !== LoggedUser.sub && (
                   <div className={styles.button}>
-                 <button className={styles.editButton} onClick={() => handleEdit(user)}>
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 24 24"
-    width="24"
-    height="24"
-    fill="none"
-    stroke="purple"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M12 20h9"></path>
-    <path d="M14.5 4.5a2.12 2.12 0 0 1 3 0l1.5 1.5a2.12 2.12 0 0 1 0 3L7 19l-4 4-1-4L14.5 4.5z"></path>
-    <path d="M18 2l4 4"></path>
-    <path d="M2 21l1 1"></path>
-  </svg>
-</button>
-
+                    <button className={styles.editButton} onClick={() => handleEdit(user)}>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        width="24"
+                        height="24"
+                        fill="none"
+                        stroke="purple"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path d="M12 20h9"></path>
+                        <path d="M14.5 4.5a2.12 2.12 0 0 1 3 0l1.5 1.5a2.12 2.12 0 0 1 0 3L7 19l-4 4-1-4L14.5 4.5z"></path>
+                        <path d="M18 2l4 4"></path>
+                        <path d="M2 21l1 1"></path>
+                      </svg>
+                    </button>
 
                     <button
                       className={styles.deleteButton}
