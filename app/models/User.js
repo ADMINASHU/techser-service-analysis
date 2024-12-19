@@ -24,7 +24,7 @@ const UserSchema = new mongoose.Schema({
   verified: { type: Boolean, required: true, default: false },
   fName: { type: String, required: true, default: "User" },
   eName: { type: String },
-  image: { type: String, required: true, default: "/user.png" },
+  image: { type: String, required: true, default: "user.png" },
   designation: { type: String },
   region: { type: String },
   branch: { type: String },
