@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { User } from '../../../lib/models/User';
+import  User  from '../../../lib/models/User';
 import connectToServiceEaseDB from "../../../lib/serviceDB";
 
 export async function GET() {

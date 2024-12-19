@@ -2,7 +2,7 @@
 
 import bcrypt from "bcryptjs";
 import connectToServiceEaseDB from "@/lib/serviceDB";
-import { User } from "../../lib/models/User";
+import  User  from "../../lib/models/User";
 import { SignInSchema, RegisterSchema } from "@/lib/zod";
 import { CredentialsSignin } from "next-auth";
 import { signIn, signOut } from "@/auth";
