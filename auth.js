@@ -2,6 +2,8 @@ import NextAuth, { CredentialsSignin } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { signInCredentials } from "./app/action";
 import { NextResponse } from "next/server";
+import { PrismaAdapter } from "@auth/prisma-adapter";
+import prisma from "@/lib/prismaClient";
 import {
   PUBLIC_ROUTES,
   LOGIN,
@@ -19,6 +21,7 @@ import {
 } from "./lib/routes";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  adapter: PrismaAdapter(prisma),
   pages: {
     signIn: "/login",
     error: "/login",
@@ -55,10 +58,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       const isAuthenticated = !!auth?.user;
       const isVerified = auth?.user?.verified;
       const level = auth?.user?.level;
-      console.log(isAuthenticated);
-      const isPublicRoute =
-        PUBLIC_ROUTES.find((route) => nextUrl.pathname.startsWith(route)) &&
-        !PROTECTED_ROUTES.find((route) => nextUrl.pathname.includes(route));
+
+      const isPublicRoute = PUBLIC_ROUTES.find((route) => nextUrl.pathname.startsWith(route)) && 
+                            !PROTECTED_ROUTES.find((route) => nextUrl.pathname.includes(route));
 
       const isAuthRoute = AUTH_ROUTES.find((route) => nextUrl.pathname.startsWith(route));
       const isAuthApiRoute = AUTH_API_ROUTES.find((route) => nextUrl.pathname.startsWith(route));

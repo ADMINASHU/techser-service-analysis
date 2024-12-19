@@ -1,5 +1,5 @@
 import connectToServiceEaseDB from "../../../lib/serviceDB";
-import Point from '../../../lib/models/Point';
+import Point from '../../../models/Point';
 import { NextResponse } from 'next/server';
 
 export async function GET() {

@@ -1,6 +1,6 @@
 import connectToServiceEaseDB from "../../../lib/serviceDB";
-import { Data } from "../../../lib/models/Data";
-import Point from "../../../lib/models/Point";
+import { Data } from "../../../models/Data";
+import Point from "../../../models/Point";
 import { NextResponse } from "next/server";
 import { parse, differenceInHours, format, isValid } from "date-fns";
 
