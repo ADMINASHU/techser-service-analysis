@@ -16,7 +16,9 @@ export default function Navbar({ isAuthenticated, loggedUser }) {
   const [dashOpen, setDashOpen] = useState(false);
 
   const verified = loggedUser?.verified;
-  const profileName = loggedUser?.userID || "User"; // Replace with actual logic to get profile name
+  const profileName = loggedUser?.fName || loggedUser?.userID || "User";
+  const isAdmin = loggedUser?.isAdmin || false;
+  const avatar = loggedUser?.picture || "user.png";
   const pathname = usePathname();
 
   useEffect(() => {
@@ -99,8 +101,14 @@ export default function Navbar({ isAuthenticated, loggedUser }) {
         </Link>
       </div>
       <div className={styles.profileSection}>
-        <Link href="/profile" className={styles.profileName}>
-          {profileName}
+        <Link href="/profile" className={styles.profileContainer}>
+          <div className={styles.profileName}>
+            <span style={{fontSize:"16px"}}>{profileName}</span>
+            <span style={{fontSize:"12px"}}>{isAdmin ? " (Admin)" : "(User)"}</span>
+          </div>
+          <div>
+            <Image height={32} width={32} src={`/${avatar}`} alt="Profile Image" priority />
+          </div>
         </Link>
 
         <Logout />

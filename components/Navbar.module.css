@@ -28,7 +28,7 @@
 
 .progressBar {
   height: 100%;
-  background-color:  #22ee13;
+  background-color: #22ee13;
   /* background-color: #ee1313; */
   transition: width 0.3s ease;
 }
@@ -56,19 +56,28 @@
 }
 
 .profileSection {
-  display: flex;
-  align-items: center;
+
 }
 
-.profileName {
+.profileContainer {
+  display: flex;
+  align-items: center;
+
+  justify-items: center;
   margin-right: 10px;
   color: white;
   text-decoration: none;
   transition: color 0.3s ease;
 }
 
+.profileName {
+  margin-right: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
 .logoutButton {
-  padding: 5px 10px;
+  padding: 5px 5px;
   background-color: #ff4c4c;
   color: white;
   border: none;
