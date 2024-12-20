@@ -1,23 +1,21 @@
-import NextAuth, { CredentialsSignin } from "next-auth";
+import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import { signInCredentials } from "./app/action";
 import { NextResponse } from "next/server";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import prisma from "@/lib/prismaClient";
+import bcrypt from "bcryptjs";
+
 import {
   PUBLIC_ROUTES,
   LOGIN,
-  ROOT,
   PROTECTED_ROUTES,
   VERIFIED_ROUTES,
-  PROFILE,
   LEVEL1_ROUTES,
   LEVEL2_ROUTES,
   LEVEL3_ROUTES,
   UNAUTHORIZED,
   AUTH_ROUTES,
   AUTH_API_ROUTES,
-  DEFAULT_LOGIN_REDIRECT,
 } from "./lib/routes";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
@@ -29,6 +27,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   session: {
     strategy: "jwt",
     maxAge: 2 * 60 * 60,
+    revalidate: 60,
   },
   providers: [
     Credentials({
@@ -38,19 +37,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
       authorize: async (credentials) => {
         const { userID, password } = credentials;
-
-        const user = await signInCredentials({ userID, password });
-
-        if (!user || user.error) {
-          // console.log("from auth ##########################" + JSON.stringify(user));
-          throw new CredentialsSignin();
+        const user = await prisma.users.findUnique({ where: { userID } });
+        if (!user || !user.password) {
+          throw new Error("User not found");
         }
+        const isValidPassword = await bcrypt.compare(password, user.password);
+        if (!isValidPassword) return null;
 
-        if (user) {
-          return user;
-        }
-
-        return null;
+        return user;
       },
     }),
   ],

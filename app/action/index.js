@@ -25,10 +25,11 @@ export async function doLogin({ userID, password }) {
 
     await signIn("credentials", {
       ...result.data,
-      redirect: true,
+      // redirect: true,
+      redirectTo:"/",
     });
 
-    return { success: true, message: "Signin successful" };
+    // return { success: true, message: "Signin successful" };
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {
@@ -79,21 +80,5 @@ export const signUp = async ({ data }) => {
   } catch (error) {
     return { error: error.message };
   }
-};
-
-export const signInCredentials = async ({ userID, password }) => {
-  try {
-    const user = await prisma.users.findUnique({ where: { userID } });
-
-    if (user) {
-      const isValidPassword = await bcrypt.compare(password, user.password);
-      if (!isValidPassword) {
-        return null;
-      }
-      return user;
-    }
-    return null;
-  } catch (error) {
-    return { error: error.message };
-  }
+  
 };

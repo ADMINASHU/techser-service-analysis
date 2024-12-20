@@ -23,16 +23,16 @@ const LoginForm = () => {
         icon: "error",
         confirmButtonText: "OK",
       });
-    } else {
-      Swal.fire({
-        title: "Success!",
-        text: response.message,
-        icon: "success",
-        confirmButtonText: "OK",
-      }).then(() => {
-        router.push("/");
-      });
-    }
+    } //else {
+    //   Swal.fire({
+    //     title: "Success!",
+    //     text: response.message,
+    //     icon: "success",
+    //     confirmButtonText: "OK",
+    //   }).then(() => {
+    //     router.push("/");
+    //   });
+    // }
   }
 
   return (
