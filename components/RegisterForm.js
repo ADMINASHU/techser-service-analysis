@@ -46,6 +46,7 @@ const RegisterForm = () => {
         <Image
           src="/logo.jpg" // Path to your image
           alt="Company logo" // Alt text for accessibility
+          priority
           width={180} // Display width
           height={101}
           className={styles.logo} // Display height

@@ -61,7 +61,7 @@ const ForgotPasswordForm = () => {
         <Image
           src="/logo.jpg" // Path to your image
           alt="Company image" // Alt text for accessibility
-          priority={true}
+          priority
           width={180} // Display width
           height={101} // Display height
           className={styles.logo}

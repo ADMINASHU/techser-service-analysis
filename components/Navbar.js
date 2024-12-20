@@ -62,6 +62,7 @@ export default function Navbar({ isAuthenticated, loggedUser }) {
           <Image
             src="/logo.png" // Path to your image
             alt="Company image" // Alt text for accessibility
+            priority
             width={100} // Display width
             height={20}
             className={styles.logo} // Display height

@@ -133,7 +133,7 @@ const Users = ({ LoggedUserLevel, LoggedUser }) => {
                     width={140}
                     src={`/${formData.image}`}
                     alt="/user.png"
-                    priority={true}
+                    priority
                   />
                 ) : (
                   <Image
@@ -141,7 +141,7 @@ const Users = ({ LoggedUserLevel, LoggedUser }) => {
                     width={140}
                     src="/user.png"
                     alt="Default Image"
-                    priority={true}
+                    priority
                   />
                 )}
 

@@ -176,9 +176,15 @@ const Profile = ({ LoggedUserID }) => {
                 </button>
               </div>
             ) : profile.image ? (
-              <Image height={163} width={140} src={`/${profile.image}`} alt="Profile Image" />
+              <Image
+                height={163}
+                width={140}
+                src={`/${profile.image}`}
+                alt="Profile Image"
+                priority
+              />
             ) : (
-              <Image height={163} width={140} src="/user.png" alt="Default Image" />
+              <Image height={163} width={140} src="/user.png" alt="Default Image" priority />
             )}
 
             <div className={styles.field}>

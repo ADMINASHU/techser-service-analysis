@@ -41,6 +41,7 @@ const LoginForm = () => {
         <Image
           src="/logo.jpg"
           alt="Company logo"
+          // loading="eager" // {lazy} | {eager}
           priority
           width={180}
           height={101}

@@ -38,13 +38,13 @@ th {
   background-color: #333333;
   color: white;
   text-align: center;
-  position: sticky;
   position: -webkit-sticky;
+  position: sticky;
 }
 
 thead {
-  position: sticky;
   position: -webkit-sticky;
+  position: sticky;
   top: 60;
   z-index: 1;
 }

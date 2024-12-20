@@ -191,7 +191,8 @@ export async function GET(request) {
       {
         status: 200,
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/x-javascript; charset=utf-8",
+          "Cache-Control": "max-age=300"
         },
       }
     );
