@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import styles from "./LoginForm.module.css";
 import Link from "next/link";
-// import { doLogin } from "@/app/action";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -16,7 +15,7 @@ const LoginForm = () => {
   async function handleSubmit(event) {
     event.preventDefault();
     const response = await doLogin({ userID, password });
-
+    // console.log("from login form ####################"+JSON.stringify(response));
     if (!response.success) {
       Swal.fire({
         title: "Error!",
@@ -42,7 +41,7 @@ const LoginForm = () => {
         <Image
           src="/logo.jpg"
           alt="Company logo"
-          priority={true}
+          priority
           width={180}
           height={101}
           className={styles.logo}

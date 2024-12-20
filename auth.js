@@ -41,8 +41,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         const user = await signInCredentials({ userID, password });
 
-        if (user.error) {
-          throw new CredentialsSignin(user.error);
+        if (!user || user.error) {
+          // console.log("from auth ##########################" + JSON.stringify(user));
+          throw new CredentialsSignin();
         }
 
         if (user) {
@@ -59,8 +60,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       const isVerified = auth?.user?.verified;
       const level = auth?.user?.level;
 
-      const isPublicRoute = PUBLIC_ROUTES.find((route) => nextUrl.pathname.startsWith(route)) && 
-                            !PROTECTED_ROUTES.find((route) => nextUrl.pathname.includes(route));
+      const isPublicRoute =
+        PUBLIC_ROUTES.find((route) => nextUrl.pathname.startsWith(route)) &&
+        !PROTECTED_ROUTES.find((route) => nextUrl.pathname.includes(route));
 
       const isAuthRoute = AUTH_ROUTES.find((route) => nextUrl.pathname.startsWith(route));
       const isAuthApiRoute = AUTH_API_ROUTES.find((route) => nextUrl.pathname.startsWith(route));

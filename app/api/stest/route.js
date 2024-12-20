@@ -9,14 +9,14 @@ export async function GET() {
     const db = await connectToServiceEaseDB();
 
     if (!db) {
-      console.error("Database connection failed");
+      // console.error("Database connection failed");
       return NextResponse.status(500).json({ message: "Error connecting to the database" });
     }
 
     const data = await Data.find({});
     const point = await Point.find({}).select("category data");
     if (!point || !data) {
-      console.error("Error fetching points and data from database");
+      // console.error("Error fetching points and data from database");
       return NextResponse.status(500).json({ message: "Error fetching points and data from database" });
     }
 
@@ -52,7 +52,7 @@ export async function GET() {
       const parsedLastDate = lastDate ? parse(lastDate, "dd.MMM.yyyy HH:mm", new Date()) : new Date();
 
       if (!isValid(parsedCallDate) || !isValid(parsedLastDate)) {
-        console.warn("Invalid date values found:", { parsedCallDate, parsedLastDate });
+        // console.warn("Invalid date values found:", { parsedCallDate, parsedLastDate });
         return acc;
       }
 
@@ -147,7 +147,7 @@ export async function GET() {
       },
     });
   } catch (error) {
-    console.error("Error in GET request:", error);
+    // console.error("Error in GET request:", error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

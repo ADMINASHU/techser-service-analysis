@@ -28,7 +28,7 @@ const ForgotPasswordForm = () => {
         body: JSON.stringify(email) ,
       });
 
-      console.log("from from page:" + response);
+      // console.log("from from page:" + response);
       if (response.error) {
         Swal.fire({
           title: "Error!",
@@ -45,7 +45,7 @@ const ForgotPasswordForm = () => {
         });
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       Swal.fire({
         title: "Error!",
         text: "Failed to send reset email. Please try again.",

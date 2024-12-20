@@ -7,7 +7,7 @@ export async function POST(request) {
   try {
     const email = await request.json();
 
-    console.log("from forgot routes email : " + email);
+    // console.log("from forgot routes email : " + email);
     await connectToServiceEaseDB();
 
     const user = await User.findOne({ email });

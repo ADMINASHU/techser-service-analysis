@@ -42,7 +42,13 @@ const Profile = ({ LoggedUserID }) => {
         const response = await axios.post("/api/profile", { userID: LoggedUserID });
         setProfile(response.data.user);
       } catch (error) {
-        console.error(error);
+        // console.error(error);
+        Swal.fire({
+          title: "Error!",
+          text: error.response?.data.message || "Failed to fetch profile.",
+          icon: "error",
+          confirmButtonText: "OK",
+        });
       }
     };
     fetchProfile();

@@ -6,7 +6,7 @@ const DataExtractor = ({ data, onDataProcessed, points }) => {
 
   useEffect(() => {
     if (!data) {
-      console.log("no data coming");
+      // console.log("no data coming");
       return;
     }
     const regionList = [

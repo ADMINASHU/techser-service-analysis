@@ -49,7 +49,13 @@ const Users = ({ LoggedUserLevel, LoggedUser }) => {
       const response = await axios.get("/api/users");
       setUsers(response.data.users);
     } catch (error) {
-      console.error(error);
+      // console.error(error);
+      Swal.fire({
+        title: "Error!",
+        text: error.response?.data.message || "Failed to fetch user.",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
     } finally {
       setLoading(false);
     }
@@ -66,7 +72,7 @@ const Users = ({ LoggedUserLevel, LoggedUser }) => {
       });
       setUsers(users.filter((user) => user.userID !== userID));
     } catch (error) {
-      console.error(error);
+      // console.error(error);
       Swal.fire({
         title: "Error!",
         text: error.response?.data.message || "Failed to delete user.",
@@ -97,7 +103,7 @@ const Users = ({ LoggedUserLevel, LoggedUser }) => {
       setEditFormVisible(false);
       fetchUsers();
     } catch (error) {
-      console.error(error);
+      // console.error(error);
       Swal.fire({
         title: "Error!",
         text: error.response?.data.message || "Failed to update profile.",

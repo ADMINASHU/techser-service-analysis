@@ -19,14 +19,14 @@ const Control = () => {
       const response = await axios.get("/api/control");
       setPoints(response.data);
     } catch (error) {
-      console.error("Error fetching points:", error);
+      // console.error("Error fetching points:", error);
     }
   };
 
   const handleSave = async () => {
     try {
       const response = await axios.put("/api/control", points);
-      console.log("Save response:", response);
+      // console.log("Save response:", response);
       if (response.status === 200) {
         Swal.fire("Success!", "Data saved successfully!", "success");
         setEditing(false);
@@ -34,7 +34,7 @@ const Control = () => {
         throw new Error(`Unexpected response status: ${response.status}`);
       }
     } catch (error) {
-      console.error("Error in handleSave:", error.message); // Use error.message for cleaner logs
+      // console.error("Error in handleSave:", error.message); // Use error.message for cleaner logs
       Swal.fire("Error!", "Failed to save data.", "error");
     }
   };

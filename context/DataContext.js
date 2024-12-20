@@ -19,9 +19,9 @@ export const DataProvider = ({ children, session }) => {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const result = await response.json();
-      if (result.error) {
-        console.error("Error fetching data:", result.error);
-      } else {
+      if (!result.error) {
+        // console.error("Error fetching data:", result.error);
+
         const finalData = result.finalPointData.map((item) => ({
           complaintID: item.complaintID,
           natureOfComplaint: item.natureOfComplaint,

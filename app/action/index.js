@@ -30,16 +30,15 @@ export async function doLogin({ userID, password }) {
 
     return { success: true, message: "Signin successful" };
   } catch (error) {
-    let msg = "";
-
-    if (error instanceof Error && error.message === "NEXT_REDIRECT") {
-      redirect("/");
-    } else if (error instanceof AuthError) {
-      msg = error.message;
-    } else {
-      msg = error.message;
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case "CredentialsSignin":
+          return { error: "Invalid Credentials" };
+        default:
+          return { error: "Something went wrong" };
+      }
     }
-    return { success: false, error: msg };
+    throw error;
   }
 }
 
@@ -89,7 +88,7 @@ export const signInCredentials = async ({ userID, password }) => {
     if (user) {
       const isValidPassword = await bcrypt.compare(password, user.password);
       if (!isValidPassword) {
-        return { error: "Invalid credentials" };
+        return null;
       }
       return user;
     }
