@@ -3,10 +3,9 @@
 import bcrypt from "bcryptjs";
 import prisma from "@/lib/prismaClient";
 import { SignInSchema, RegisterSchema } from "@/lib/zod";
-import { CredentialsSignin } from "next-auth";
 import { signIn, signOut } from "@/auth";
 import { AuthError } from "next-auth";
-import { redirect } from "next/navigation";
+
 
 export async function doLogout() {
   await signOut({ redirect: true, redirectTo: "/login" });

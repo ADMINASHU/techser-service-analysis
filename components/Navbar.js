@@ -62,12 +62,12 @@ export default function Navbar({ isAuthenticated, loggedUser }) {
       <div className={styles.navLinks}>
         <Link href="/" className={pathname === "/" ? styles.activeLink : ""}>
           <Image
-            src="/logo.png" // Path to your image
-            alt="Company image" // Alt text for accessibility
+            src="/logo.png"
+            alt="Company image"
             priority
-            width={100} // Display width
+            width={100}
             height={20}
-            className={styles.logo} // Display height
+            className={styles.logo}
           />
         </Link>
         <Link
@@ -103,11 +103,18 @@ export default function Navbar({ isAuthenticated, loggedUser }) {
       <div className={styles.profileSection}>
         <Link href="/profile" className={styles.profileContainer}>
           <div className={styles.profileName}>
-            <span style={{fontSize:"16px"}}>{profileName}</span>
-            <span style={{fontSize:"12px"}}>{isAdmin ? " (Admin)" : "(User)"}</span>
+            <span style={{ fontSize: "16px" }}>{profileName}</span>
+            <span style={{ fontSize: "12px" }}>{isAdmin ? " (Admin)" : "(User)"}</span>
           </div>
-          <div>
-            <Image height={32} width={32} src={`/${avatar}`} alt="Profile Image" priority />
+          <div className={styles.profileImageContainer}>
+            <Image
+              height={32}
+              width={32}
+              src={`/${avatar}`}
+              alt="Profile Image"
+              priority
+              className={styles.profileImage}
+            />
           </div>
         </Link>
 
@@ -194,7 +201,4 @@ export default function Navbar({ isAuthenticated, loggedUser }) {
       )}
     </nav>
   );
-  // } else {
-  //   return <></>;
-  // }
 }
