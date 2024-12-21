@@ -1,5 +1,5 @@
 "use client";
-
+import { auth } from "@/auth";
 import React, { useState, useEffect, useContext } from "react";
 import Link from "next/link";
 import Logout from "./Logout";
@@ -10,15 +10,15 @@ import { usePathname } from "next/navigation";
 import DataContext from "../context/DataContext";
 import Swal from "sweetalert2";
 
-export default function Navbar({ session }) {
+export default function Navbar({ isAuthenticated, loggedUser }) {
   const { processedData, totalRows, loading } = useContext(DataContext); // Use DataContext to access processedData and loading state
-  const isAuthenticated = !!session?.user;
-  const isAdmin = session?.user?.isAdmin;
-  const verified = session?.user?.verified;
   const [menuOpen, setMenuOpen] = useState(false);
   const [dashOpen, setDashOpen] = useState(false);
 
-  const profileName = session?.user?.userID || "User"; // Replace with actual logic to get profile name
+  const verified = loggedUser?.verified;
+  const profileName = loggedUser?.fName || loggedUser?.userID || "User";
+  const isAdmin = loggedUser?.isAdmin || false;
+  const avatar = loggedUser?.picture || "user.png";
   const pathname = usePathname();
 
   useEffect(() => {
@@ -49,23 +49,101 @@ export default function Navbar({ session }) {
   // Calculate progress
   const progress = (processedData.length / totalRows) * 100;
 
-  if (isAuthenticated) {
-    return (
-      <nav className={styles.navbar}>
-        {loading && (
-          <div className={styles.progressBarContainer}>
-            <div className={styles.progressBar} style={{ width: `${progress}%` }}></div>
+  if (!isAuthenticated) {
+    return null;
+  }
+  return (
+    <nav className={styles.navbar}>
+      {loading && (
+        <div className={styles.progressBarContainer}>
+          <div className={styles.progressBar} style={{ width: `${progress}%` }}></div>
+        </div>
+      )}
+      <div className={styles.navLinks}>
+        <Link href="/" className={pathname === "/" ? styles.activeLink : ""}>
+          <Image
+            src="/logo.png"
+            alt="Company image"
+            priority
+            width={100}
+            height={20}
+            className={styles.logo}
+          />
+        </Link>
+        <Link
+          href=""
+          className={
+            pathname === "/dashboard/engineer" ||
+            pathname === "/dashboard/branch" ||
+            pathname === "/dashboard/region" ||
+            pathname === "/dashboard/customer"
+              ? styles.activeLink
+              : styles.nlink
+          }
+          onClick={toggleDash}
+        >
+          Dashboard
+        </Link>
+
+        <Link href="/data" className={pathname === "/data" ? styles.activeLink : styles.nlink}>
+          Data
+        </Link>
+
+        <Link href="/users" className={pathname === "/users" ? styles.activeLink : styles.nlink}>
+          Users
+        </Link>
+
+        <Link
+          href="/control"
+          className={pathname === "/control" ? styles.activeLink : styles.nlink}
+        >
+          Control
+        </Link>
+      </div>
+      <div className={styles.profileSection}>
+        <Link href="/profile" className={styles.profileContainer}>
+          <div className={styles.profileName}>
+            <span style={{ fontSize: "16px" }}>{profileName}</span>
+            <span style={{ fontSize: "12px" }}>{isAdmin ? " (Admin)" : "(User)"}</span>
           </div>
-        )}
-        <div className={styles.navLinks}>
-          <Link href="/" className={pathname === "/" ? styles.activeLink : ""}>
+          <div className={styles.profileImageContainer}>
             <Image
-              src="/logo.png" // Path to your image
-              alt="Company image" // Alt text for accessibility
-              width={100} // Display width
-              height={20}
-              className={styles.logo} // Display height
+              height={32}
+              width={32}
+              src={`/${avatar}`}
+              alt="Profile Image"
+              priority
+              className={styles.profileImage}
             />
+          </div>
+        </Link>
+
+        <Logout />
+      </div>
+      <button className={styles.menuButton} onClick={toggleMenu}>
+        ☰
+      </button>
+      {menuOpen && (
+        <div className={styles.responsiveMenu}>
+          <Link href="/profile" className={styles.profileContainer}>
+            <div className={styles.profileImageContainer}>
+              <Image
+                height={32}
+                width={32}
+                src={`/${avatar}`}
+                alt="Profile Image"
+                priority
+                className={styles.profileImage}
+              />
+            </div>
+            <div className={styles.profileName}>
+              <span style={{ fontSize: "16px" }}>{profileName}</span>
+              <span style={{ fontSize: "12px" }}>{isAdmin ? " (Admin)" : "(User)"}</span>
+            </div>
+          </Link>
+
+          <Link href="/" className={pathname === "/" ? styles.activeLink : ""} onClick={toggleMenu}>
+            Home
           </Link>
           <Link
             href=""
@@ -81,118 +159,99 @@ export default function Navbar({ session }) {
           >
             Dashboard
           </Link>
+          {dashOpen && (
+            <div className={styles.newResponsiveDash}>
+              <Link
+                href="/dashboard/engineer"
+                className={pathname === "/dashboard/engineer" ? styles.activeLink : ""}
+                onClick={toggleDash}
+              >
+                Engineer
+              </Link>
+              <Link
+                href="/dashboard/branch"
+                className={pathname === "/dashboard/branch" ? styles.activeLink : ""}
+                onClick={toggleDash}
+              >
+                Branch
+              </Link>
+              <Link
+                href="/dashboard/region"
+                className={pathname === "/dashboard/region" ? styles.activeLink : ""}
+                onClick={toggleDash}
+              >
+                Region
+              </Link>
+              <Link
+                href="/dashboard/customer"
+                className={pathname === "/dashboard/customer" ? styles.activeLink : ""}
+                onClick={toggleDash}
+              >
+                Customer
+              </Link>
+            </div>
+          )}
 
-          <Link href="/data" className={pathname === "/data" ? styles.activeLink : styles.nlink}>
+          <Link
+            href="/data"
+            className={pathname === "/data" ? styles.activeLink : ""}
+            onClick={toggleMenu}
+          >
             Data
           </Link>
 
-          <Link href="/users" className={pathname === "/users" ? styles.activeLink : styles.nlink}>
+          <Link
+            href="/users"
+            onClick={toggleMenu}
+            className={pathname === "/users" ? styles.activeLink : styles.nlink}
+          >
             Users
           </Link>
 
           <Link
             href="/control"
+            onClick={toggleMenu}
             className={pathname === "/control" ? styles.activeLink : styles.nlink}
           >
             Control
           </Link>
-        </div>
-        <div className={styles.profileSection}>
-          <Link href="/profile" className={styles.profileName}>
-            {profileName}
-          </Link>
-
-          <Logout />
-        </div>
-        <button className={styles.menuButton} onClick={toggleMenu}>
-          ☰
-        </button>
-        {menuOpen && (
-          <div className={styles.responsiveMenu}>
-            <Link href="/profile" className={pathname === "/profile" ? styles.activeLink : ""}>
-              {profileName}
-            </Link>
-
-            <Link
-              href="/"
-              className={pathname === "/" ? styles.activeLink : ""}
-              onClick={toggleMenu}
-            >
-              Home
-            </Link>
-            <Link
-              href=""
-              className={
-                pathname === "/dashboard/engineer" ||
-                pathname === "/dashboard/branch" ||
-                pathname === "/dashboard/region" ||
-                pathname === "/dashboard/customer"
-                  ? styles.activeLink
-                  : styles.nlink
-              }
-              onClick={toggleDash}
-            >
-              Dashboard
-            </Link>
-            <Link
-              href="/data"
-              className={pathname === "/data" ? styles.activeLink : ""}
-              onClick={toggleMenu}
-            >
-              Data
-            </Link>
-
-            <Link
-              href="/users"
-              className={pathname === "/users" ? styles.activeLink : styles.nlink}
-            >
-              Users
-            </Link>
-
-            <Link
-              href="/control"
-              className={pathname === "/control" ? styles.activeLink : styles.nlink}
-            >
-              Control
-            </Link>
+          <div className={styles.logout}>
             <Logout onClick={() => toggleMenu()} />
           </div>
-        )}
-        {dashOpen && (
-          <div className={styles.responsiveDash}>
-            <Link
-              href="/dashboard/engineer"
-              className={pathname === "/dashboard/engineer" ? styles.activeLink : ""}
-              onClick={toggleDash}
-            >
-              Engineer
-            </Link>
-            <Link
-              href="/dashboard/branch"
-              className={pathname === "/dashboard/branch" ? styles.activeLink : ""}
-              onClick={toggleDash}
-            >
-              Branch
-            </Link>
-            <Link
-              href="/dashboard/region"
-              className={pathname === "/dashboard/region" ? styles.activeLink : ""}
-              onClick={toggleDash}
-            >
-              Region
-            </Link>
-            <Link
-              href="/dashboard/customer"
-              className={pathname === "/dashboard/customer" ? styles.activeLink : ""}
-              onClick={toggleDash}
-            >
-              Customer
-            </Link>
-          </div>
-        )}
-      </nav>
-    );
-  } else {
-    return <></>;
-  }
+        </div>
+      )}
+      {dashOpen && (
+        <div className={styles.responsiveDash}>
+          <Link
+            href="/dashboard/engineer"
+            className={pathname === "/dashboard/engineer" ? styles.activeLink : ""}
+            onClick={toggleDash}
+          >
+            Engineer
+          </Link>
+          <Link
+            href="/dashboard/branch"
+            className={pathname === "/dashboard/branch" ? styles.activeLink : ""}
+            onClick={toggleDash}
+          >
+            Branch
+          </Link>
+          <Link
+            href="/dashboard/region"
+            className={pathname === "/dashboard/region" ? styles.activeLink : ""}
+            onClick={toggleDash}
+          >
+            Region
+          </Link>
+          <Link
+            href="/dashboard/customer"
+            className={pathname === "/dashboard/customer" ? styles.activeLink : ""}
+            onClick={toggleDash}
+          >
+            Customer
+          </Link>
+        </div>
+      )}
+    </nav>
+  );
 }

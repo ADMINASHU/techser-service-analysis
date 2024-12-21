@@ -1,6 +1,5 @@
 // app/models/Data.js
 import mongoose from "mongoose";
-
 const DataSchema = new mongoose.Schema({
   blank: String,
   callNo: String,

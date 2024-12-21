@@ -7,7 +7,7 @@ const ForgotPasswordPage = async () => {
   const session = await auth();
   const isAuthenticated = !!session?.user;
   if (isAuthenticated) {
-    redirect("/profile");
+    redirect("/");
   }
   return <ForgotPasswordForm />;
 };

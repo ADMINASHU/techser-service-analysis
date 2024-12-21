@@ -1,42 +1,41 @@
 "use client";
+
 import styles from "./RegisterForm.module.css";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import axios from "axios";
 import { useState } from "react";
 import Swal from "sweetalert2";
+import { signUp } from "@/app/action";
 
 const RegisterForm = () => {
   const [userID, setUserID] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const router = useRouter();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    try {
-      const data = { userID, email, password };
-      const response = await axios.post("/api/register", data);
-      if (response.status === 201) {
-        setUserID("");
-        setEmail("");
-        setPassword("");
-        Swal.fire({
-          title: "Success!",
-          text: response.message,
-          icon: "success",
-          confirmButtonText: "OK",
-        });
-        router.push("/");
-      }
-    } catch (error) {
-      // console.log(error.message);
+
+    const data = { userID, email, password, confirmPassword };
+    const response = await signUp({ data });
+
+    if (response.error) {
       Swal.fire({
         title: "Error!",
-        text: error.message,
+        text: response.error,
         icon: "error",
         confirmButtonText: "OK",
+      });
+    } else {
+      Swal.fire({
+        title: "Success!",
+        text: response.message,
+        icon: "success",
+        confirmButtonText: "OK",
+      }).then(() => {
+        router.push("/login");
       });
     }
   };
@@ -46,7 +45,8 @@ const RegisterForm = () => {
       <div className={styles.registerContainer}>
         <Image
           src="/logo.jpg" // Path to your image
-          alt="Company image" // Alt text for accessibility
+          alt="Company logo" // Alt text for accessibility
+          priority
           width={180} // Display width
           height={101}
           className={styles.logo} // Display height
@@ -54,21 +54,19 @@ const RegisterForm = () => {
         <form onSubmit={handleSubmit}>
           <input
             type="text"
-            id="userId"
-            name="userId"
+            id="userID"
+            name="userID"
             placeholder="User ID"
             value={userID}
             onChange={(e) => setUserID(e.target.value)}
-            required
           />
           <input
-            type="email"
+            type="text"
             id="email"
             name="email"
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            required
           />
           <input
             type="password"
@@ -77,7 +75,14 @@ const RegisterForm = () => {
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            required
+          />
+          <input
+            type="password"
+            id="confirmPassword"
+            name="confirmPassword"
+            placeholder="Confirm Password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
           />
           <button type="submit">Signup</button>
           <p>

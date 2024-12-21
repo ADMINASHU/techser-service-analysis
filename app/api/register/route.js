@@ -2,7 +2,7 @@
 import { NextResponse } from "next/server";
 import connectToServiceEaseDB from "@/lib/serviceDB";
 import bcrypt from "bcryptjs";
-import { User } from "../../models/User";
+import  User  from "../../../models/User";
 
 export async function POST(request) {
   try {

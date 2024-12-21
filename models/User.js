@@ -22,15 +22,16 @@ const UserSchema = new mongoose.Schema({
   },
   level: { type: Number, required: true, default: 4 },
   verified: { type: Boolean, required: true, default: false },
-  fName: { type: String },
+  fName: { type: String, required: true, default: "User" },
   eName: { type: String },
-  image: { type: String },
+  image: { type: String, required: true, default: "user.png" },
   designation: { type: String },
   region: { type: String },
   branch: { type: String },
   mobileNo: { type: String },
-  resetToken: { type: String }, // Add resetToken field
-  resetTokenExpiry: { type: Date } // Add resetTokenExpiry field
+  resetToken: { type: String },
+  resetTokenExpiry: { type: Date },
 });
 
-export const User = mongoose.models?.User ?? mongoose.model("User", UserSchema);
+// Prevents redefining the model during hot reloading
+export default mongoose.models?.User || mongoose.model("User", UserSchema);

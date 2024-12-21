@@ -1,5 +1,5 @@
 import connectToServiceEaseDB from "../../../lib/serviceDB";
-import Point from '../../models/Point';
+import Point from '../../../models/Point';
 import { NextResponse } from 'next/server';
 
 export async function GET() {
@@ -23,7 +23,7 @@ export async function GET() {
       },
     });
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
@@ -67,7 +67,7 @@ export async function PUT(request) {
 
     return NextResponse.json({ message: "Data updated successfully" }, { status: 200 });
   } catch (error) {
-    console.error('PUT error:', error.message);
+    // console.error('PUT error:', error.message);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

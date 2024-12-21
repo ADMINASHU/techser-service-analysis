@@ -38,7 +38,9 @@ export async function POST(request) {
       }
     );
   } catch (error) {
-    console.error("Error during POST request:", error.message);
+
+    //console.error("Error during POST request:", error.message);
+
     return NextResponse.json({ error: "Error fetching Branch data" }, { status: 500 });
   }
 }

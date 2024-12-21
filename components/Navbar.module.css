@@ -4,16 +4,13 @@
   align-items: center;
   padding: 10px 20px;
   background: linear-gradient(135deg, rgba(21, 21, 21, 0.5), rgba(255, 255, 255, 0.1), rgba(248, 47, 32, 0.3), rgba(51, 51, 51, 0.6)), rgba(51, 51, 51, 0.7);
-  /* Updated glossy gradient */
   backdrop-filter: blur(10px);
-  /* Glassy effect */
   color: white;
   position: fixed;
   top: 0;
   width: 100%;
   z-index: 1000;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(255, 255, 255, 0.1) inset;
-  /* Outer and inner shadow */
   transition: background-color 0.3s ease, backdrop-filter 0.3s ease;
 }
 
@@ -28,8 +25,7 @@
 
 .progressBar {
   height: 100%;
-  background-color:  #22ee13;
-  /* background-color: #ee1313; */
+  background-color: #22ee13;
   transition: width 0.3s ease;
 }
 
@@ -41,7 +37,6 @@
 
 .navLinks a {
   margin-right: 20px;
-  /* color: white; */
   text-decoration: none;
   transition: color 0.3s ease;
 }
@@ -60,22 +55,43 @@
   align-items: center;
 }
 
-.profileName {
+.profileContainer {
+  display: flex;
+  align-items: center;
   margin-right: 10px;
   color: white;
   text-decoration: none;
   transition: color 0.3s ease;
 }
 
+.profileName {
+  margin-right: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.profileImageContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.profileImage {
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  object-fit: cover;
+}
+
 .logoutButton {
-  padding: 5px 10px;
+  padding: 5px 5px;
   background-color: #ff4c4c;
   color: white;
   border: none;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  /* Adding shadow to the button */
 }
 
 .logoutButton:hover {
@@ -100,13 +116,10 @@
   left: 50px;
   border-radius: 8px;
   background: linear-gradient(135deg, rgba(248, 47, 32, 0.5), rgba(211, 211, 211, 0.4)), rgba(0, 0, 0, 0.9);
-  /* Updated glossy gradient */
   backdrop-filter: blur(10px);
-  /* Glassy effect */
   padding: 10px;
   z-index: 1001;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(255, 255, 255, 0.1) inset;
-  /* Outer and inner shadow */
 }
 
 .responsiveDash {
@@ -119,13 +132,10 @@
   border-radius: 8px;
   left: 150px;
   background: linear-gradient(135deg, rgba(248, 47, 32, 0.5), rgba(211, 211, 211, 0.4)), rgba(0, 0, 0, 0.9);
-  /* Updated glossy gradient */
   backdrop-filter: blur(10px);
-  /* Glassy effect */
   padding: 10px;
   z-index: 1001;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(255, 255, 255, 0.1) inset;
-  /* Outer and inner shadow */
 }
 
 .responsiveMenu a {
@@ -159,6 +169,16 @@
   background-color: transparent;
 }
 
+.newResponsiveDash {
+  display: flex;
+  font-size: 18px;
+  flex-direction: column;
+  transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+}
+.logout{
+  margin: 10px ;
+}
+
 @media (max-width: 768px) {
   .navLinks {
     display: none;
@@ -174,13 +194,44 @@
 
   .responsiveMenu {
     display: flex;
-    width: 200px;
+    width: 250px;
   }
 
   .responsiveDash {
+    display: none;
+  }
 
-    top: 130px;
-    left: 250px;
+  .profileContainer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    flex-wrap: nowrap;
+    width: 100%;
+  }
 
+  .profileName {
+    flex-direction: row;
+    align-items: center;
+    margin-left: 10px;
+  }
+
+  .profileName span {
+    margin-right: 5px;
+  }
+
+  .profileImageContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+
+  .profileImage {
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    object-fit: cover;
   }
 }

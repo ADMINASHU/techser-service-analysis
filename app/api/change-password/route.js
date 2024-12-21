@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import bcrypt from 'bcryptjs'; // Import bcrypt for password hashing
-import { User } from "../../models/User";
+import User  from "../../../models/User";
 import connectToServiceEaseDB from "../../../lib/serviceDB";
 
 export async function POST(request) {

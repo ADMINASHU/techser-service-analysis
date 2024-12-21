@@ -52,35 +52,52 @@
 
 .button {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
+  gap: 10px;
 }
 
 .editButton {
-  background-color: #0070f3;
-  color: white;
-  margin: 5px;
-  padding: 5px 10px;
+  background-color: transparent;
   border: none;
-  border-radius: 4px;
   cursor: pointer;
-  font-size: 12px;
-  width: 60px;
+  padding: 0;
+}
+
+.editButton svg {
+  fill: none;
+  stroke: rgb(47, 201, 4); /* Purple color for the SVG icon */
+  width: 24px;    /* Adjust the size as needed */
+  height: 24px;
+}
+
+.editButton:hover svg {
+  stroke: rgb(0, 69, 37); /* Purple color for the SVG icon */
 
 }
+
+
 
 .deleteButton {
-  background-color: #dc3545;
-  color: white;
-  margin: 5px;
-  padding: 5px 10px;
+  background-color: transparent;
   border: none;
-  border-radius: 4px;
   cursor: pointer;
-  font-size: 12px;
-  width: 60px;
+  padding: 0;
 }
+
+.deleteButton svg {
+  fill: none;
+  stroke: red; /* Red color for the SVG icon */
+  width: 24px;   /* Adjust the size as needed */
+  height: 24px;
+}
+
+.deleteButton:hover svg {
+  stroke: #a71d2a; /* Darker red for hover state */
+}
+
+
 
 .modalOverlay {
   position: fixed;
