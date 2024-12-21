@@ -147,7 +147,7 @@ const Profile = ({ LoggedUserID }) => {
       <div className={styles.page}>
         {/* <h1 className={styles.title}>Profile Page</h1> */}
         <div className={styles.container}>
-          <div className={styles.fContainer}>
+          <div className={styles.fContainer} style={editMode ? { marginTop: "15px" } : {}}>
             {editMode ? (
               <div className={styles.field}>
                 <input
@@ -158,16 +158,16 @@ const Profile = ({ LoggedUserID }) => {
                   disabled={!editMode}
                 />
                 <button
+                  className={styles.input}
                   style={{
-                    backgroundColor: "#dc3545",
+                    backgroundColor: "#0070f3",
                     color: "white",
-                    marginTop: "20px",
-                    padding: "10px 10px",
+                    marginTop: "35px",
+                    padding: "8px",
+
                     border: "none",
-                    borderRadius: "4px",
                     cursor: "pointer",
-                    fontSize: "10px",
-                    width: "100%",
+                    fontSize: "16px",
                   }}
                   onClick={handleUpload}
                   disabled={!editMode}
@@ -191,7 +191,21 @@ const Profile = ({ LoggedUserID }) => {
               <div
                 className={styles.input}
                 style={
-                  formData.verified
+                  editMode
+                    ? formData.verified
+                      ? {
+                          marginTop: "15px",
+                          backgroundColor: "green",
+                          color: "white",
+                          textAlign: "center",
+                        }
+                      : {
+                          marginTop: "15px",
+                          backgroundColor: "red",
+                          color: "white",
+                          textAlign: "center",
+                        }
+                    : formData.verified
                     ? { backgroundColor: "green", color: "white", textAlign: "center" }
                     : { backgroundColor: "red", color: "white", textAlign: "center" }
                 }
@@ -316,7 +330,7 @@ const Profile = ({ LoggedUserID }) => {
           </div>
         </div>
         <div className={styles.buttonContainer}>
-          {!editMode && (
+          {!editMode && !resetMode && (
             <button
               className={`${styles.button} ${styles.resetButton}`}
               onClick={() => setResetMode((prevMode) => !prevMode)} // Updated to use prevMode for toggling
@@ -325,15 +339,25 @@ const Profile = ({ LoggedUserID }) => {
             </button>
           )}
           {editMode ? (
-            <button
-              className={`${styles.button} ${styles.saveButton}`}
-              onClick={() => {
-                setEditMode(false);
-                handleSave();
-              }}
-            >
-              Save
-            </button>
+            <div className={styles.formButtonContainer}>
+              <button
+                className={`${styles.button} ${styles.cancelButton}`}
+                onClick={() => {
+                  setEditMode(false);
+                }}
+              >
+                Close
+              </button>
+              <button
+                className={`${styles.button} ${styles.saveButton}`}
+                onClick={() => {
+                  setEditMode(false);
+                  handleSave();
+                }}
+              >
+                Save
+              </button>
+            </div>
           ) : (
             <button
               className={`${styles.button} ${styles.editButton}`}
@@ -347,6 +371,17 @@ const Profile = ({ LoggedUserID }) => {
       {resetMode && (
         <div className={styles.page}>
           <div className={styles.resetPasswordContainer}>
+            <div
+              style={{
+                color: " #dc3545",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                padding: "25px",
+              }}
+            >
+              <h2>Change Password</h2>
+            </div>
             <form onSubmit={handleResetPassword}>
               <div className={styles.field}>
                 <label className={styles.label}>Current Password:</label>
@@ -356,9 +391,17 @@ const Profile = ({ LoggedUserID }) => {
                 <label className={styles.label}>New Password:</label>
                 <input className={styles.input} type="password" name="newPassword" required />
               </div>
-              <button className={`${styles.button} ${styles.resetButton}`} type="submit">
-                Save
-              </button>
+              <div className={styles.changePassButtonContainer}>
+                <button
+                  className={`${styles.button} ${styles.cancelButton}`}
+                  onClick={() => setResetMode((prevMode) => !prevMode)}
+                >
+                  Close
+                </button>
+                <button className={`${styles.button} ${styles.saveButton}`} type="submit">
+                  Save
+                </button>
+              </div>
             </form>
           </div>
         </div>

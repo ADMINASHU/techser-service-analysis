@@ -2,12 +2,11 @@ import { NextResponse } from "next/server";
 import User from "../../../../models/User";
 import connectToServiceEaseDB from "../../../../lib/serviceDB";
 
-export async function DELETE({ params }) {
-  
+export async function DELETE(request, { params }) {
   try {
+    const { userID } = params;
+
     await connectToServiceEaseDB();
-    const { userID } = await params;
-    console.log(params);
     const user = await User.findOneAndDelete({ userID });
 
     if (!user) {
