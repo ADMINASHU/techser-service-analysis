@@ -6,7 +6,7 @@ const DataContext = createContext();
 
 const CHUNK_SIZE = 400; // Number of rows to fetch per chunk
 
-export const DataProvider = ({ children, session }) => {
+export const DataProvider = ({ children }) => {
   const [processedData, setProcessedData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [startRow, setStartRow] = useState(0);
@@ -71,7 +71,7 @@ export const DataProvider = ({ children, session }) => {
     const fetchData = async () => {
       await fetchDataChunk(0, CHUNK_SIZE);
     };
-    session?.user && fetchData();
+    fetchData();
   }, []);
 
   useEffect(() => {
