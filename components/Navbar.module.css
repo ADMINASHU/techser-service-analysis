@@ -175,6 +175,9 @@
   flex-direction: column;
   transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
 }
+.logout{
+  margin: 10px ;
+}
 
 @media (max-width: 768px) {
   .navLinks {

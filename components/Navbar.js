@@ -200,17 +200,24 @@ export default function Navbar({ isAuthenticated, loggedUser }) {
             Data
           </Link>
 
-          <Link href="/users" className={pathname === "/users" ? styles.activeLink : styles.nlink}>
+          <Link
+            href="/users"
+            onClick={toggleMenu}
+            className={pathname === "/users" ? styles.activeLink : styles.nlink}
+          >
             Users
           </Link>
 
           <Link
             href="/control"
+            onClick={toggleMenu}
             className={pathname === "/control" ? styles.activeLink : styles.nlink}
           >
             Control
           </Link>
-          <Logout onClick={() => toggleMenu()} />
+          <div className={styles.logout}>
+            <Logout onClick={() => toggleMenu()} />
+          </div>
         </div>
       )}
       {dashOpen && (

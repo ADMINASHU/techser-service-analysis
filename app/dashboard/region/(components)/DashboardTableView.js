@@ -116,10 +116,10 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
         >
           {smartFilter ? "Smart" : "Regular"}
         </button>
-      </div>
       <button className={styles.print} onClick={handlePrint}>
         Print
       </button>
+      </div>
 
       <table ref={tableRef}>
         <thead>
