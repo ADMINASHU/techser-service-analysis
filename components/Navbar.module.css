@@ -169,6 +169,13 @@
   background-color: transparent;
 }
 
+.newResponsiveDash {
+  display: flex;
+  font-size: 18px;
+  flex-direction: column;
+  transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+}
+
 @media (max-width: 768px) {
   .navLinks {
     display: none;
@@ -184,11 +191,44 @@
 
   .responsiveMenu {
     display: flex;
-    width: 200px;
+    width: 250px;
   }
 
   .responsiveDash {
-    top: 130px;
-    left: 250px;
+    display: none;
+  }
+
+  .profileContainer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    flex-wrap: nowrap;
+    width: 100%;
+  }
+
+  .profileName {
+    flex-direction: row;
+    align-items: center;
+    margin-left: 10px;
+  }
+
+  .profileName span {
+    margin-right: 5px;
+  }
+
+  .profileImageContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+
+  .profileImage {
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    object-fit: cover;
   }
 }
