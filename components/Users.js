@@ -72,7 +72,7 @@ const Users = ({ LoggedUserLevel, LoggedUser }) => {
       });
       setUsers(users.filter((user) => user.userID !== userID));
     } catch (error) {
-      // console.error(error);
+      console.error(error);
       Swal.fire({
         title: "Error!",
         text: error.response?.data.message || "Failed to delete user.",

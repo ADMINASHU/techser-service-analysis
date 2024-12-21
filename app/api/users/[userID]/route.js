@@ -3,10 +3,11 @@ import User from "../../../../models/User";
 import connectToServiceEaseDB from "../../../../lib/serviceDB";
 
 export async function DELETE({ params }) {
-  const { userID } = await params;
-
+  
   try {
     await connectToServiceEaseDB();
+    const { userID } = await params;
+    console.log(params);
     const user = await User.findOneAndDelete({ userID });
 
     if (!user) {
