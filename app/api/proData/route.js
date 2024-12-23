@@ -1,6 +1,6 @@
 import connectToServiceEaseDB from "../../../lib/serviceDB";
-import { Data } from "../../models/Data";
-import Point from "../../models/Point";
+import { Data } from "../../../models/Data";
+import Point from "../../../models/Point";
 import { NextResponse } from "next/server";
 import { parse, differenceInHours, format, isValid } from "date-fns";
 import { regionList } from "@/lib/regions";
@@ -14,14 +14,14 @@ export async function GET(request) {
     const db = await connectToServiceEaseDB();
 
     if (!db) {
-      console.error("Database connection failed");
+      // console.error("Database connection failed");
       return NextResponse.status(500).json({ message: "Error connecting to the database" });
     }
 
     const point = await Point.find({});
     const data = await Data.find({}).skip(startRow).limit(chunkSize);
     if (!point || !data) {
-      console.error("Error fetching points and data from database");
+      // console.error("Error fetching points and data from database");
       return NextResponse.status(500).json({
         message: "Error fetching points and data from database",
       });
@@ -47,7 +47,7 @@ export async function GET(request) {
         : new Date();
 
       if (!isValid(parsedCallDate) || !isValid(parsedLastDate)) {
-        console.warn("Invalid date values found:", { parsedCallDate, parsedLastDate });
+        // console.warn("Invalid date values found:", { parsedCallDate, parsedLastDate });
         return acc;
       }
 
@@ -191,12 +191,13 @@ export async function GET(request) {
       {
         status: 200,
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/x-javascript; charset=utf-8",
+          "Cache-Control": "max-age=300"
         },
       }
     );
   } catch (error) {
-    console.error("Error in GET request:", error);
+    // console.error("Error in GET request:", error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

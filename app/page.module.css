@@ -1,25 +1,25 @@
 .container {
     text-align: center;
     padding: 40px;
-}
-
-.container h1 {
+  }
+  
+  .container h1 {
     font-size: 36px;
     margin-bottom: 20px;
-}
-
-.container p {
+  }
+  
+  .container p {
     font-size: 18px;
     margin-bottom: 20px;
-}
-
-.sliderContainer {
+  }
+  
+  .sliderContainer {
     width: 80%;
     margin: 0 auto;
     margin-top: 30px;
-}
-
-.slide {
+  }
+  
+  .slide {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -31,18 +31,116 @@
     background: #f9f9f9;
     cursor: pointer;
     transition: background-color 0.3s ease;
-}
-
-.slide:hover {
+  }
+  
+  .slide:hover {
     background-color: #eaeaea;
-}
-
-.slide h2 {
+  }
+  
+  .slide h2 {
     font-size: 24px;
     margin-bottom: 10px;
-}
-
-.slide p {
+  }
+  
+  .slide p {
     font-size: 16px;
     padding: 40px;
-}
+  }
+  
+  /* Media Queries for Responsive Design */
+  @media (max-width: 1200px) {
+    .sliderContainer {
+      width: 90%;
+    }
+  
+    .slide {
+      height: 350px;
+    }
+  
+    .slide h2 {
+      font-size: 22px;
+    }
+  
+    .slide p {
+      font-size: 15px;
+      padding: 30px;
+    }
+  }
+  
+  @media (max-width: 992px) {
+    .container h1 {
+      font-size: 32px;
+    }
+  
+    .container p {
+      font-size: 16px;
+    }
+  
+    .slide {
+      height: 300px;
+    }
+  
+    .slide h2 {
+      font-size: 20px;
+    }
+  
+    .slide p {
+      font-size: 14px;
+      padding: 25px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .sliderContainer {
+      width: 100%;
+    }
+  
+    .container {
+      padding: 20px;
+    }
+  
+    .container h1 {
+      font-size: 28px;
+    }
+  
+    .container p {
+      font-size: 14px;
+    }
+  
+    .slide {
+      height: 250px;
+    }
+  
+    .slide h2 {
+      font-size: 18px;
+    }
+  
+    .slide p {
+      font-size: 12px;
+      padding: 20px;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .container h1 {
+      font-size: 24px;
+    }
+  
+    .container p {
+      font-size: 12px;
+    }
+  
+    .slide {
+      height:250px;
+    }
+  
+    .slide h2 {
+      font-size: 16px;
+    }
+  
+    .slide p {
+      font-size: 10px;
+      padding: 15px;
+    }
+  }
+  

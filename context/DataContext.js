@@ -19,9 +19,9 @@ export const DataProvider = ({ children }) => {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const result = await response.json();
-      if (result.error) {
-        console.error("Error fetching data:", result.error);
-      } else {
+      if (!result.error) {
+        // console.error("Error fetching data:", result.error);
+
         const finalData = result.finalPointData.map((item) => ({
           complaintID: item.complaintID,
           natureOfComplaint: item.natureOfComplaint,
@@ -53,7 +53,7 @@ export const DataProvider = ({ children }) => {
 
       setLoading(false);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      // console.error("Error fetching data:", error);
       setLoading(false);
     }
   };
@@ -69,13 +69,10 @@ export const DataProvider = ({ children }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      // Start fetching the first chunk
       await fetchDataChunk(0, CHUNK_SIZE);
     };
     fetchData();
   }, []);
-
-
 
   useEffect(() => {
     if (startRow < totalRows || totalRows === 0) {

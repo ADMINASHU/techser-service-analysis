@@ -2,11 +2,11 @@
 import React, { useState } from "react";
 import styles from "./LoginForm.module.css";
 import Link from "next/link";
-import { doLogin } from "@/app/action";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { AuthError } from "next-auth";
+import { doLogin } from "@/app/action";
+
 const LoginForm = () => {
   const [userID, setUserID] = useState("");
   const [password, setPassword] = useState("");
@@ -14,47 +14,25 @@ const LoginForm = () => {
 
   async function handleSubmit(event) {
     event.preventDefault();
-    if (!userID || !password) {
-      Swal.fire({
-        title: "Warning!",
-        text: "Please fill in all the fields.",
-        icon: "warning",
-        confirmButtonText: "OK",
-      });
-      return;
-    }
-    const cred = { userID, password };
-    try {
-      const response = await doLogin(cred);
-      if (response.error) {
-        Swal.fire({
-          title: "Error!",
-          text: response.error,
-          icon: "error",
-          confirmButtonText: "OK",
-        });
-      } else {
-        router.push("/");
-      }
-    } catch (error) {
+    const response = await doLogin({ userID, password });
+    // console.log("from login form ####################"+JSON.stringify(response));
+    if (!response.success) {
       Swal.fire({
         title: "Error!",
-        text: "Login failed. Please try again later.",
+        text: response.error,
         icon: "error",
         confirmButtonText: "OK",
       });
-      if (error instanceof AuthError) {
-        switch (error.type) {
-          case "CredentialsSignin":
-            return { error: "Invalid Credentials!" };
-          case "CallbackRouteError":
-            return { error: "Invalid credentials" };
-          default:
-            return { error: "Something went wrong!" };
-        }
-      }
-      throw error;
-    }
+    } //else {
+    //   Swal.fire({
+    //     title: "Success!",
+    //     text: response.message,
+    //     icon: "success",
+    //     confirmButtonText: "OK",
+    //   }).then(() => {
+    //     router.push("/");
+    //   });
+    // }
   }
 
   return (
@@ -63,7 +41,8 @@ const LoginForm = () => {
         <Image
           src="/logo.jpg"
           alt="Company logo"
-          priority={true}
+          // loading="eager" // {lazy} | {eager}
+          priority
           width={180}
           height={101}
           className={styles.logo}
