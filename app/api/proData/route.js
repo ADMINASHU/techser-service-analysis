@@ -1,27 +1,31 @@
 import connectToServiceEaseDB from "../../../lib/serviceDB";
 import { Data } from "../../../models/Data";
 import Point from "../../../models/Point";
+import UserData from "../../../models/UserData";
 import { NextResponse } from "next/server";
 import { parse, differenceInHours, format, isValid } from "date-fns";
 import { regionList } from "@/lib/regions";
+import axios from "axios";
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
   const startRow = parseInt(searchParams.get("startRow")) || 0;
-  const chunkSize = parseInt(searchParams.get("chunkSize")) || 100;
+  const chunkSize = parseInt(searchParams.get("chunkSize")) || 400;
 
   try {
     const db = await connectToServiceEaseDB();
 
     if (!db) {
-      // console.error("Database connection failed");
       return NextResponse.status(500).json({ message: "Error connecting to the database" });
     }
 
+    // Fetch user data from the serviceEaseUsers API
+
+    const users = await UserData.find({});
     const point = await Point.find({});
+    
     const data = await Data.find({}).skip(startRow).limit(chunkSize);
     if (!point || !data) {
-      // console.error("Error fetching points and data from database");
       return NextResponse.status(500).json({
         message: "Error fetching points and data from database",
       });
@@ -42,12 +46,9 @@ export async function GET(request) {
       const dateStr = item.callStartEndDate;
       const lastDate = dateStr ? parseDate(dateStr) : null;
       const parsedCallDate = callDate ? parse(callDate, "dd.MMM.yyyy HH:mm", new Date()) : null;
-      const parsedLastDate = lastDate
-        ? parse(lastDate, "dd.MMM.yyyy HH:mm", new Date())
-        : new Date();
+      const parsedLastDate = lastDate ? parse(lastDate, "dd.MMM.yyyy HH:mm", new Date()) : new Date();
 
       if (!isValid(parsedCallDate) || !isValid(parsedLastDate)) {
-        // console.warn("Invalid date values found:", { parsedCallDate, parsedLastDate });
         return acc;
       }
 
@@ -173,18 +174,27 @@ export async function GET(request) {
           return point.toFixed(2);
         })();
 
+        // Find the matching user
+        const matchingUser = users.find(
+          (user) =>
+            user.REGION === item.region &&
+            user.BRANCH === item.branch &&
+            user.NAME.includes(item.engineerName)
+         
+        );
+
         return {
           ...item,
           cPoint,
           ePoint,
           bPoint,
           rPoint,
+          USERNAME: matchingUser ? matchingUser.USERNAME : "", // Add UMID column
         };
       })
       .filter((row) => row.region !== "Region");
 
     const totalRows = await Data.countDocuments();
-    // console.log(finalPointData);
 
     return NextResponse.json(
       { finalPointData, totalRows },
@@ -197,7 +207,6 @@ export async function GET(request) {
       }
     );
   } catch (error) {
-    // console.error("Error in GET request:", error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

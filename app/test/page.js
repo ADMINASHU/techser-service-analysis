@@ -1,4 +1,5 @@
 import { auth } from "@/auth";
+import Seusers from "@/components/Seusers";
 import React from "react";
 
 const TestPage = async () => {
@@ -7,6 +8,7 @@ const TestPage = async () => {
     <div>
       <div>TestPage no login required</div>
       <div>{session?.user && JSON.stringify(session?.user)}</div>
+      <Seusers />
     </div>
   );
 };
