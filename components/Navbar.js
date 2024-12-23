@@ -71,6 +71,12 @@ export default function Navbar({ isAuthenticated, loggedUser }) {
           />
         </Link>
         <Link
+          href="/my-report"
+          className={pathname === "/my-report" ? styles.activeLink : styles.nlink}
+        >
+          My Report
+        </Link>
+        <Link
           href=""
           className={
             pathname === "/dashboard/engineer" ||
@@ -88,7 +94,6 @@ export default function Navbar({ isAuthenticated, loggedUser }) {
         <Link href="/data" className={pathname === "/data" ? styles.activeLink : styles.nlink}>
           Data
         </Link>
-
         <Link href="/users" className={pathname === "/users" ? styles.activeLink : styles.nlink}>
           Users
         </Link>
@@ -144,6 +149,12 @@ export default function Navbar({ isAuthenticated, loggedUser }) {
 
           <Link href="/" className={pathname === "/" ? styles.activeLink : ""} onClick={toggleMenu}>
             Home
+          </Link>
+          <Link
+            href="/my-report"
+            className={pathname === "/my-report" ? styles.activeLink : styles.nlink}
+          >
+            My Report
           </Link>
           <Link
             href=""
