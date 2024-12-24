@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import ProfileCard from "./ProfileCard"; // Import the ProfileCard component
 import styles from "../../Dashboard.module.css";
 import { regionList } from "@/lib/regions";
+import axios from "axios";
 
 const DashboardTableView = ({ data, averageTotalVisits }) => {
   const tableRef = useRef();
@@ -15,10 +16,17 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
   const [profileData, setProfileData] = useState(null);
   const [profilePosition, setProfilePosition] = useState({ top: 0, left: 0 });
-  
+  const [users, setUsers] = useState(null);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const response = await axios.get("/api/users");
+      setUsers(response.data.users);
+    };
+    fetchUsers();
+  }, []);
+
   const selectedColumns = [
-    "region",
-    "branch",
     "engineer",
     "totalCallAssigned",
     "newBreakdown",
@@ -169,20 +177,36 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
   };
 
   const handleCellClick = (event, colIndex, rowData) => {
-    if (colIndex === 2) {
-      setProfileData(rowData);
+    if (colIndex === 0) {
+      const existingUsers = users.filter(
+        (user) => user.userID.toLowerCase() === rowData.account.erID.toLowerCase()
+      );
+      if (existingUsers.length > 0) {
+        const newData = {
+          ...rowData,
+          account: {
+            ...rowData.account,
+            image: "user.png",
+            erEmail: existingUsers[0].email,
+            erName: `${existingUsers[0].fName} ${existingUsers[0].eName}`,
+            erMob: existingUsers[0].mobileNo,
+          },
+        };
+        setProfileData(newData);
+      } else {
+        setProfileData({ ...rowData, account: { ...rowData.account, image: "ashu_user1.png" } });
+      }
       setProfilePosition({ top: `${event.clientY}px`, left: `${event.clientX}px` });
-      document.body.classList.add(styles.blurredBackground);
+      // document.body.classList.add(styles.blurredBackground);
     }
   };
 
   const closeProfileCard = () => {
     setProfileData(null);
-    document.body.classList.remove(styles.blurredBackground);
+    // document.body.classList.remove(styles.blurredBackground);
   };
 
   if (!data || data.length === 0) return <div>No data available</div>;
-
   return (
     <div className={styles.page}>
       <div className={styles.filterContainer}>
@@ -197,7 +221,7 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
         >
           {smartFilter ? "Smart" : "Regular"}
         </button>
-  
+
         <select name="region" value={filters.region} onChange={handleFilterChange}>
           <option value="ALL Region">ALL Region</option>
           {regionList.map((region) => (
@@ -206,16 +230,16 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
             </option>
           ))}
         </select>
-  
+
         <select name="branch" value={filters.branch} onChange={handleFilterChange}>
           <option value="ALL Branch">ALL Branch</option>
-          {getBranchesForRegion(filters.region).map((branch) => (
-            <option key={branch} value={branch}>
+          {getBranchesForRegion(filters.region).map((branch, index) => (
+            <option key={index} value={branch}>
               {branch}
             </option>
           ))}
         </select>
-  
+
         <input
           type="text"
           name="engineer"
@@ -227,11 +251,11 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
           Print
         </button>
       </div>
-      
+
       <table ref={tableRef}>
         <thead>
           <tr>
-            <th colSpan={4}>Dashboard Engineer</th>
+            <th colSpan={2}>Dashboard Engineer</th>
             <th colSpan={1}>Assigned</th>
             <th colSpan={3}>New</th>
             <th colSpan={3}>Pending</th>
@@ -247,11 +271,7 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
               {selectedColumns.map((col, index) => (
                 <th key={index} onClick={() => handleSort(col)}>
                   {data[0][col]}{" "}
-                  {sortConfig.key === col
-                    ? sortConfig.direction === "asc"
-                      ? "▲"
-                      : "▼"
-                    : ""}
+                  {sortConfig.key === col ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
                 </th>
               ))}
             </tr>
@@ -260,12 +280,15 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
         <tbody>
           {filteredData?.map((row, rowIndex) => (
             <tr key={rowIndex}>
-              <td>{rowIndex + 1}</td>
+              <td className={styles.hoverColumn}>{rowIndex + 1}</td>
               {selectedColumns.map((col, colIndex) => (
                 <td
                   key={colIndex}
-                  style={colIndex === 18 ? { backgroundColor: getColor(row[col]) } : {}}
+                  className={colIndex === 0 ? styles.hoverColumn : ""}
+                  style={colIndex === 16 ? { backgroundColor: getColor(row[col]) } : {}}
                   onClick={(event) => handleCellClick(event, colIndex, row)}
+                 
+            
                 >
                   {row[col]}
                 </td>
@@ -274,15 +297,12 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
           ))}
         </tbody>
       </table>
-  
+
       {profileData && (
         <ProfileCard data={profileData} onClose={closeProfileCard} position={profilePosition} />
       )}
     </div>
   );
-  
-  
-  
 };
 
 export default DashboardTableView;

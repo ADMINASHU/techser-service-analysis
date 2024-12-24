@@ -45,45 +45,130 @@
 
 }
 /* Dashboard.module.css */
-/* .blurredBackground {
-    filter: blur(5px);
-  } */
-  
-/* ProfileCard.module.css */
+
+.hoverColumn:hover {
+  background-color: #f7a79c; /* Change this to your desired hover color */
+}
+
+
+/* Dashboard.module.css */
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
 .card {
-    position: fixed;
-    background-color: white;
-    border: 1px solid #ccc;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    padding: 10px;
-    width: 250px;
-    z-index: 1000;
-    top: var(--top);
-    left: var(--left);
-  }
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  max-width: 450px;
+  width: 90%;
+  padding: 20px;
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  top: var(--top);
+  left: var(--left);
+}
+
+.closeButton {
+  background-color: #e90c0c;
+  color: white;
+  border: none;
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2em;
+}
+
+.cardContent {
+  text-align: center;
+  width: 100%;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.profileImage {
+  border-radius: 10px;
+  margin-right: 20px;
+}
+
+.cardHeaderText {
+  text-align: left;
+}
+
+.cardHeaderText h2 {
+  margin: 0;
+  font-size: 1.8em;
+}
+
+.cardHeaderText span {
+  display: block;
+  color: #666;
+  font-size: 1.2em;
+}
+
+.cardLocation {
+  display: flex;
+  flex-direction: column;
+  /* justify-content: space-between; */
+  margin-top: 10px;
+  font-size: 1em;
+}
+
+.cardDetails {
+  text-align: left;
+  width: 100%;
+}
+
+.cardDetail {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+}
+
+.cardDetail .label {
   
-  .closeButton {
-    background-color: #e90c0c;
-    color: white;
-    border: none;
-    cursor: pointer;
-    float: right;
-  }
-  
-  .card p {
-    margin: 8px 0;
-  }
-  
-  .overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  
+  font-weight: bold;
+  color: #333;
+}
+
+.cardDetail .value {
+  text-align: right;
+  color: #555;
+}
+
+.showMoreButton {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.showMoreButton:hover {
+  background-color: #0056b3;
+}

@@ -36,6 +36,7 @@ const Users = ({ LoggedUserLevel, LoggedUser }) => {
           processedData.filter((row) => row.region === formData.region).map((row) => row.branch)
         )
       );
+      
   useEffect(() => {
     const newLevels = Array.from({ length: 4 }, (_, i) => i + 1).filter(
       (level) => level >= LoggedUserLevel
