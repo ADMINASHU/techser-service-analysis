@@ -104,8 +104,8 @@ const DataCompile = ({ proData, onDataProcessed }) => {
             : "0.00";
           const index = totalVisits ? ((ePoint * 1000) / totalVisits).toFixed(0) : 0;
           return {
-            // region: engineerData.account.erRegion,
-            // branch: engineerData.account.erBranch,
+            region: engineerData.account.erRegion,
+            branch: engineerData.account.erBranch,
             engineer,
             totalCallAssigned: totalAssigned,
             newBreakdown,
@@ -135,8 +135,8 @@ const DataCompile = ({ proData, onDataProcessed }) => {
 
         // Create header row
         const header = {
-          // region: "Region",
-          // branch: "Branch",
+          region: "Region",
+          branch: "Branch",
           engineer: "Engineer",
           totalCallAssigned: "Call",
           newBreakdown: "B",
