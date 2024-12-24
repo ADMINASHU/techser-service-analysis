@@ -5,7 +5,6 @@ import UserData from "../../../models/UserData";
 import { NextResponse } from "next/server";
 import { parse, differenceInHours, format, isValid } from "date-fns";
 import { regionList } from "@/lib/regions";
-import axios from "axios";
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
@@ -23,7 +22,7 @@ export async function GET(request) {
 
     const users = await UserData.find({});
     const point = await Point.find({});
-    
+
     const data = await Data.find({}).skip(startRow).limit(chunkSize);
     if (!point || !data) {
       return NextResponse.status(500).json({
@@ -46,7 +45,9 @@ export async function GET(request) {
       const dateStr = item.callStartEndDate;
       const lastDate = dateStr ? parseDate(dateStr) : null;
       const parsedCallDate = callDate ? parse(callDate, "dd.MMM.yyyy HH:mm", new Date()) : null;
-      const parsedLastDate = lastDate ? parse(lastDate, "dd.MMM.yyyy HH:mm", new Date()) : new Date();
+      const parsedLastDate = lastDate
+        ? parse(lastDate, "dd.MMM.yyyy HH:mm", new Date())
+        : new Date();
 
       if (!isValid(parsedCallDate) || !isValid(parsedLastDate)) {
         return acc;
@@ -136,7 +137,9 @@ export async function GET(request) {
           realStatus === "NEW"
             ? points[natureOfComplaint].eng.new
             : realStatus === "IN PROCESS"
-            ? (item.closedDate ? points[natureOfComplaint].eng.pending : 0)
+            ? item.closedDate
+              ? points[natureOfComplaint].eng.pending
+              : 0
             : cPoint;
 
         const bPoint = (() => {
@@ -177,11 +180,11 @@ export async function GET(request) {
         // Find the matching user
         const matchingUser = users.find(
           (user) =>
-            user.REGION === item.region &&
-            user.BRANCH === item.branch &&
-            user.NAME.includes(item.engineerName)
-         
+            user.NAME.includes(item.assignedTo?.toUpperCase())
         );
+        // console.log(item)
+        const userName = item.assignedTo ? (matchingUser ? matchingUser.USERNAME : "") : "";
+        const name = item.assignedTo ? (matchingUser ? matchingUser.NAME : "") : "";
 
         return {
           ...item,
@@ -189,7 +192,8 @@ export async function GET(request) {
           ePoint,
           bPoint,
           rPoint,
-          USERNAME: matchingUser ? matchingUser.USERNAME : "", // Add UMID column
+          userName: userName, // Add UMID column
+          name:name, //
         };
       })
       .filter((row) => row.region !== "Region");
@@ -202,7 +206,7 @@ export async function GET(request) {
         status: 200,
         headers: {
           "Content-Type": "application/x-javascript; charset=utf-8",
-          "Cache-Control": "max-age=300"
+          "Cache-Control": "max-age=300",
         },
       }
     );

@@ -40,7 +40,9 @@ export const DataProvider = ({ children }) => {
           ePoint: parseFloat(item.ePoint),
           bPoint: parseFloat(item.bPoint),
           rPoint: parseFloat(item.rPoint),
-          USERNAME: item.USERNAME,
+          userName: item.userName,
+          name: item.name,
+        
         }));
 
         setProcessedData((prevData) => {
