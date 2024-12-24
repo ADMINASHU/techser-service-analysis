@@ -14,7 +14,8 @@ const ProfileCard = ({ data, onClose, position }) => {
         <p className={styles.cardBranch}>Branch: {data.branch}</p>
         <p className={styles.cardEPoint}>E Point: {data.ePoint}</p>
         <p className={styles.cardScore}>Score: {data.index}</p>
-        {/* Add more fields as needed */}
+        <p>{JSON.stringify(data.account)}</p>
+   
       </div>
     </div>
   );

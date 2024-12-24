@@ -125,7 +125,8 @@ const DataCompile = ({ proData, onDataProcessed }) => {
             // openCall, // Add openCall to the final data
             index,
             accuracy,
-            
+            account: engineerData.account, // Add account to the final data, assuming account is a field in the proData object. If not, you can remove this line and add account to the header row instead.
+
           };
         });
 
@@ -155,6 +156,7 @@ const DataCompile = ({ proData, onDataProcessed }) => {
           // openCall: "Open Call", // Add openCall to the header row
           index: "Score",
           accuracy: "%",
+          account: "Account",
         };
 
         // Combine header with data
