@@ -125,6 +125,7 @@ const DataCompile = ({ proData, onDataProcessed }) => {
             // openCall, // Add openCall to the final data
             index,
             accuracy,
+            
           };
         });
 

@@ -183,6 +183,30 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
 
   if (!data || data.length === 0) return <div>No data available</div>;
 
+
+  const columnHeaderValues = {
+    region: "Region",
+    branch: "Branch",
+    engineer: "Engineer",
+    totalCallAssigned: "Call",
+    newBreakdown: "B",
+    newInstallation: "I",
+    newPM: "P",
+    pendBreakdown: "B",
+    pendInstallation: "I",
+    pendPM: "P",
+    closeBreakdown: "B",
+    closeInstallation: "I",
+    closePM: "P",
+    pCloseBreakdown: "B",
+    pCloseInstallation: "I",
+    pClosePM: "P",
+    totalVisits: "Visits",
+    ePoint: "E Point",
+    index: "Score",
+    accuracy: "%",
+  };
+  
   return (
     <div className={styles.page}>
       <div className={styles.filterContainer}>
@@ -246,7 +270,7 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
               <th>S.No.</th>
               {selectedColumns.map((col, index) => (
                 <th key={index} onClick={() => handleSort(col)}>
-                  {data[0][col]}{" "}
+                  {columnHeaderValues[col]}{" "}
                   {sortConfig.key === col
                     ? sortConfig.direction === "asc"
                       ? "▲"

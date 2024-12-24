@@ -44,3 +44,46 @@
     color: white;
 
 }
+/* Dashboard.module.css */
+/* .blurredBackground {
+    filter: blur(5px);
+  } */
+  
+/* ProfileCard.module.css */
+.card {
+    position: fixed;
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    width: 250px;
+    z-index: 1000;
+    top: var(--top);
+    left: var(--left);
+  }
+  
+  .closeButton {
+    background-color: #e90c0c;
+    color: white;
+    border: none;
+    cursor: pointer;
+    float: right;
+  }
+  
+  .card p {
+    margin: 8px 0;
+  }
+  
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  

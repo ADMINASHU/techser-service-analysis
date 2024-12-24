@@ -21,8 +21,6 @@ const TableView = ({ data }) => {
     "ePoint",
     "bPoint",
     "rPoint",
-    "userName",
-    "name",
   ];
 
 

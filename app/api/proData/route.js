@@ -178,22 +178,44 @@ export async function GET(request) {
         })();
 
         // Find the matching user
-        const matchingUser = users.find(
-          (user) =>
-            user.NAME.includes(item.assignedTo?.toUpperCase())
+        const matchingUser = users.find((user) =>
+          user.NAME.includes(item.assignedTo?.toUpperCase())
         );
         // console.log(item)
-        const userName = item.assignedTo ? (matchingUser ? matchingUser.USERNAME : "") : "";
-        const name = item.assignedTo ? (matchingUser ? matchingUser.NAME : "") : "";
+        const erID = item.assignedTo ? (matchingUser ? matchingUser.USERNAME : "") : "";
+        const erName = item.assignedTo ? (matchingUser ? matchingUser.NAME : "") : "";
+        const erMob = item.assignedTo ? (matchingUser ? matchingUser.PHONENO : "") : "";
+        const erEmail = item.assignedTo ? (matchingUser ? matchingUser.EMAIL : "") : "";
+        const erDesignation = item.assignedTo ? (matchingUser ? matchingUser.DESIGNATION : "") : "";
+        const erWorkLocation = item.assignedTo ? (matchingUser ? matchingUser.WORKLOCATION : "") : "";
+        const erBranch = item.assignedTo ? (matchingUser ? matchingUser.BRANCH : "") : "";
+        const erRegion = item.assignedTo ? (matchingUser ? matchingUser.REGION : "") : "";
+        const erAddress = item.assignedTo ? (matchingUser ? matchingUser.ADDRESS : "") : "";
+        const erDistrict = item.assignedTo ? (matchingUser ? matchingUser.DISTRICT : "") : "";
+        const erState = item.assignedTo ? (matchingUser ? matchingUser.STATE : "") : "";
+        const erPincode = item.assignedTo ? (matchingUser ? matchingUser.PINCODE : "") : "";
 
+        const account = {
+          erID,
+          erName,
+          erMob,
+          erEmail,
+          erDesignation,
+          erWorkLocation,
+          erBranch,
+          erRegion,
+          erAddress,
+          erDistrict,
+          erState,
+          erPincode,
+        };
         return {
           ...item,
           cPoint,
           ePoint,
           bPoint,
           rPoint,
-          userName: userName, // Add UMID column
-          name:name, //
+          account,
         };
       })
       .filter((row) => row.region !== "Region");
