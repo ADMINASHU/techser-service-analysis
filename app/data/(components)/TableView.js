@@ -23,8 +23,6 @@ const TableView = ({ data }) => {
     "rPoint",
   ];
 
-
-
   const [filters, setFilters] = useState({
     year: data[data.length - 1]?.year,
     month: data[data.length - 1]?.month,
@@ -37,6 +35,8 @@ const TableView = ({ data }) => {
   });
 
   const [currentPage, setCurrentPage] = useState(1);
+  const [hoveredRow, setHoveredRow] = useState(null);
+
   const rowsPerPage = 50;
 
   const handleFilterChange = (e) => {
@@ -150,6 +150,14 @@ const TableView = ({ data }) => {
     return buttons;
   };
 
+  const handleRowMouseEnter = (rowIndex) => {
+    setHoveredRow(rowIndex);
+  };
+
+  const handleRowMouseLeave = () => {
+    setHoveredRow(null);
+  };
+
   return (
     <div className={styles.page}>
       <div className={styles.filterContainer}>
@@ -240,9 +248,15 @@ const TableView = ({ data }) => {
         </thead>
         <tbody>
           {paginatedData.map((row, rowIndex) => (
-            <tr key={rowIndex}>
+            <tr
+              key={rowIndex}
+              onMouseEnter={() => handleRowMouseEnter(rowIndex)}
+              onMouseLeave={handleRowMouseLeave}
+            >
               {selectedColumns.map((col, index) => (
-                <td key={index}>{row[col] !== undefined ? row[col] : ""}</td>
+                <td key={index} className={`${hoveredRow === rowIndex ? styles.activeCell : ""}`}>
+                  {row[col] !== undefined ? row[col] : ""}
+                </td>
               ))}
             </tr>
           ))}

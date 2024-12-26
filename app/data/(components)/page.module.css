@@ -19,6 +19,12 @@
   outline: none;
 
 }
+.activeCell {
+  color: white;
+  background-color: #333333 !important;
+  z-index: 2;
+  /* transform: scale(1.1); */
+}
 
 /* Styles for the search bar */
 .searchBar {
