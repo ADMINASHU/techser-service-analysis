@@ -238,30 +238,32 @@ const TableView = ({ data }) => {
         {` entries`}
       </div>
 
-      <table border="1" cellPadding="5">
-        <thead>
-          <tr>
-            {selectedColumns.map((col, index) => (
-              <th key={index}>{col}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {paginatedData.map((row, rowIndex) => (
-            <tr
-              key={rowIndex}
-              onMouseEnter={() => handleRowMouseEnter(rowIndex)}
-              onMouseLeave={handleRowMouseLeave}
-            >
+      <div className={styles.tableWrapper}>
+        <table className="table" border="1" cellPadding="5">
+          <thead className="thead-dark">
+            <tr>
               {selectedColumns.map((col, index) => (
-                <td key={index} className={`${hoveredRow === rowIndex ? styles.activeCell : ""}`}>
-                  {row[col] !== undefined ? row[col] : ""}
-                </td>
+                <th key={index}>{col}</th>
               ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {paginatedData.map((row, rowIndex) => (
+              <tr
+                key={rowIndex}
+                onMouseEnter={() => handleRowMouseEnter(rowIndex)}
+                onMouseLeave={handleRowMouseLeave}
+              >
+                {selectedColumns.map((col, index) => (
+                  <td key={index} className={`${hoveredRow === rowIndex ? styles.activeCell : ""}`}>
+                    {row[col] !== undefined ? row[col] : ""}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       <div className={styles.paginationContainer}>
         <button

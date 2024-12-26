@@ -2,6 +2,9 @@
 
 .page {
   margin: 20px;
+  height: calc(100vh - 150px); /* Adjust based on your navbar height */
+  display: flex;
+  flex-direction: column;
 }
 
 .filterContainer {
@@ -9,6 +12,7 @@
   align-items: center;
   gap: 10px;
   margin-bottom: 20px;
+  flex-shrink: 0;
 }
 
 .filterContainer select,
@@ -35,6 +39,7 @@
   overflow-x: auto;
 }
 
+
 /*.................................................*/
 .page {
   margin: 20px;
@@ -48,6 +53,7 @@
   display: flex;
   justify-content: left;
   margin-top: 20px;
+  flex-shrink: 0;
 }
 
 .pageButton,
@@ -101,4 +107,14 @@
   justify-content: center;
   width: 30px;
   height: 30px;
+}
+
+/* .tableWrapper {
+  flex: 1;
+  overflow-y: auto;
+  margin: 20px 0;
+} */
+
+.countDisplay {
+  flex-shrink: 0;
 }

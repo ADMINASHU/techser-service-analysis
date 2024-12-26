@@ -26,7 +26,6 @@ table {
   overflow-y: auto;
 }
 
-
 th,
 td {
   border: 1px solid #dddddd;
@@ -38,15 +37,26 @@ th {
   background-color: #333333;
   color: white;
   text-align: center;
-  position: -webkit-sticky;
   position: sticky;
+  top: 60px; /* Reduced from 60px to move header up */
+  z-index: 10;
 }
 
 thead {
-  position: -webkit-sticky;
   position: sticky;
-  top: 60;
-  z-index: 1;
+  top: 60px; /* Same as th */
+  z-index: 10;
+  background-color: #333333;
+}
+
+/* Add new style for first row of thead */
+thead tr:first-child th {
+  top: 60px; /* Same as above */
+}
+
+/* Add style for second row of thead */
+thead tr:last-child th {
+  top: 84px; /* First row height (32px) + initial top position (52px) */
 }
 
 input:focus {
@@ -94,4 +104,11 @@ input:focus {
   margin-top: 20px;
   font-size: 18px;
   color: #333;
+}
+
+/* Add these new styles */
+.page {
+  max-height: calc(100vh - 75px); /* Adjust based on your layout */
+  overflow-y: auto;
+  padding-bottom: 20px;
 }
