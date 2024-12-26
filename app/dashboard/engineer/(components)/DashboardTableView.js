@@ -15,8 +15,8 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
   const [filteredData, setFilteredData] = useState([]);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
   const [profileData, setProfileData] = useState(null);
-  const [profilePosition, setProfilePosition] = useState({ top: 0, left: 0 });
   const [users, setUsers] = useState(null);
+  const [hoveredCell, setHoveredCell] = useState(null);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -176,12 +176,13 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
     printWindow.print();
   };
 
-  const handleCellClick = (event, colIndex, rowData) => {
+  const handleCellMouseEnter = (event, colIndex, rowData) => {
     if (colIndex === 0) {
-      const existingUsers = users.filter(
+      setHoveredCell(rowData);
+      const existingUsers = users?.filter(
         (user) => user.userID.toLowerCase() === rowData.account.erID.toLowerCase()
       );
-      if (existingUsers.length > 0) {
+      if (existingUsers?.length > 0) {
         const newData = {
           ...rowData,
           account: {
@@ -196,14 +197,12 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
       } else {
         setProfileData({ ...rowData, account: { ...rowData.account, image: "ashu_user1.png" } });
       }
-      setProfilePosition({ top: `${event.clientY}px`, left: `${event.clientX}px` });
-      // document.body.classList.add(styles.blurredBackground);
     }
   };
 
-  const closeProfileCard = () => {
+  const handleCellMouseLeave = () => {
+    setHoveredCell(null);
     setProfileData(null);
-    // document.body.classList.remove(styles.blurredBackground);
   };
 
   if (!data || data.length === 0) return <div>No data available</div>;
@@ -284,9 +283,10 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
               {selectedColumns.map((col, colIndex) => (
                 <td
                   key={colIndex}
-                  className={colIndex === 0 ? styles.hoverColumn : ""}
+                  className={`${colIndex === 0 ? styles.hoverColumn : ""} `}
                   style={colIndex === 16 ? { backgroundColor: getColor(row[col]) } : {}}
-                  onClick={(event) => handleCellClick(event, colIndex, row)}
+                  onMouseEnter={(event) => handleCellMouseEnter(event, colIndex, row)}
+                  onMouseLeave={handleCellMouseLeave}
                 >
                   {row[col]}
                 </td>
@@ -296,8 +296,15 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
         </tbody>
       </table>
 
-      {profileData && (
-        <ProfileCard data={profileData} onClose={closeProfileCard} position={profilePosition} />
+      {profileData && hoveredCell && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.cardContainer}>
+            <ProfileCard 
+              data={profileData} 
+            
+            />
+          </div>
+        </div>
       )}
     </div>
   );
