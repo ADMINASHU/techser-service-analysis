@@ -8,6 +8,8 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
   const [smartFilter, setSmartFilter] = useState(false);
   const [filteredData, setFilteredData] = useState([]);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
+    const [hoveredRow, setHoveredRow] = useState(null);
+  
 
   const handleSmartFilterToggle = () => {
     setSmartFilter((prevSmartFilter) => !prevSmartFilter);
@@ -100,6 +102,14 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
     printWindow.print();
   };
 
+  const handleRowMouseEnter = (rowIndex) => {
+    setHoveredRow(rowIndex);
+  };
+
+  const handleRowMouseLeave = () => {
+    setHoveredRow(null);
+  };
+
   if (!data || data.length === 0) return <div>No data available</div>;
 
   return (
@@ -152,12 +162,19 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
         </thead>
         <tbody>
           {filteredData?.map((row, rowIndex) => (
-            <tr key={rowIndex}>
-              <td>{rowIndex + 1}</td>
+            <tr
+              key={rowIndex}
+              onMouseEnter={() => handleRowMouseEnter(rowIndex)}
+              onMouseLeave={handleRowMouseLeave}
+            >
+              <td className={hoveredRow === rowIndex ? styles.activeCell : ""}>{rowIndex + 1}</td>
               {Object.values(row)?.map((value, colIndex) => (
                 <td
-                  key={colIndex}
                   style={colIndex === 20 ? { backgroundColor: getColor(value) } : {}}
+                  key={colIndex}
+                  className={`${
+                    hoveredRow === rowIndex ? styles.activeCell : ""
+                  }`}
                 >
                   {value}
                 </td>

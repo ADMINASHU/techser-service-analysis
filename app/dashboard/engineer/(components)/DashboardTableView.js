@@ -328,16 +328,16 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
               key={rowIndex}
               onMouseEnter={() => handleRowMouseEnter(rowIndex)}
               onMouseLeave={handleRowMouseLeave}
-              // className={hoveredRow === rowIndex ? styles.activeCell : ""}
             >
               <td className={hoveredRow === rowIndex ? styles.activeCell : ""}>{rowIndex + 1}</td>
               {selectedColumns.map((col, colIndex) => (
                 <td
                   key={colIndex}
-                  className={`${colIndex === 0 ? styles.hoverColumn : ""} ${
-                    hoveredRow === rowIndex && colIndex !== 16 ? styles.activeCell : ""
-                  }`}
                   style={colIndex === 16 ? { backgroundColor: getColor(row[col]) } : {}}
+
+                  className={`${colIndex === 0 ? styles.hoverColumn : ""} ${
+                    hoveredRow === rowIndex ? styles.activeCell : ""
+                  }`}
                   onClick={(event) => handleCellMouseOnClick(event, colIndex, row)}
                   onMouseEnter={(event) => handleCellMouseEnter(event, colIndex, row)}
                   onMouseLeave={handleCellMouseLeave}
