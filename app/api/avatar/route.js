@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { writeFile } from "fs/promises";
+
+
 export async function POST(req) {
   const data = await req.formData();
   // console.log(data);
@@ -13,4 +15,8 @@ export async function POST(req) {
   const path = `./public/${id}_${file.name}`;
   await writeFile(path, buffer);
   return NextResponse.json({ message: "Image uploaded successfully", success: true });
+}
+
+export async function GET(req) {
+  return NextResponse.json({ message: "Method not allowed" }, { status: 405 });
 }

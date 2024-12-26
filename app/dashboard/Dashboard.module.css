@@ -44,11 +44,24 @@
     color: white;
 
 }
+
+
+
 /* Dashboard.module.css */
 
-.hoverColumn:hover {
-  background-color: #f7a79c; /* Change this to your desired hover color */
+.hoverColumn {
+  position: relative;
 }
+
+.hoverColumn:hover {
+  color: white;
+  background-color: #333333;
+  cursor: pointer;
+  z-index: 1; /* Ensure the hovered cell is on top */
+  transform: scale(1.1); /* Scale up the cell */
+  transition: transform 0.2s ease; /* Smooth transition */
+}
+
 
 
 /* Dashboard.module.css */

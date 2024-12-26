@@ -270,7 +270,7 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
               <th>S.No.</th>
               {selectedColumns.map((col, index) => (
                 <th key={index} onClick={() => handleSort(col)}>
-                  {data[0][col]}{" "}
+                  {data[0][col]}
                   {sortConfig.key === col ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
                 </th>
               ))}
@@ -280,15 +280,13 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
         <tbody>
           {filteredData?.map((row, rowIndex) => (
             <tr key={rowIndex}>
-              <td className={styles.hoverColumn}>{rowIndex + 1}</td>
+              <td>{rowIndex + 1}</td>
               {selectedColumns.map((col, colIndex) => (
                 <td
                   key={colIndex}
                   className={colIndex === 0 ? styles.hoverColumn : ""}
                   style={colIndex === 16 ? { backgroundColor: getColor(row[col]) } : {}}
                   onClick={(event) => handleCellClick(event, colIndex, row)}
-                 
-            
                 >
                   {row[col]}
                 </td>

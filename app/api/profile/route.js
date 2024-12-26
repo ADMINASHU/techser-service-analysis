@@ -63,3 +63,6 @@ export async function POST(request) {
     return NextResponse.json({ message: error.message }, { status: 500 });
   }
 }
+export async function GET(request) {
+  return NextResponse.json({ message: "Method not allowed" }, { status: 405 });
+}

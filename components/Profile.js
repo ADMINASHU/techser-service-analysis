@@ -401,6 +401,7 @@ const Profile = ({ LoggedUserID }) => {
                 <button className={`${styles.button} ${styles.saveButton}`} type="submit">
                   Save
                 </button>
+                
               </div>
             </form>
           </div>
