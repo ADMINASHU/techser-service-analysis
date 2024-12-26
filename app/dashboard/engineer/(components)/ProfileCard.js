@@ -2,13 +2,16 @@ import React, { useState } from "react";
 import Image from "next/image";
 import styles from "../../Dashboard.module.css";
 
-const ProfileCard = ({ data }) => {
+const ProfileCard = ({ data, onClose }) => {
   const [expanded, setExpanded] = useState(false);
 
   if (!data || !data.account) return null;
 
   return (
     <div className={styles.card}>
+      <button className={styles.closeButton} onClick={onClose}>
+        X
+      </button>
       <div className={styles.cardContent}>
         <div className={styles.cardHeader}>
           <Image

@@ -71,12 +71,15 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  /* background-color: rgba(0, 0, 0, 0.5); */
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1001;
   pointer-events: none;
+}
+
+.modalOverlay2 {
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
 .cardContainer {
