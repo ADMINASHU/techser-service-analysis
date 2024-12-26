@@ -18,6 +18,7 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
   const [users, setUsers] = useState(null);
   const [hoveredCell, setHoveredCell] = useState(null);
   const [mouseOnClick, setMouseOnClick] = useState(null);
+  const [hoveredRow, setHoveredRow] = useState(null);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -51,7 +52,7 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
   const getBranchesForRegion = (region) => {
     const branches = new Set();
     data.forEach((row) => {
-      if (region === "ALL Region" || row.region === region) {
+      if ((region === "ALL Region" || row.region === region) && row.branch !== "Branch") {
         branches.add(row.branch);
       }
     });
@@ -76,6 +77,12 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
   };
 
   useEffect(() => {
+    if (!filters.region || filters.region === "ALL Region") {
+      setFilters((prevFilters) => ({ ...prevFilters, branch: "", engineer: "" }));
+    }
+  }, [filters.region]);
+
+  useEffect(() => {
     if (!data || data.length === 0) {
       setFilteredData([]);
       return;
@@ -86,6 +93,7 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
     if (smartFilter) {
       newFilteredData = data
         .filter((row) => row.region !== "Region")
+        .filter((row) => row.branch !== "Branch")
         .filter((row) => {
           return (
             filters.region === "ALL Region" || !filters.region || row.region === filters.region
@@ -100,7 +108,7 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
         .filter((row) => row.totalVisits > averageTotalVisits);
     } else {
       newFilteredData = data
-        .filter((row) => row.region !== "Region")
+        .filter((row) => row.region !== "Region" && row.branch !== "Branch")
         .filter((row) => {
           return (
             filters.region === "ALL Region" || !filters.region || row.region === filters.region
@@ -205,6 +213,8 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
   const handleCellMouseEnter = (event, colIndex, rowData) => {
     if (colIndex === 0) {
       setHoveredCell(rowData);
+      setHoveredRow(null);
+
       const existingUsers = users?.filter(
         (user) => user.userID.toLowerCase() === rowData.account.erID.toLowerCase()
       );
@@ -227,10 +237,18 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
   };
 
   const handleCellMouseLeave = () => {
-    if (!mouseOnClick){
+    if (!mouseOnClick) {
       setHoveredCell(null);
       setProfileData(null);
     }
+  };
+
+  const handleRowMouseEnter = (rowIndex) => {
+    setHoveredRow(rowIndex);
+  };
+
+  const handleRowMouseLeave = () => {
+    setHoveredRow(null);
   };
 
   if (!data || data.length === 0) return <div>No data available</div>;
@@ -306,12 +324,19 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
         </thead>
         <tbody>
           {filteredData?.map((row, rowIndex) => (
-            <tr key={rowIndex}>
-              <td>{rowIndex + 1}</td>
+            <tr
+              key={rowIndex}
+              onMouseEnter={() => handleRowMouseEnter(rowIndex)}
+              onMouseLeave={handleRowMouseLeave}
+              // className={hoveredRow === rowIndex ? styles.activeCell : ""}
+            >
+              <td className={hoveredRow === rowIndex ? styles.activeCell : ""}>{rowIndex + 1}</td>
               {selectedColumns.map((col, colIndex) => (
                 <td
                   key={colIndex}
-                  className={`${colIndex === 0 ? styles.hoverColumn : ""} `}
+                  className={`${colIndex === 0 ? styles.hoverColumn : ""} ${
+                    hoveredRow === rowIndex && colIndex !== 16 ? styles.activeCell : ""
+                  }`}
                   style={colIndex === 16 ? { backgroundColor: getColor(row[col]) } : {}}
                   onClick={(event) => handleCellMouseOnClick(event, colIndex, row)}
                   onMouseEnter={(event) => handleCellMouseEnter(event, colIndex, row)}
@@ -325,11 +350,11 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
         </tbody>
       </table>
 
-      {profileData && (hoveredCell || mouseOnClick )&& (
+      {profileData && (hoveredCell || mouseOnClick) && (
         <div className={`${styles.modalOverlay} ${mouseOnClick ? styles.modalOverlay2 : ""}`}>
           <div className={styles.cardContainer}>
-            <ProfileCard 
-              data={profileData} 
+            <ProfileCard
+              data={profileData}
               onClose={() => {
                 setProfileData(null);
                 setHoveredCell(null);
