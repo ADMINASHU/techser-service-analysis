@@ -1,11 +1,17 @@
-import { useState, useEffect } from "react";
+"use client";
 
-const DataCompile = ({ proData, onDataProcessed }) => {
-  const [processed, setProcessed] = useState(false);
+import { useState, useEffect, useContext } from "react";
+import DashboardTableView from "./DashboardTableView";
+import DataContext from "@/context/DataContext";
+
+const DataCompile = () => {
+  const { processedData } = useContext(DataContext);
+  const [data, setData] = useState({});
+
   useEffect(() => {
-    if (proData.length > 0 && !processed) {
+    if (processedData.length > 0) {
       const processData = async () => {
-        const uniqueEngineersPerRegion = proData.reduce((acc, item) => {
+        const uniqueEngineersPerRegion = processedData.reduce((acc, item) => {
           if (item.assignedTo && item.region) {
             if (!acc[item.region]) {
               acc[item.region] = new Set();
@@ -14,7 +20,7 @@ const DataCompile = ({ proData, onDataProcessed }) => {
           }
           return acc;
         }, {});
-        const uniqueBranchPerRegion = proData.reduce((acc, item) => {
+        const uniqueBranchPerRegion = processedData.reduce((acc, item) => {
           if (item.branch && item.region) {
             if (!acc[item.region]) {
               acc[item.region] = new Set();
@@ -25,11 +31,11 @@ const DataCompile = ({ proData, onDataProcessed }) => {
         }, {});
 
         const uniqueRegion = [
-          ...new Set(proData.map((item) => item.region).filter(Boolean)),
+          ...new Set(processedData.map((item) => item.region).filter(Boolean)),
         ].sort();
 
-        // Count occurrences of each engineer in proData based on conditions
-        const regionCallCount = proData.reduce((acc, item) => {
+        // Count occurrences of each engineer in processedData based on conditions
+        const regionCallCount = processedData.reduce((acc, item) => {
           if (item.region) {
             acc[item.region] = (acc[item.region] || 0) + 1;
 
@@ -89,7 +95,7 @@ const DataCompile = ({ proData, onDataProcessed }) => {
         const finalData = uniqueRegion.map((region) => {
           // console.log(uniqueEngineersPerBranch[branch]);
 
-          // const regionData = proData.find((item) => item.region === region);
+          // const regionData = processedData.find((item) => item.region === region);
           const totalAssigned = regionCallCount[region];
           const newBreakdown = regionCallCount[`${region}_newBreakdown`] || 0;
           const newInstallation = regionCallCount[`${region}_newInstallation`] || 0;
@@ -181,14 +187,17 @@ const DataCompile = ({ proData, onDataProcessed }) => {
         // Combine header with data
         const finalDataWithHeader = [header, ...finalData].filter((row) => row.region !== "");
 
-        onDataProcessed(finalDataWithHeader, averageTotalVisits);
-
-        setProcessed(true);
+        setData({ finalDataWithHeader, averageTotalVisits });
       };
       processData();
     }
-  }, [proData, onDataProcessed, processed]);
-  return null;
+  }, [processedData, setData]);
+  return (
+    <DashboardTableView
+      data={data.finalDataWithHeader}
+      averageTotalVisits={data.averageTotalVisits}
+    />
+  );
 };
 
 export default DataCompile;

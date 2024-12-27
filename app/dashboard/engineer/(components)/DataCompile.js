@@ -9,7 +9,7 @@ const DataCompile = () => {
   const [data, setData] = useState({});
 
   useEffect(() => {
-    if (processedData.length > 0 ) {
+    if (processedData.length > 0) {
       const processData = async () => {
         const uniqueEngineers = [
           ...new Set(processedData.map((item) => item.assignedTo).filter(Boolean)),
@@ -167,8 +167,6 @@ const DataCompile = () => {
         const finalDataWithHeader = [header, ...finalData];
 
         setData({ finalDataWithHeader, averageTotalVisits });
-
-       
       };
 
       processData();
