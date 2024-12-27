@@ -16,6 +16,7 @@ export default function Navbar({ isAuthenticated, loggedUser }) {
   const [dashOpen, setDashOpen] = useState(false);
 
   const verified = loggedUser?.verified;
+  const level = loggedUser?.level;
   const profileName = loggedUser?.fName || loggedUser?.userID || "User";
   const isAdmin = loggedUser?.isAdmin || false;
   const avatar = loggedUser?.picture || "user.png";
@@ -70,12 +71,14 @@ export default function Navbar({ isAuthenticated, loggedUser }) {
             className={styles.logo}
           />
         </Link>
-        <Link
-          href="/my-report"
-          className={pathname === "/my-report" ? styles.activeLink : styles.nlink}
-        >
-          My Report
-        </Link>
+        {level > 1 && (
+          <Link
+            href="/my-report"
+            className={pathname === "/my-report" ? styles.activeLink : styles.nlink}
+          >
+            My Report
+          </Link>
+        )}
         <Link
           href=""
           className={
@@ -91,19 +94,25 @@ export default function Navbar({ isAuthenticated, loggedUser }) {
           Dashboard
         </Link>
 
-        <Link href="/data" className={pathname === "/data" ? styles.activeLink : styles.nlink}>
-          Data
-        </Link>
-        <Link href="/users" className={pathname === "/users" ? styles.activeLink : styles.nlink}>
-          Users
-        </Link>
+        {level <= 1 && (
+          <Link href="/data" className={pathname === "/data" ? styles.activeLink : styles.nlink}>
+            Data
+          </Link>
+        )}
+        {level <= 3 && (
+          <Link href="/users" className={pathname === "/users" ? styles.activeLink : styles.nlink}>
+            Users
+          </Link>
+        )}
 
-        <Link
-          href="/control"
-          className={pathname === "/control" ? styles.activeLink : styles.nlink}
-        >
-          Control
-        </Link>
+        {level <= 1 && (
+          <Link
+            href="/control"
+            className={pathname === "/control" ? styles.activeLink : styles.nlink}
+          >
+            Control
+          </Link>
+        )}
       </div>
       <div className={styles.profileSection}>
         <Link href="/profile" className={styles.profileContainer}>
@@ -150,12 +159,14 @@ export default function Navbar({ isAuthenticated, loggedUser }) {
           <Link href="/" className={pathname === "/" ? styles.activeLink : ""} onClick={toggleMenu}>
             Home
           </Link>
-          <Link
-            href="/my-report"
-            className={pathname === "/my-report" ? styles.activeLink : styles.nlink}
-          >
-            My Report
-          </Link>
+          {level > 1 && (
+            <Link
+              href="/my-report"
+              className={pathname === "/my-report" ? styles.activeLink : styles.nlink}
+            >
+              My Report
+            </Link>
+          )}
           <Link
             href=""
             className={
@@ -203,29 +214,35 @@ export default function Navbar({ isAuthenticated, loggedUser }) {
             </div>
           )}
 
-          <Link
-            href="/data"
-            className={pathname === "/data" ? styles.activeLink : ""}
-            onClick={toggleMenu}
-          >
-            Data
-          </Link>
+          {level <= 1 && (
+            <Link
+              href="/data"
+              className={pathname === "/data" ? styles.activeLink : ""}
+              onClick={toggleMenu}
+            >
+              Data
+            </Link>
+          )}
 
-          <Link
-            href="/users"
-            onClick={toggleMenu}
-            className={pathname === "/users" ? styles.activeLink : styles.nlink}
-          >
-            Users
-          </Link>
+          {level <= 3 && (
+            <Link
+              href="/users"
+              onClick={toggleMenu}
+              className={pathname === "/users" ? styles.activeLink : styles.nlink}
+            >
+              Users
+            </Link>
+          )}
 
-          <Link
-            href="/control"
-            onClick={toggleMenu}
-            className={pathname === "/control" ? styles.activeLink : styles.nlink}
-          >
-            Control
-          </Link>
+          {level <= 1 && (
+            <Link
+              href="/control"
+              onClick={toggleMenu}
+              className={pathname === "/control" ? styles.activeLink : styles.nlink}
+            >
+              Control
+            </Link>
+          )}
           <div className={styles.logout}>
             <Logout onClick={() => toggleMenu()} />
           </div>

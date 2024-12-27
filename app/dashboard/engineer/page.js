@@ -4,7 +4,7 @@ import styles from "../Dashboard.module.css";
 import DashboardTableView from "./(components)/DashboardTableView";
 import DataCompile from "./(components)/DataCompile";
 import DataContext from "../../../context/DataContext";
-import ProfileCard from "./(components)/ProfileCard";
+
 
 const DashboardPage = () => {
   const [data, setData] = useState([]);
