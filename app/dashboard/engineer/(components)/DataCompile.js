@@ -1,21 +1,26 @@
-import { useState, useEffect } from "react";
+"use client";
 
-const DataCompile = ({ proData, onDataProcessed }) => {
-  const [processed, setProcessed] = useState(false);
+import { useState, useEffect, useContext } from "react";
+import DashboardTableView from "./DashboardTableView";
+import DataContext from "@/context/DataContext";
+
+const DataCompile = () => {
+  const { processedData } = useContext(DataContext);
+  const [data, setData] = useState({});
 
   useEffect(() => {
-    if (proData.length > 0 && !processed) {
+    if (processedData.length > 0 ) {
       const processData = async () => {
         const uniqueEngineers = [
-          ...new Set(proData.map((item) => item.assignedTo).filter(Boolean)),
+          ...new Set(processedData.map((item) => item.assignedTo).filter(Boolean)),
         ].sort();
 
-        // Count occurrences of each engineer in proData based on conditions
-        const engineerCallCount = proData.reduce((acc, item) => {
+        // Count occurrences of each engineer in processedData based on conditions
+        const engineerCallCount = processedData.reduce((acc, item) => {
           if (item.assignedTo) {
             acc[item.assignedTo] = (acc[item.assignedTo] || 0) + 1;
 
-            if (!item.closedDate && item.realStatus !== "NEW" ) {
+            if (!item.closedDate && item.realStatus !== "NEW") {
               acc[`${item.assignedTo}_openCall`] = (acc[`${item.assignedTo}_openCall`] || 0) + 1;
             }
 
@@ -74,7 +79,7 @@ const DataCompile = ({ proData, onDataProcessed }) => {
         // Map unique engineers to regions and branches
         let totalVisitsSum = 0;
         const finalData = uniqueEngineers.map((engineer) => {
-          const engineerData = proData.find((item) => item.assignedTo === engineer);
+          const engineerData = processedData.find((item) => item.assignedTo === engineer);
           const totalAssigned = engineerCallCount[engineer];
           const newBreakdown = engineerCallCount[`${engineer}_newBreakdown`] || 0;
           const newInstallation = engineerCallCount[`${engineer}_newInstallation`] || 0;
@@ -125,8 +130,7 @@ const DataCompile = ({ proData, onDataProcessed }) => {
             // openCall, // Add openCall to the final data
             index,
             accuracy,
-            account: engineerData.account, // Add account to the final data, assuming account is a field in the proData object. If not, you can remove this line and add account to the header row instead.
-
+            account: engineerData.account, // Add account to the final data, assuming account is a field in the processedData object. If not, you can remove this line and add account to the header row instead.
           };
         });
 
@@ -162,16 +166,20 @@ const DataCompile = ({ proData, onDataProcessed }) => {
         // Combine header with data
         const finalDataWithHeader = [header, ...finalData];
 
-        onDataProcessed(finalDataWithHeader, averageTotalVisits);
+        setData({ finalDataWithHeader, averageTotalVisits });
 
-        setProcessed(true);
+       
       };
 
       processData();
     }
-  }, [proData, onDataProcessed, processed]);
-
-  return null;
+  }, [processedData, setData]);
+  return (
+    <DashboardTableView
+      data={data.finalDataWithHeader}
+      averageTotalVisits={data.averageTotalVisits}
+    />
+  );
 };
 
 export default DataCompile;
