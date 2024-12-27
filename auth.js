@@ -98,6 +98,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           level: user.level,
           verified: user.verified,
           fName: user.fName,
+          eName: user.eName,
         };
         token = { ...token, ...newToken };
       }

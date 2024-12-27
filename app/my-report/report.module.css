@@ -1,0 +1,519 @@
+.container {
+    max-width: 1400px;
+    margin: 20px auto 50px;  /* Added bottom margin of 50px */
+    padding: 0 20px;
+    background-color: #f5f7fa;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: calc(100vh - 70px);  /* Added min-height to ensure content fills viewport */
+}
+
+/* Profile card styles */
+.profileViewCard {
+    display: flex;
+    width: 95%;
+    max-width: 1400px;
+    padding: 1rem;
+    background: linear-gradient(145deg, #ffffff, #f8f9fa);
+    border-radius: 20px;
+    box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
+    margin-bottom: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    transition: all 0.3s ease;
+    min-height: 180px;
+}
+
+/* .profileViewCard:hover {
+    transform: translateY(-5px);
+    box-shadow: rgba(17, 12, 46, 0.2) 0px 48px 100px 0px;
+} */
+
+.part {
+    display: flex;
+    flex-direction: column;
+    padding: 0 15px;
+    position: relative;
+}
+
+.part:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 10%;
+    height: 80%;
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, #e0e0e0, transparent);
+}
+
+.part1 {
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    flex: 0 0 250px;
+    padding-right: 30px;
+}
+
+.profileImage {
+    border-radius: 50%;
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    padding: 2px;
+    background: white;
+    transition: all 0.3s ease;
+    width: 150px !important;
+    height: 150px !important;
+}
+
+.profileImage:hover {
+    transform: scale(1.05);
+}
+
+.profileDetails {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 12px;
+}
+
+.profileDetails h2 {
+    margin: 0;
+    color: #2d3436;
+    font-size: 1.2rem;  /* Reduced from 1.4rem */
+    font-weight: 600;
+}
+
+.profileDetails h4 {
+    margin: 8px 0 0;
+    color: #636e72;
+    font-weight: 500;
+    font-size: 0.9rem;  /* Reduced from 1rem */
+}
+
+.part2, .part3 {
+    justify-content: space-evenly;
+    flex-grow: 1;
+}
+
+.profileDetail {
+    margin: 4px 0;
+    display: flex;
+    gap: 15px;
+    padding: 6px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.profileDetail:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+.label {
+    color: #636e72;
+    font-weight: 500;
+    min-width: 120px;
+    font-size: 0.85rem;  /* Added smaller font size */
+}
+
+.value {
+    color: #2d3436;
+    font-weight: 500;
+    font-size: 0.9rem;  /* Added smaller font size */
+}
+
+.dataSection {
+    background: white;
+    border-radius: 20px;
+    box-shadow: rgba(17, 12, 46, 0.1) 0px 48px 100px 0px;
+    padding: 25px;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    max-width: 1400px;
+    width: 95%;
+}
+
+.tableContainer {
+    margin-top: 20px;
+    width: 100%;
+}
+
+.tableContainer h2 {
+    color: #2d3436;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Add responsive styles */
+@media (max-width: 1024px) {
+    .profileViewCard {
+        padding: 0.8rem;
+    }
+
+    .part1 {
+        flex: 0 0 200px;
+    }
+
+    .statsTable {
+        font-size: 0.9rem;
+    }
+
+    .statsTable th,
+    .statsTable td {
+        padding: 10px 8px;
+    }
+}
+
+@media (max-width: 1024px) and (min-width: 769px) {
+    .profileViewCard, .dataSection {
+        width: 90%;
+    }
+
+    .profileViewCard {
+        flex-wrap: wrap;
+        padding: 1rem;
+        justify-content: center;
+    }
+
+    .part1, .part2 {
+        flex: 0 0 50%;
+        display: flex;
+        align-items: center;
+    }
+
+    .part2 {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        align-items: start;
+        padding: 0 20px;
+    }
+
+    .part3 {
+        flex: 0 0 100%;
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px solid #e0e0e0;
+        padding: 20px;
+    }
+
+    .part:not(:last-child)::after {
+        display: none;
+    }
+
+    .part3 {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .profileImage {
+        width: 130px !important;
+        height: 130px !important;
+    }
+
+    .profileDetail {
+        margin: 5px 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        margin-bottom: 40px;  /* Slightly reduced margin on mobile */
+    }
+
+    .profileViewCard, .dataSection {
+        width: 85%;
+        max-width: 700px;
+    }
+
+    .profileViewCard {
+        flex-direction: column;
+        align-items: center;
+        padding: 1.5rem;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .part {
+        width: 100%;
+        padding: 15px 0;
+    }
+
+    .part:not(:last-child)::after {
+        display: none;
+    }
+
+    .part1 {
+        flex: none;
+        padding-right: 0;
+        margin-bottom: 20px;
+    }
+
+    .profileImage {
+        width: 120px !important;
+        height: 120px !important;
+    }
+
+    .part2, .part3 {
+        max-width: 500px;
+        margin-left: auto;
+        margin-right: auto;
+        width: 100%;
+    }
+
+    .profileDetail {
+        padding: 8px;
+    }
+
+    .tableContainer {
+        margin: 15px 0;
+        padding: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0 15px;
+        margin-bottom: 30px;  /* Further reduced margin on smaller screens */
+    }
+
+    .profileViewCard {
+        padding: 1rem;
+        width: 100%;
+    }
+
+    .profileDetails h2 {
+        font-size: 1.2rem;
+    }
+
+    .profileDetails h4 {
+        font-size: 0.9rem;
+    }
+
+    .profileDetail {
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .label {
+        min-width: unset;
+    }
+}
+
+/* New card layout styles */
+.statsContainer {
+  width: 100%;
+  padding: 20px;
+  position: relative;  /* Add this to position the filters */
+}
+
+.filterControls {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.filterControls select {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+  background: white;
+  font-size: 0.85rem;
+  color: #2d3436;
+  cursor: pointer;
+  outline: none;
+}
+
+.filterControls select:hover {
+  border-color: #2d3436;
+}
+
+@media (max-width: 768px) {
+  .filterControls {
+    position: static;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+}
+
+.statsContainer h2 {
+  color: #2d3436;
+  font-size: 1.5rem;  /* Reduced from 1.8rem */
+  font-weight: 600;
+  text-align: center;
+  margin: 0 0 25px 0;  /* Reduced margin */
+  padding: 12px;  /* Reduced padding */
+  position: relative;
+}
+
+.statsContainer h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #2d3436, transparent);
+}
+
+.statsGrid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(3, 1fr);  /* Fixed 3 columns for first 3 sections */
+}
+
+.statsSection {
+  background: white;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  border: 1px solid rgba(0, 0, 0, 0.1);  /* Add border to all sections */
+}
+
+/* Override styles for summary section */
+.statsGrid > div:last-child {
+  grid-column: 1 / -1;
+  margin-top: 20px;
+  background: linear-gradient(145deg, #ffffff, #f8f9fa);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border: none;  /* Remove border from summary section */
+}
+
+.statsSection:last-child .statsCards {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px;
+}
+
+.statsSection:last-child .statsCard {
+  flex: 0 1 200px;
+  margin: 0;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.1);  /* Add border to summary cards */
+}
+
+.statsSection h3 {
+  color: #2d3436;
+  margin-bottom: 12px;  /* Reduced margin */
+  font-size: 1rem;  /* Reduced from 1.1rem */
+  text-align: center;
+}
+
+.statsCards {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+}
+
+.statsCard {
+  background: #f8f9fa;
+  border-radius: 10px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  transition: transform 0.2s;
+}
+
+.statsCard:hover {
+  transform: translateY(-2px);
+}
+
+.cardLabel {
+  color: #636e72;
+  font-size: 0.85rem;  /* Reduced from 0.9rem */
+  text-align: center;
+}
+
+.cardValue {
+  color: #2d3436;
+  font-size: 1.1rem;  /* Reduced from 1.2rem */
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .statsGrid {
+    grid-template-columns: repeat(2, 1fr);  /* 2 columns on medium screens */
+  }
+}
+
+@media (max-width: 768px) {
+  .statsGrid {
+    grid-template-columns: 1fr;  /* Single column on mobile */
+  }
+
+  .statsSection:last-child .statsCards {
+    padding: 10px;
+    gap: 10px;
+  }
+
+  .statsSection:last-child .statsCard {
+    flex: 0 1 180px;
+  }
+}
+
+@media (max-width: 768px) {
+  .statsContainer h2 {
+    font-size: 1.3rem;  /* Reduced from 1.5rem */
+    margin-bottom: 25px;
+    padding: 12px;
+  }
+
+  .statsGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .statsCards {
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  }
+
+  .statsSection:last-child .statsCards {
+    justify-content: center;
+  }
+
+  .statsSection:last-child .statsCard {
+    min-width: 150px;
+    max-width: 200px;
+  }
+
+  .cardValue {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .statsContainer h2 {
+    font-size: 1.2rem;  /* Reduced from 1.3rem */
+    margin-bottom: 20px;
+    padding: 10px;
+  }
+
+  .statsSection:last-child .statsCard {
+    min-width: 140px;
+    max-width: none;
+    flex: 0 1 calc(50% - 10px);
+  }
+
+  .statsSection h3 {
+    font-size: 0.95rem;
+  }
+    
+  .cardLabel {
+    font-size: 0.8rem;
+  }
+    
+  .cardValue {
+    font-size: 0.95rem;
+  }
+}

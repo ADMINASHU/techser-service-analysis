@@ -8,7 +8,7 @@ const TestPage = async () => {
     <div>
       <div>TestPage no login required</div>
       <div>{session?.user && JSON.stringify(session?.user)}</div>
-      <Seusers />
+      {/* <Seusers /> */}
     </div>
   );
 };
