@@ -56,9 +56,14 @@
     padding: 8px 6px;
     text-align: center;
     border-bottom: 1px solid #edf2f7;
+    border-right: 1px solid #ffffff33;  /* Add vertical line */
     white-space: normal;
     word-wrap: break-word;
     width: auto;
+}
+
+.table th:last-child {
+    border-right: none;  /* Remove border from last header cell */
 }
 
 .table td {
