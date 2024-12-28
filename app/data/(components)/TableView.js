@@ -231,19 +231,12 @@ const TableView = ({ data }) => {
         />
       </div>
 
-      <div className={styles.countDisplay}>
-        Showing {(currentPage - 1) * rowsPerPage + 1} to{" "}
-        {Math.min(currentPage * rowsPerPage, filteredData.length)} {`of `}
-        <span style={{ color: "#e63946" }}>{filteredData.length}</span>
-        {` entries`}
-      </div>
-
-      <div className={styles.tableWrapper}>
-        <table className="table" border="1" cellPadding="5">
-          <thead className="thead-dark">
+      <div className={styles.tableContainer}>
+        <table >
+          <thead >
             <tr>
               {selectedColumns.map((col, index) => (
-                <th key={index}>{col}</th>
+                <th  className={styles.tableHeader} key={index}>{col}</th>
               ))}
             </tr>
           </thead>
@@ -266,42 +259,50 @@ const TableView = ({ data }) => {
       </div>
 
       <div className={styles.paginationContainer}>
-        <button
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-          className={styles.pageButton}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            className={styles.icon}
+        <div className={styles.countDisplay}>
+          Showing {(currentPage - 1) * rowsPerPage + 1} to{" "}
+          {Math.min(currentPage * rowsPerPage, filteredData.length)} {`of `}
+          <span style={{ color: "#e63946" }}>{filteredData.length}</span>
+          {` entries`}
+        </div>
+        <div className={styles.paginationButtons}>
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+            className={styles.pageButton}
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M15 19l-7-7 7-7"
-            />
-          </svg>
-        </button>
-        {getPaginationButtons()}
-        <button
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages}
-          className={styles.pageButton}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            className={styles.icon}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              className={styles.icon}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+          </button>
+          {getPaginationButtons()}
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            className={styles.pageButton}
           >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-          </svg>
-        </button>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              className={styles.icon}
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
   );

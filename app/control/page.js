@@ -76,6 +76,12 @@ const Control = () => {
   const displayClosedValue = (closed) => {
     return Array.isArray(closed) ? closed.join(", ") : closed;
   };
+  
+  const handleScroll = (e) => {
+    const container = e.target;
+    const scrollPercentage = (container.scrollLeft / (container.scrollWidth - container.clientWidth)) * 100;
+    container.style.setProperty('--scroll-position', `${scrollPercentage}%`);
+  };
 
   return (
     <div className={styles.page}>
@@ -85,180 +91,184 @@ const Control = () => {
           {editing ? "Save" : "Edit"}
         </button>
       </div>
-      <table className={styles["table"]}>
-        <thead>
-          <tr>
-            <th rowSpan={2}>Category</th>
-            <th colSpan={3}>New</th>
-            <th colSpan={3}>Pending</th>
-            <th colSpan={5}>Closed</th>
-          </tr>
-          <tr>
-            <th>Eng</th>
-            <th>Branch</th>
-            <th>Region</th>
-            <th>Eng</th>
-            <th>Branch</th>
-            <th>Region</th>
-            <th>1st Visit</th>
-            <th>2nd & 3rd Visit</th>
-            <th>After 3rd Visit</th>
-            <th>Branch</th>
-            <th>Region</th>
-          </tr>
-        </thead>
-        <tbody>
-          {Object.keys(points).map((category) => (
-            <tr key={category}>
-              <td>{category}</td>
-              <td>
-                {editing ? (
-                  <input
-                    type="number"
-                    value={points[category].eng.new}
-                    onChange={(e) => handleChange(category, "eng", "new", 0, e.target.value)}
-                    className={styles["input-field"]}
-                  />
-                ) : (
-                  <span className={styles["input-field"]}>{points[category].eng.new}</span>
-                )}
-              </td>
-              <td>
-                {editing ? (
-                  <input
-                    type="number"
-                    value={points[category].branch.new}
-                    onChange={(e) => handleChange(category, "branch", "new", 0, e.target.value)}
-                    className={styles["input-field"]}
-                  />
-                ) : (<>
-                  <span className={styles["input-field"]}>{points[category].branch.new}</span>
-                  {category==="BREAKDOWN" && <span>/ day; after 3 day</span>}
-                  </>
-                )}
-              </td>
-              <td>
-                {editing ? (
-                  <input
-                    type="number"
-                    value={points[category].region.new}
-                    onChange={(e) => handleChange(category, "region", "new", 0, e.target.value)}
-                    className={styles["input-field"]}
-                  />
-                ) : (
-                  <span className={styles["input-field"]}>{points[category].region.new}</span>
-                )}
-              </td>
-              <td>
-                {editing ? (
-                  <input
-                    type="number"
-                    value={points[category].eng.pending}
-                    onChange={(e) => handleChange(category, "eng", "pending", 0, e.target.value)}
-                    className={styles["input-field"]}
-                  />
-                ) : (
-                  <span className={styles["input-field"]}>{points[category].eng.pending}</span>
-                )}
-              </td>
-              <td>
-                {editing ? (
-                  <input
-                    type="number"
-                    value={points[category].branch.pending}
-                    onChange={(e) => handleChange(category, "branch", "pending", 0, e.target.value)}
-                    className={styles["input-field"]}
-                  />
-                ) : (<>
-                  <span className={styles["input-field"]}>{points[category].branch.pending}</span>
-                  {category==="BREAKDOWN" ? <span>/ day; after 3 day</span> : <span> per visit</span>}
-                  
-                  </>
-                )}
-              </td>
-              <td>
-                {editing ? (
-                  <input
-                    type="number"
-                    value={points[category].region.pending}
-                    onChange={(e) => handleChange(category, "region", "pending", 0, e.target.value)}
-                    className={styles["input-field"]}
-                  />
-                ) : (
-                  <span className={styles["input-field"]}>{points[category].region.pending}</span>
-                )}
-              </td>
-              <td>
-                {editing ? (
-                  <input
-                    type="number"
-                    value={points[category].eng.closed[0]}
-                    onChange={(e) => handleChange(category, "eng", "closed", 0, e.target.value)}
-                    className={styles["input-field"]}
-                  />
-                ) : (
-                  <span className={styles["input-field"]}>{points[category].eng.closed[0]}</span>
-                )}
-              </td>
-              <td>
-                {editing ? (
-                  <input
-                    type="number"
-                    value={points[category].eng.closed[1]}
-                    onChange={(e) => handleChange(category, "eng", "closed", 1, e.target.value)}
-                    className={styles["input-field"]}
-                  />
-                ) : (
-                  <span className={styles["input-field"]}>{points[category].eng.closed[1]}</span>
-                )}
-              </td>
-              <td>
-                {editing ? (
-                  <input
-                    type="number"
-                    value={points[category].eng.closed[2]}
-                    onChange={(e) => handleChange(category, "eng", "closed", 2, e.target.value)}
-                    className={styles["input-field"]}
-                  />
-                ) : (
-                  <span className={styles["input-field"]}>{points[category].eng.closed[2]}</span>
-                )}
-              </td>
-              <td>
-                {editing ? (
-                  <input
-                    type="number"
-                    value={displayClosedValue(points[category].branch.closed)}
-                    onChange={(e) => handleChange(category, "branch", "closed", 0, e.target.value)}
-                    className={styles["input-field"]}
-                  />
-                ) : (<>
-                  <span className={styles["input-field"]}>
-                    {displayClosedValue(points[category].branch.closed)}
-                  </span>
-                  {category==="BREAKDOWN" ? <span>/ day; after 3 day</span> : <span> per visit</span>}
-
-                  </>
-                )}
-              </td>
-              <td>
-                {editing ? (
-                  <input
-                    type="number"
-                    value={displayClosedValue(points[category].region.closed)}
-                    onChange={(e) => handleChange(category, "region", "closed", 0, e.target.value)}
-                    className={styles["input-field"]}
-                  />
-                ) : (
-                  <span className={styles["input-field"]}>
-                    {displayClosedValue(points[category].region.closed)}
-                  </span>
-                )}
-              </td>
+      <div className={styles.tableContainer} onScroll={handleScroll}>
+        <div className={styles.scrollIndicator}></div>
+        <table className={styles["table"]}>
+          <thead>
+            <tr>
+              <th rowSpan={2}>Category</th>
+              <th colSpan={3}>New</th>
+              <th colSpan={3}>Pending</th>
+              <th colSpan={5}>Closed</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+            <tr>
+              <th>Eng</th>
+              <th>Branch</th>
+              <th>Region</th>
+              <th>Eng</th>
+              <th>Branch</th>
+              <th>Region</th>
+              <th>1st Visit</th>
+              <th>2nd & 3rd Visit</th>
+              <th>After 3rd Visit</th>
+              <th>Branch</th>
+              <th>Region</th>
+            </tr>
+          </thead>
+          <tbody>
+            {Object.keys(points).map((category) => (
+              <tr key={category}>
+                <td>{category}</td>
+                <td>
+                  {editing ? (
+                    <input
+                      type="number"
+                      value={points[category].eng.new}
+                      onChange={(e) => handleChange(category, "eng", "new", 0, e.target.value)}
+                      className={styles["input-field"]}
+                    />
+                  ) : (
+                    <span className={styles["input-field"]}>{points[category].eng.new}</span>
+                  )}
+                </td>
+                <td>
+                  {editing ? (
+                    <input
+                      type="number"
+                      value={points[category].branch.new}
+                      onChange={(e) => handleChange(category, "branch", "new", 0, e.target.value)}
+                      className={styles["input-field"]}
+                    />
+                  ) : (<>
+                    <span className={styles["input-field"]}>{points[category].branch.new}</span>
+                    {category==="BREAKDOWN" && <span>/ day; after 3 day</span>}
+                    </>
+                  )}
+                </td>
+                <td>
+                  {editing ? (
+                    <input
+                      type="number"
+                      value={points[category].region.new}
+                      onChange={(e) => handleChange(category, "region", "new", 0, e.target.value)}
+                      className={styles["input-field"]}
+                    />
+                  ) : (
+                    <span className={styles["input-field"]}>{points[category].region.new}</span>
+                  )}
+                </td>
+                <td>
+                  {editing ? (
+                    <input
+                      type="number"
+                      value={points[category].eng.pending}
+                      onChange={(e) => handleChange(category, "eng", "pending", 0, e.target.value)}
+                      className={styles["input-field"]}
+                    />
+                  ) : (
+                    <span className={styles["input-field"]}>{points[category].eng.pending}</span>
+                  )}
+                </td>
+                <td>
+                  {editing ? (
+                    <input
+                      type="number"
+                      value={points[category].branch.pending}
+                      onChange={(e) => handleChange(category, "branch", "pending", 0, e.target.value)}
+                      className={styles["input-field"]}
+                    />
+                  ) : (<>
+                    <span className={styles["input-field"]}>{points[category].branch.pending}</span>
+                    {category==="BREAKDOWN" ? <span>/ day; after 3 day</span> : <span> per visit</span>}
+                    
+                    </>
+                  )}
+                </td>
+                <td>
+                  {editing ? (
+                    <input
+                      type="number"
+                      value={points[category].region.pending}
+                      onChange={(e) => handleChange(category, "region", "pending", 0, e.target.value)}
+                      className={styles["input-field"]}
+                    />
+                  ) : (
+                    <span className={styles["input-field"]}>{points[category].region.pending}</span>
+                  )}
+                </td>
+                <td>
+                  {editing ? (
+                    <input
+                      type="number"
+                      value={points[category].eng.closed[0]}
+                      onChange={(e) => handleChange(category, "eng", "closed", 0, e.target.value)}
+                      className={styles["input-field"]}
+                    />
+                  ) : (
+                    <span className={styles["input-field"]}>{points[category].eng.closed[0]}</span>
+                  )}
+                </td>
+                <td>
+                  {editing ? (
+                    <input
+                      type="number"
+                      value={points[category].eng.closed[1]}
+                      onChange={(e) => handleChange(category, "eng", "closed", 1, e.target.value)}
+                      className={styles["input-field"]}
+                    />
+                  ) : (
+                    <span className={styles["input-field"]}>{points[category].eng.closed[1]}</span>
+                  )}
+                </td>
+                <td>
+                  {editing ? (
+                    <input
+                      type="number"
+                      value={points[category].eng.closed[2]}
+                      onChange={(e) => handleChange(category, "eng", "closed", 2, e.target.value)}
+                      className={styles["input-field"]}
+                    />
+                  ) : (
+                    <span className={styles["input-field"]}>{points[category].eng.closed[2]}</span>
+                  )}
+                </td>
+                <td>
+                  {editing ? (
+                    <input
+                      type="number"
+                      value={displayClosedValue(points[category].branch.closed)}
+                      onChange={(e) => handleChange(category, "branch", "closed", 0, e.target.value)}
+                      className={styles["input-field"]}
+                    />
+                  ) : (<>
+                    <span className={styles["input-field"]}>
+                      {displayClosedValue(points[category].branch.closed)}
+                    </span>
+                    {category==="BREAKDOWN" ? <span>/ day; after 3 day</span> : <span> per visit</span>
+
+                    }
+                    </>
+                  )}
+                </td>
+                <td>
+                  {editing ? (
+                    <input
+                      type="number"
+                      value={displayClosedValue(points[category].region.closed)}
+                      onChange={(e) => handleChange(category, "region", "closed", 0, e.target.value)}
+                      className={styles["input-field"]}
+                    />
+                  ) : (
+                    <span className={styles["input-field"]}>
+                      {displayClosedValue(points[category].region.closed)}
+                    </span>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

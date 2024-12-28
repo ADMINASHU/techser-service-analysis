@@ -1,30 +1,48 @@
 /* Styles for the filter section */
 
 .page {
-  margin: 20px;
-  height: calc(100vh - 150px); /* Adjust based on your navbar height */
+  margin: 10px;
+  min-height: 100%;  /* Changed from fixed height */
   display: flex;
   flex-direction: column;
+  max-width: 100%;
+  padding: 0 10px;
+  box-sizing: border-box;
 }
 
 .filterContainer {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 20px;
-  flex-shrink: 0;
+  gap: 5px;
+  margin-bottom: 10px;
 }
 
 .filterContainer select,
 .filterContainer input {
-  padding: 8px;
+  padding: 6px;
   border: 1px solid #ccc;
   border-radius: 4px;
   outline: none;
-
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
+
+.filterContainer select:hover,
+.filterContainer input:hover {
+  border-color: #0070f3;
+  box-shadow: 0 4px 8px rgba(0, 112, 243, 0.1);
+}
+
+.filterContainer select:focus,
+.filterContainer input:focus {
+  border-color: #0070f3;
+  box-shadow: 0 0 0 3px rgba(0, 112, 243, 0.2);
+}
+
 .activeCell {
-  color: white;
+  color: white !important;
   background-color: #333333 !important;
   z-index: 2;
   /* transform: scale(1.1); */
@@ -36,85 +54,266 @@
 }
 
 .tableContainer {
-  overflow-x: auto;
+  width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+  background: white;
+  margin: 10px 0;
+  overflow-x: auto; /* Changed to allow horizontal scroll */
 }
 
+.tableContainer::-webkit-scrollbar {
+  display: none; /* Hide scrollbar */
+}
+
+.tableContainer table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 8px;
+  table-layout: auto; /* Changed from fixed */
+}
+
+.tableContainer thead {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #2c3e50;
+}
+
+/* Column-specific widths */
+.tableContainer th:nth-child(1),
+.tableContainer td:nth-child(1) {
+  min-width: auto;
+  max-width: none;
+  white-space: normal;
+}
+
+.tableContainer th:nth-child(2),
+.tableContainer td:nth-child(2) {
+  min-width: auto;
+  max-width: none;
+  white-space: normal;
+}
+
+.tableContainer th:nth-child(3),
+.tableContainer td:nth-child(3),
+.tableContainer th:nth-child(4),
+.tableContainer td:nth-child(4) {
+  min-width: auto;
+  max-width: none;
+  white-space: normal;
+}
+
+.tableContainer th,
+.tableContainer td {
+  border: 1px solid #eee;
+  padding: 8px 12px;
+  text-align: center;
+  transition: all 0.2s ease;
+  font-size: 0.8rem;
+  white-space: normal;
+  word-wrap: break-word;
+  word-break: break-word;
+  min-width: 80px;
+  max-width: 200px;
+}
+
+.tableContainer td {
+  background: white;
+  color: #2c3e50;
+}
+
+.tableContainer tr:nth-child(even) td {
+  background: #f8fafc;
+}
+
+/* Update table cell hover behavior */
+.tableContainer tr:hover td {
+  color: white !important;
+  background-color: #2c3e50 !important;
+  transition: all 0.2s ease;
+}
 
 /*.................................................*/
-.page {
-  margin: 20px;
-}
-
-.filterContainer {
-  margin-bottom: 20px;
-}
-
-.paginationContainer {
-  display: flex;
-  justify-content: left;
-  margin-top: 20px;
-  flex-shrink: 0;
-}
 
 .pageButton,
 .activePageButton {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 30px;
-  height: 30px;
-  margin: 0 5px;
-  padding: 5px;
-  border: none;
+  min-width: 32px;
+  height: 32px;
+  margin: 0 2px;
+  padding: 4px 8px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all 0.2s ease;
+  font-size: 12px;
+  font-weight: 500;
 }
 
 .pageButton {
-  background-color: #f0f0f0;
+  background-color: white;
+  color: #333;
 }
 
 .activePageButton {
-  background-color: #ff4c4c;
+  background-color: #e63946;
   color: white;
+  border-color: #e63946;
+  box-shadow: 0 2px 4px rgba(230, 57, 70, 0.2);
 }
 
 .pageButton:disabled {
-  background-color: #d0d0d0;
+  background-color: #f5f5f5;
+  color: #999;
   cursor: not-allowed;
+  border-color: #e0e0e0;
 }
 
 .pageButton:hover:not(:disabled) {
-  background-color: #ff4c4c;
+  background-color: #e63946;
   color: white;
-
+  border-color: #e63946;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(230, 57, 70, 0.2);
 }
 
 .icon {
-  width: 20px;
-  height: 20px;
-  color: #ff4c4c;
-}
-
-.icon:hover {
-  color: white;
-
+  width: 14px;
+  height: 14px;
+  color: currentColor;
 }
 
 .ellipsis {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 30px;
-  height: 30px;
+  min-width: 28px;
+  height: 28px;
+  margin: 0 3px;
+  color: #666;
 }
 
-/* .tableWrapper {
-  flex: 1;
-  overflow-y: auto;
-  margin: 20px 0;
-} */
+.paginationContainer {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: center;
+  margin-top: 10px;
+  padding: 10px 15px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.paginationButtons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
 
 .countDisplay {
-  flex-shrink: 0;
+  color: #2c3e50;
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 6px 10px;
+  background: #f8fafc;
+  border-radius: 6px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.countDisplay span {
+  color: #e63946;
+  font-weight: 600;
+  margin: 0 4px;
+}
+
+.tableHeader {
+  position: sticky;
+  top: 0;
+  background: linear-gradient(180deg, #2c3e50, #2c3e50) !important;
+  color: white !important;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  transition: all 0.2s ease;
+  z-index: 10;
+  text-align: center;
+  height: 32px;
+  vertical-align: middle;
+  padding: 6px 8px;
+}
+
+/* First row header */
+tr:first-child .tableHeader {
+  top: 0;
+  z-index: 11;
+  background: linear-gradient(180deg, #1a2634, #2c3e50) !important;
+}
+
+/* Second row header */
+tr:nth-child(2) .tableHeader {
+  top: 32px;  /* Reduced from 40px */
+  z-index: 11;
+  background: linear-gradient(180deg, #2c3e50, #34495e) !important;
+}
+
+.tableHeader:hover {
+  background: linear-gradient(180deg, #34495e, #2c3e50) !important;
+  cursor: pointer;
+}
+
+.tableRow {
+  transition: all 0.2s ease;
+  background: white;
+}
+
+.tableRow:nth-child(even) {
+  background: #f8fafc;
+}
+
+/* Remove conflicting hover styles */
+.tableRow:hover {
+  background-color: transparent;
+}
+
+.tableCell {
+  position: relative;
+  overflow: hidden;
+  padding: 8px;
+  text-align: center;
+}
+
+.tableCellContent {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 20px;
+}
+
+/* Sort indicator styling */
+.sortIndicator {
+  display: inline-block;
+  margin-left: 4px;
+  font-size: 0.7rem;
+  opacity: 0.8;
+  vertical-align: middle;
+}
+
+/* Hover effect for cells */
+.tableCell:before {
+  display: none;
+}
+
+/* Animation for modal */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translate(-50%, -48%); }
+  to { opacity: 1; transform: translate(-50%, -50%); }
 }
