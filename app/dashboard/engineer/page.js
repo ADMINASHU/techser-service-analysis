@@ -6,7 +6,7 @@ const DashboardPage = () => {
 
   return (
     <div className={styles.dash}>
-      <h1>Dashboard Engineer</h1>
+      {/* <h1>Dashboard Engineer</h1> */}
       <DataCompile />
     </div>
   );

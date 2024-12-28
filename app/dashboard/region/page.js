@@ -4,7 +4,7 @@ import DataCompile from "./(components)/DataCompile";
 const DashboardPage = () => {
   return (
     <div className={styles.dash}>
-      <h1>Dashboard Region</h1>
+      {/* <h1>Dashboard Region</h1> */}
       <DataCompile />
     </div>
   );
