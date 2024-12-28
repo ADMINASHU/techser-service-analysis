@@ -18,8 +18,8 @@ const ProfileCard = ({ data, onClose }) => {
             src={`/${data.account.image}`} 
             alt="Profile Image"
             priority
-            width={140}
-            height={140}
+            width={120}  // Reduced from 140
+            height={120} // Reduced from 140
             className={styles.profileImage}
           />
           <div className={styles.cardHeaderText}>
