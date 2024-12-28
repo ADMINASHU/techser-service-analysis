@@ -1,15 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
-
 import styles from "../../Dashboard.module.css";
 
 const DashboardTableView = ({ data, averageTotalVisits }) => {
   const tableRef = useRef();
-
   const [smartFilter, setSmartFilter] = useState(false);
   const [filteredData, setFilteredData] = useState([]);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
-    const [hoveredRow, setHoveredRow] = useState(null);
-  
+  const [hoveredRow, setHoveredRow] = useState(null);
 
   const handleSmartFilterToggle = () => {
     setSmartFilter((prevSmartFilter) => !prevSmartFilter);
@@ -29,28 +26,19 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
       return;
     }
 
-    let newFilteredData;
-
-    if (smartFilter) {
-      newFilteredData = data
-        .filter((row) => row.region !== "Region")
-        .filter((row) => row.totalVisits > averageTotalVisits);
-    } else {
-      newFilteredData = data.filter((row) => row.region !== "Region");
-    }
+    let newFilteredData = smartFilter
+      ? data
+          .filter((row) => row.region !== "Region")
+          .filter((row) => row.totalVisits > averageTotalVisits)
+      : data.filter((row) => row.region !== "Region");
 
     if (sortConfig.key) {
       newFilteredData = [...newFilteredData].sort((a, b) => {
         const aValue = isNaN(a[sortConfig.key]) ? a[sortConfig.key] : parseFloat(a[sortConfig.key]);
         const bValue = isNaN(b[sortConfig.key]) ? b[sortConfig.key] : parseFloat(b[sortConfig.key]);
-
-        if (aValue < bValue) {
-          return sortConfig.direction === "asc" ? -1 : 1;
-        }
-        if (aValue > bValue) {
-          return sortConfig.direction === "asc" ? 1 : -1;
-        }
-        return 0;
+        return sortConfig.direction === "asc" 
+          ? aValue < bValue ? -1 : 1
+          : aValue > bValue ? -1 : 1;
       });
     }
 
@@ -86,18 +74,18 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
   const handlePrint = () => {
     const printContent = tableRef.current;
     const printWindow = window.open("", "", "width=800,height=600");
-    printWindow.document.write(
-      ` <html> 
-    <head> 
-    <title>Print Table</title> 
-    <style> 
-    table { width: 100%; border-collapse: collapse; } 
-    th, td { border: 1px solid black; padding: 8px; text-align: left; }
-     </style> 
-     </head> 
-     <body> ${printContent.outerHTML} </body>
-      </html> `
-    );
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>Print Table</title>
+          <style>
+            table { width: 100%; border-collapse: collapse; }
+            th, td { border: 1px solid black; padding: 8px; text-align: center; }
+          </style>
+        </head>
+        <body>${printContent.outerHTML}</body>
+      </html>
+    `);
     printWindow.document.close();
     printWindow.print();
   };
@@ -115,74 +103,76 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
   return (
     <div className={styles.page}>
       <div className={styles.filterContainer}>
-        <button
-          className={styles.button}
-          style={
-            smartFilter
-              ? { backgroundColor: "green", color: "white", textAlign: "center" }
-              : { backgroundColor: "#e90c0c", color: "white", textAlign: "center" }
-          }
-          onClick={handleSmartFilterToggle}
-        >
-          {smartFilter ? "Smart" : "Regular"}
+        <label className={styles.toggleSwitch}>
+          <input type="checkbox" checked={smartFilter} onChange={handleSmartFilterToggle} />
+          <span className={styles.slider}>
+            <span className={styles.toggleText}>{smartFilter ? "Smart" : "Regular"}</span>
+          </span>
+        </label>
+        <button className={styles.print} onClick={handlePrint}>
+          Print
         </button>
-      <button className={styles.print} onClick={handlePrint}>
-        Print
-      </button>
       </div>
 
-      <table ref={tableRef}>
-        <thead>
-          <tr>
-            <th colSpan={4}>Dashboard Region</th>
-            <th colSpan={1}>Entry</th>
-            <th colSpan={3}>New</th>
-            <th colSpan={3}>Pending</th>
-            <th colSpan={3}>Closed in 1st Attempt</th>
-            <th colSpan={3}>Pending Call Closed</th>
-            <th colSpan={4}>Total</th>
-            <th colSpan={1}>Index</th>
-            <th colSpan={1}>Accuracy</th>
-          </tr>
-          {data?.length > 0 && (
+      <div className={styles.tableContainer}>
+        <table ref={tableRef}>
+          <thead>
             <tr>
-              <th>S.No.</th>
-              {Object.values(data[0])?.map((value, index) => (
-                <th key={index} onClick={() => handleSort(Object.keys(data[0])[index])}>
-                  {value}{" "}
-                  {sortConfig.key === Object.keys(data[0])[index]
-                    ? sortConfig.direction === "asc"
-                      ? "▲"
-                      : "▼"
-                    : ""}
-                </th>
-              ))}
+              <th colSpan={4} className={styles.tableHeader}>Dashboard Region</th>
+              <th colSpan={1} className={styles.tableHeader}>Entry</th>
+              <th colSpan={3} className={styles.tableHeader}>New</th>
+              <th colSpan={3} className={styles.tableHeader}>Pending</th>
+              <th colSpan={3} className={styles.tableHeader}>Closed in 1st Attempt</th>
+              <th colSpan={3} className={styles.tableHeader}>Pending Call Closed</th>
+              <th colSpan={4} className={styles.tableHeader}>Total</th>
+              <th colSpan={1} className={styles.tableHeader}>Index</th>
+              <th colSpan={1} className={styles.tableHeader}>Accuracy</th>
             </tr>
-          )}
-        </thead>
-        <tbody>
-          {filteredData?.map((row, rowIndex) => (
-            <tr
-              key={rowIndex}
-              onMouseEnter={() => handleRowMouseEnter(rowIndex)}
-              onMouseLeave={handleRowMouseLeave}
-            >
-              <td className={hoveredRow === rowIndex ? styles.activeCell : ""}>{rowIndex + 1}</td>
-              {Object.values(row)?.map((value, colIndex) => (
-                <td
-                  style={colIndex === 20 ? { backgroundColor: getColor(value) } : {}}
-                  key={colIndex}
-                  className={`${
-                    hoveredRow === rowIndex ? styles.activeCell : ""
-                  }`}
-                >
-                  {value}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+            {data?.length > 0 && (
+              <tr>
+                <th className={styles.tableHeader}>S.No.</th>
+                {Object.values(data[0])?.map((value, index) => (
+                  <th 
+                    key={index} 
+                    onClick={() => handleSort(Object.keys(data[0])[index])}
+                    className={styles.tableHeader}
+                  >
+                    {value}
+                    <span className={styles.sortIndicator}>
+                      {sortConfig.key === Object.keys(data[0])[index] ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+                    </span>
+                  </th>
+                ))}
+              </tr>
+            )}
+          </thead>
+          <tbody>
+            {filteredData?.map((row, rowIndex) => (
+              <tr
+                key={rowIndex}
+                className={styles.tableRow}
+                onMouseEnter={() => handleRowMouseEnter(rowIndex)}
+                onMouseLeave={handleRowMouseLeave}
+              >
+                <td className={hoveredRow === rowIndex ? styles.activeCell : ""}>{rowIndex + 1}</td>
+                {Object.values(row)?.map((value, colIndex) => (
+                  <td
+                    key={colIndex}
+                    style={colIndex === 20 ? { backgroundColor: getColor(value) } : {}}
+                    className={`${styles.tableCell} ${
+                      hoveredRow === rowIndex ? styles.activeCell : ""
+                    }`}
+                  >
+                    <div className={styles.tableCellContent}>
+                      {value}
+                    </div>
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

@@ -137,17 +137,12 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
   return (
     <div className={styles.page}>
       <div className={styles.filterContainer}>
-        <button
-          className={styles.button}
-          style={
-            smartFilter
-              ? { backgroundColor: "green", color: "white", textAlign: "center" }
-              : { backgroundColor: "#e90c0c", color: "white", textAlign: "center" }
-          }
-          onClick={handleSmartFilterToggle}
-        >
-          {smartFilter ? "Smart" : "Regular"}
-        </button>
+        <label className={styles.toggleSwitch}>
+          <input type="checkbox" checked={smartFilter} onChange={handleSmartFilterToggle} />
+          <span className={styles.slider}>
+            <span className={styles.toggleText}>{smartFilter ? "Smart" : "Regular"}</span>
+          </span>
+        </label>
 
         <select name="region" value={filters.region} onChange={handleFilterChange}>
           <option value="ALL Region">ALL Region</option>
@@ -169,60 +164,68 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
           Print
         </button>
       </div>
-      <table ref={tableRef}>
-        <thead>
-          <tr>
-            <th colSpan={4}>Dashboard Branch</th>
-            <th colSpan={1}>Entry</th>
-            <th colSpan={3}>New</th>
-            <th colSpan={3}>Pending</th>
-            <th colSpan={3}>Closed in 1st Attempt</th>
-            <th colSpan={3}>Pending Call Closed</th>
-            <th colSpan={3}>Total</th>
-            <th colSpan={1}>Index</th>
-            <th colSpan={1}>Accuracy</th>
-          </tr>
-          {data?.length > 0 && (
+
+      <div className={styles.tableContainer}>
+        <table ref={tableRef}>
+          <thead>
             <tr>
-              <th>S.No.</th>
-              {Object.values(data[0])?.map((value, index) => (
-                <th key={index} onClick={() => handleSort(Object.keys(data[0])[index])}>
-                  {value}{" "}
-                  {sortConfig.key === Object.keys(data[0])[index]
-                    ? sortConfig.direction === "asc"
-                      ? "▲"
-                      : "▼"
-                    : ""}
-                </th>
-              ))}
+              <th colSpan={3} className={styles.tableHeader}>Dashboard Branch</th>
+              <th colSpan={2} className={styles.tableHeader}>Total</th>
+              <th colSpan={3} className={styles.tableHeader}>New</th>
+              <th colSpan={3} className={styles.tableHeader}>Pending</th>
+              <th colSpan={3} className={styles.tableHeader}>Closed in 1st Attempt</th>
+              <th colSpan={3} className={styles.tableHeader}>Pending Call Closed</th>
+              <th colSpan={1} className={styles.tableHeader}>Total</th>
+              <th colSpan={2} className={styles.tableHeader}>Point</th>
+              <th colSpan={1} className={styles.tableHeader}>Index</th>
+              <th colSpan={1} className={styles.tableHeader}>Accuracy</th>
             </tr>
-          )}
-        </thead>
-        <tbody>
-          {filteredData?.map((row, rowIndex) => (
-            <tr
-              key={rowIndex}
-              onMouseEnter={() => handleRowMouseEnter(rowIndex)}
-              onMouseLeave={handleRowMouseLeave}
-            >
-              <td className={hoveredRow === rowIndex ? styles.activeCell : ""}>{rowIndex + 1}</td>
+            {data?.length > 0 && (
+              <tr>
+                <th className={styles.tableHeader}>S.No.</th>
+                {Object.values(data[0])?.map((value, index) => (
+                  <th 
+                    key={index} 
+                    onClick={() => handleSort(Object.keys(data[0])[index])}
+                    className={styles.tableHeader}
+                  >
+                    {value}
+                    <span className={styles.sortIndicator}>
+                      {sortConfig.key === Object.keys(data[0])[index] ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+                    </span>
+                  </th>
+                ))}
+              </tr>
+            )}
+          </thead>
+          <tbody>
+            {filteredData?.map((row, rowIndex) => (
+              <tr
+                key={rowIndex}
+                className={styles.tableRow}
+                onMouseEnter={() => handleRowMouseEnter(rowIndex)}
+                onMouseLeave={handleRowMouseLeave}
+              >
+                <td className={hoveredRow === rowIndex ? styles.activeCell : ""}>{rowIndex + 1}</td>
 
-              {Object.values(row)?.map((value, colIndex) => (
-                <td
-                  key={colIndex}
-                  style={colIndex === 19 ? { backgroundColor: getColor(value) } : {}}
-
-                  className={`${
-                    hoveredRow === rowIndex  ? styles.activeCell : ""
-                  }`}
-                >
-                  {value}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+                {Object.values(row)?.map((value, colIndex) => (
+                  <td
+                    key={colIndex}
+                    style={colIndex === 19 ? { backgroundColor: getColor(value) } : {}}
+                    className={`${styles.tableCell} ${colIndex === 0 ? styles.hoverColumn : ""} ${
+                      hoveredRow === rowIndex ? styles.activeCell : ""
+                    }`}
+                  >
+                    <div className={styles.tableCellContent}>
+                      {value}
+                    </div>
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

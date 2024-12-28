@@ -255,17 +255,12 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
   return (
     <div className={styles.page}>
       <div className={styles.filterContainer}>
-        <button
-          className={styles.button}
-          style={
-            smartFilter
-              ? { backgroundColor: "green", color: "white", textAlign: "center" }
-              : { backgroundColor: "#e90c0c", color: "white", textAlign: "center" }
-          }
-          onClick={handleSmartFilterToggle}
-        >
-          {smartFilter ? "Smart" : "Regular"}
-        </button>
+        <label className={styles.toggleSwitch}>
+          <input type="checkbox" checked={smartFilter} onChange={handleSmartFilterToggle} />
+          <span className={styles.slider}>
+            <span className={styles.toggleText}>{smartFilter ? "Smart" : "Regular"}</span>
+          </span>
+        </label>
 
         <select name="region" value={filters.region} onChange={handleFilterChange}>
           <option value="ALL Region">ALL Region</option>
@@ -297,58 +292,66 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
         </button>
       </div>
 
-      <table ref={tableRef}>
-        <thead>
-          <tr>
-            <th colSpan={2}>Dashboard Engineer</th>
-            <th colSpan={1}>Assigned</th>
-            <th colSpan={3}>New</th>
-            <th colSpan={3}>Pending</th>
-            <th colSpan={3}>Closed in 1st Attempt</th>
-            <th colSpan={3}>Pending Call Closed</th>
-            <th colSpan={2}>Total</th>
-            <th colSpan={1}>Index</th>
-            <th colSpan={1}>Accuracy</th>
-          </tr>
-          {data?.length > 0 && (
+      <div className={styles.tableContainer}>
+        <table ref={tableRef}>
+          <thead>
             <tr>
-              <th>S.No.</th>
-              {selectedColumns.map((col, index) => (
-                <th key={index} onClick={() => handleSort(col)}>
-                  {data[0][col]}
-                  {sortConfig.key === col ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
-                </th>
-              ))}
+              <th colSpan={2} className={styles.tableHeader}>Dashboard Engineer</th>
+              <th colSpan={1} className={styles.tableHeader}>Assigned</th>
+              <th colSpan={3} className={styles.tableHeader}>New</th>
+              <th colSpan={3} className={styles.tableHeader}>Pending</th>
+              <th colSpan={3} className={styles.tableHeader}>Closed in 1st Attempt</th>
+              <th colSpan={3} className={styles.tableHeader}>Pending Call Closed</th>
+              <th colSpan={2} className={styles.tableHeader}>Total</th>
+              <th colSpan={1} className={styles.tableHeader}>Index</th>
+              <th colSpan={1} className={styles.tableHeader}>Accuracy</th>
             </tr>
-          )}
-        </thead>
-        <tbody>
-          {filteredData?.map((row, rowIndex) => (
-            <tr
-              key={rowIndex}
-              onMouseEnter={() => handleRowMouseEnter(rowIndex)}
-              onMouseLeave={handleRowMouseLeave}
-            >
-              <td className={hoveredRow === rowIndex ? styles.activeCell : ""}>{rowIndex + 1}</td>
-              {selectedColumns.map((col, colIndex) => (
-                <td
-                  key={colIndex}
-                  style={colIndex === 16 ? { backgroundColor: getColor(row[col]) } : {}}
-
-                  className={`${colIndex === 0 ? styles.hoverColumn : ""} ${
-                    hoveredRow === rowIndex ? styles.activeCell : ""
-                  }`}
-                  onClick={(event) => handleCellMouseOnClick(event, colIndex, row)}
-                  onMouseEnter={(event) => handleCellMouseEnter(event, colIndex, row)}
-                  onMouseLeave={handleCellMouseLeave}
-                >
-                  {row[col]}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+            {data?.length > 0 && (
+              <tr>
+                <th className={styles.tableHeader}>S.No.</th>
+                {selectedColumns.map((col, index) => (
+                  <th 
+                    key={index} 
+                    onClick={() => handleSort(col)}
+                    className={styles.tableHeader}
+                  >
+                    {data[0][col]}
+                    {sortConfig.key === col ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+                  </th>
+                ))}
+              </tr>
+            )}
+          </thead>
+          <tbody>
+            {filteredData?.map((row, rowIndex) => (
+              <tr
+                key={rowIndex}
+                className={styles.tableRow}
+                onMouseEnter={() => handleRowMouseEnter(rowIndex)}
+                onMouseLeave={handleRowMouseLeave}
+              >
+                <td className={hoveredRow === rowIndex ? styles.activeCell : ""}>{rowIndex + 1}</td>
+                {selectedColumns.map((col, colIndex) => (
+                  <td
+                    key={colIndex}
+                    style={colIndex === 16 ? { backgroundColor: getColor(row[col]) } : {}}
+                    className={`${styles.tableCell} ${colIndex === 0 ? styles.hoverColumn : ""} ${
+                      hoveredRow === rowIndex ? styles.activeCell : ""
+                    }`}
+                    onClick={(event) => handleCellMouseOnClick(event, colIndex, row)}
+                    onMouseEnter={(event) => handleCellMouseEnter(event, colIndex, row)}
+                    onMouseLeave={handleCellMouseLeave}
+                  >
+                    <div className={styles.tableCellContent}>
+                      {row[col]}
+                    </div>
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       {profileData && (hoveredCell || mouseOnClick) && (
         <div className={`${styles.modalOverlay} ${mouseOnClick ? styles.modalOverlay2 : ""}`}>
