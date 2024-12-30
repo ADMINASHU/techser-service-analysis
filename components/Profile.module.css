@@ -1,20 +1,30 @@
+.profileContainer{
+  /* text-align: center; */
+  /* padding: 20px; */
+  /* padding-top: 40px; */
+  min-height: calc(100vh - 100px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 .profile {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
   height: 100%;
-  gap: 10px;
+  gap: 8px; /* Reduced from 10px */
 
   /* Add gap between the two divs */
 }
 
 .page {
-  padding: 20px;
+  padding: 16px; /* Reduced from 20px */
   background-color: #f9f9f9;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
-  max-width: 800px;
+  max-width: 700px; 
   /* width: 100%; */
 }
 
@@ -22,7 +32,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 16px; /* Reduced from 20px */
   /* max-width: 1000px; */
   margin: auto;
   border-radius: 10px;
@@ -42,7 +52,7 @@
 
 .field {
   align-items: center;
-  padding: 10px;
+  padding: 8px; /* Reduced from 10px */
   width: 100%;
 
 }
@@ -56,30 +66,29 @@
 
 .input {
   width: 100%;
-  padding: 8px;
+  padding: 6px; /* Reduced from 8px */
   border: 1px solid #ccc;
   border-radius: 4px;
   flex: 2;
-  min-width: 140px;
+  min-width: 120px; /* Reduced from 140px */
 
 }
 
-
 .buttonContainer {
-  padding-right: 20px;
+  padding-right: 16px; /* Reduced from 20px */
   /* background-color: #e11616; */
   display: flex;
   justify-content: flex-end;
 }
 
 .changePassButtonContainer {
-  margin-top: 20px;
+  margin-top: 16px; /* Reduced from 20px */
   display: flex;
   justify-content: space-between;
 }
 
 .formButtonContainer {
-  padding-left: 20px;
+  padding-left: 16px; /* Reduced from 20px */
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -88,12 +97,12 @@
 }
 
 .button {
-  margin: 10px;
-  padding: 10px 20px;
+  margin: 8px; /* Reduced from 10px */
+  padding: 8px 16px; /* Reduced from 10px 20px */
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 14px; /* Reduced from 16px */
 }
 
 .editButton {
@@ -105,14 +114,13 @@
   background-color: #0070f3;
   color: white;
   margin-top: 35px;
-  padding: 8px;
-
+  padding: 6px; /* Reduced from 8px */
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 14px; /* Reduced from 16px */
   width: 100%;
-  min-width: 130px;
+  min-width: 120px; /* Reduced from 130px */
 
 }
 
@@ -133,17 +141,17 @@
 }
 
 .title {
-  margin-bottom: 20px;
-  font-size: 24px;
+  margin-bottom: 16px; /* Reduced from 20px */
+  font-size: 20px; /* Reduced from 24px */
 }
 
 .resetPasswordContainer {
-  min-width: 270px;
+  min-width: 250px; /* Reduced from 270px */
   width: 100%;
   margin: auto;
-  padding-top: 15px;
+  padding-top: 12px; /* Reduced from 15px */
   transition: ease-out 0.5;
-  height: 395px;
+  height: 360px; /* Reduced from 395px */
 }
 
 @media (max-width: 700px) {
@@ -153,7 +161,7 @@
 
   .page {
     max-width: 100%;
-    margin-bottom: 10px;
+    margin-bottom: 8px; /* Reduced from 10px */
     /* Gap between the divs when stacked */
   }
 
@@ -164,11 +172,11 @@
 
   .label {
     text-align: left;
-    margin-bottom: 5px;
+    margin-bottom: 4px; /* Reduced from 5px */
   }
 
   .input {
-    width: calc(100% - 16px);
+    width: calc(100% - 12px); /* Reduced from 16px */
     /* Adjust for padding */
   }
 }
