@@ -20,7 +20,7 @@ const Footer = ({ isAuthenticated, loggedUser }) => {
           <Link href="/dashboard/engineer" className={styles.link}>Engineer</Link>
           <Link href="/dashboard/branch" className={styles.link}>Branch</Link>
           <Link href="/dashboard/region" className={styles.link}>Region</Link>
-          <span className={styles.divider}>|</span>
+          {/* <span className={styles.divider}>|</span> */}
           {level <= 1 && <Link href="/data" className={styles.link}>Data</Link>}
           {level <= 3 && <Link href="/users" className={styles.link}>Users</Link>}
         </div>
