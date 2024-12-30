@@ -9,7 +9,7 @@ const DataPage = () => {
 
   return (
     <div style={{ margin: "10px" }}>
-      <h1>Complaint Data</h1>
+      {/* <h1>Complaint Data</h1> */}
       <TableView data={processedData} />
     </div>
   );

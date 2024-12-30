@@ -1,146 +1,155 @@
 .container {
-    text-align: center;
-    padding: 40px;
-  }
-  
-  .container h1 {
-    font-size: 36px;
-    margin-bottom: 20px;
-  }
-  
-  .container p {
-    font-size: 18px;
-    margin-bottom: 20px;
-  }
-  
+  text-align: center;
+  padding: 20px;
+  padding-top: 40px;
+  min-height: calc(100vh - 55px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.container h1 {
+  font-size: 24px;
+  margin-bottom: 12px;
+}
+
+.container p {
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+
+.sliderContainer {
+  width: 80%;
+  margin: 0 auto;
+  margin-top: 20px;
+  height: 450px; /* Increased height */
+  display: flex;
+  align-items: center;
+}
+
+.slide {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 400px; /* Increased height */
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 24px; /* Increased padding */
+  background: #f9f9f9;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.slide:hover {
+  background-color: #eaeaea;
+}
+
+.slide h2 {
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.slide p {
+  font-size: 13px;
+  padding: 20px;
+}
+
+/* Media Queries for Responsive Design */
+@media (max-width: 1200px) {
   .sliderContainer {
-    width: 80%;
-    margin: 0 auto;
-    margin-top: 30px;
+    width: 90%;
   }
-  
+
   .slide {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 400px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    padding: 20px;
-    background: #f9f9f9;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+    height: 380px;
   }
-  
-  .slide:hover {
-    background-color: #eaeaea;
-  }
-  
+
   .slide h2 {
-    font-size: 24px;
-    margin-bottom: 10px;
+    font-size: 18px;
   }
-  
+
   .slide p {
+    font-size: 13px;
+    padding: 20px;
+  }
+}
+
+@media (max-width: 992px) {
+  .container h1 {
+    font-size: 22px;
+  }
+
+  .container p {
+    font-size: 14px;
+  }
+
+  .slide {
+    height: 350px;
+  }
+
+  .slide h2 {
+    font-size: 18px;
+  }
+
+  .slide p {
+    font-size: 13px;
+    padding: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .sliderContainer {
+    width: 100%;
+  }
+
+  .container {
+    padding: 20px;
+    padding-top: 40px;
+  }
+
+  .container h1 {
+    font-size: 22px;
+  }
+
+  .container p {
+    font-size: 14px;
+  }
+
+  .slide {
+    height: 300px;
+  }
+
+  .slide h2 {
+    font-size: 18px;
+  }
+
+  .slide p {
+    font-size: 13px;
+    padding: 20px;
+  }
+}
+
+@media (max-width: 576px) {
+  .container h1 {
+    font-size: 20px;
+  }
+
+  .container p {
+    font-size: 12px;
+  }
+
+  .slide {
+    height: 280px;
+  }
+
+  .slide h2 {
     font-size: 16px;
-    padding: 40px;
   }
-  
-  /* Media Queries for Responsive Design */
-  @media (max-width: 1200px) {
-    .sliderContainer {
-      width: 90%;
-    }
-  
-    .slide {
-      height: 350px;
-    }
-  
-    .slide h2 {
-      font-size: 22px;
-    }
-  
-    .slide p {
-      font-size: 15px;
-      padding: 30px;
-    }
+
+  .slide p {
+    font-size: 10px;
+    padding: 15px;
   }
-  
-  @media (max-width: 992px) {
-    .container h1 {
-      font-size: 32px;
-    }
-  
-    .container p {
-      font-size: 16px;
-    }
-  
-    .slide {
-      height: 300px;
-    }
-  
-    .slide h2 {
-      font-size: 20px;
-    }
-  
-    .slide p {
-      font-size: 14px;
-      padding: 25px;
-    }
-  }
-  
-  @media (max-width: 768px) {
-    .sliderContainer {
-      width: 100%;
-    }
-  
-    .container {
-      padding: 20px;
-    }
-  
-    .container h1 {
-      font-size: 28px;
-    }
-  
-    .container p {
-      font-size: 14px;
-    }
-  
-    .slide {
-      height: 250px;
-    }
-  
-    .slide h2 {
-      font-size: 18px;
-    }
-  
-    .slide p {
-      font-size: 12px;
-      padding: 20px;
-    }
-  }
-  
-  @media (max-width: 576px) {
-    .container h1 {
-      font-size: 24px;
-    }
-  
-    .container p {
-      font-size: 12px;
-    }
-  
-    .slide {
-      height:250px;
-    }
-  
-    .slide h2 {
-      font-size: 16px;
-    }
-  
-    .slide p {
-      font-size: 10px;
-      padding: 15px;
-    }
-  }
-  
+}

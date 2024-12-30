@@ -122,7 +122,7 @@ const Users = ({ LoggedUserLevel, LoggedUser }) => {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>Users</h1>
+      {/* <h1 className={styles.title}>Users</h1> */}
       {editFormVisible && (
         <div className={styles.modalOverlay}>
           <div className={styles.page}>

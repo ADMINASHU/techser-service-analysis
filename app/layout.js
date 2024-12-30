@@ -36,8 +36,7 @@ export default async function RootLayout({ children }) {
   return (
     <DataProvider>
       <html lang="en">
-   
-        <body className={`${geistSans.variable} ${geistMono.variable}`}>
+        <body className={`${geistSans.variable} ${geistMono.variable} text-sm`}>
           <Navbar isAuthenticated={isAuthenticated} session={session} loggedUser={loggedUser} />
           {children}
           <SpeedInsights />

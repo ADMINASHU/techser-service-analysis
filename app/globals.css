@@ -13,6 +13,7 @@ body {
   font-family: var(--font-geist-sans), var(--font-geist-mono);
   background-color: #f5f5f5;
   padding-top: 55px;
+  font-size: 14px;
 }
 
 input:focus {
@@ -25,8 +26,9 @@ input:focus {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
-  text-align: center;
+  min-height: calc(100vh - 55px); /* Adjust for navbar height */
+  width: 100%;
+  position: relative;
 }
 
 .loadingContainer {
@@ -56,15 +58,15 @@ input:focus {
 }
 
 .loadingMessage {
-  margin-top: 20px;
-  font-size: 18px;
+  margin-top: 16px;
+  font-size: 14px;
   color: #333;
 }
 
 .page {
-  max-height: calc(100vh - 75px);
+  max-height: calc(100vh - 60px);
   overflow-y: auto;
-  padding-bottom: 20px;
+  padding-bottom: 16px;
 }
 
 ::-webkit-scrollbar {

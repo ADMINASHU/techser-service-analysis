@@ -85,7 +85,7 @@ const Control = () => {
 
   return (
     <div className={styles.page}>
-      <h1>Control Page</h1>
+      {/* <h1>Control Page</h1> */}
       <div className={styles["button-container"]}>
         <button className={styles["button"]} onClick={editing ? handleSave : handleEdit}>
           {editing ? "Save" : "Edit"}
