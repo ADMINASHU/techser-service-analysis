@@ -1,5 +1,5 @@
 .dash {
-  margin: 10px;
+  /* margin: 10px; */
   scroll-behavior: smooth;
 }
 
@@ -323,9 +323,10 @@
 
 .tableContainer {
   width: 100%;
-  overflow-x: hidden;
-  overflow-y: auto;
-  max-height: calc(100vh - 200px);
+  height: auto;
+  /* overflow-x: hidden; */
+  /* overflow-y: auto; */
+  /* max-height: calc(100vh - 100px); */
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   position: relative;

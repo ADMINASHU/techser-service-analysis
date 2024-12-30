@@ -1,6 +1,6 @@
 import { auth } from "@/auth";
 import Users from "@/components/Users";
-
+import styles from "../../components/Users.module.css";
 import React from "react";
 
 const UsersPage = async () => {
@@ -9,10 +9,10 @@ const UsersPage = async () => {
   const LoggedUserLevel = session?.user.level;
 
   return (
-    <div >
+    <div className={styles.userContainer}>
       <Users LoggedUserLevel={LoggedUserLevel} LoggedUser={LoggedUser}/>
     </div>
   );
 };
 
-export default UsersPage;
+export default UsersPage; 

@@ -1,9 +1,8 @@
 .page {
     padding: 12px;
-    margin: 0;
-    background-color: #ffffff;
+    /* background-color: #ffffff; */
     width: 100%;
-    min-height: 80vh;
+    min-height: calc(100vh - 100px);
     display: flex;
     flex-direction: column;
 }
@@ -14,8 +13,8 @@
     border-spacing: 0;
     /* margin-top: 20px; */
     background: white;
-    border-radius: 6px;
-    overflow: hidden;
+    border-radius: 10px;
+    /* overflow: hidden; */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     min-width: auto;
     table-layout: fixed;
@@ -25,8 +24,11 @@
 .tableContainer {
     position: relative;
     width: 100%;
-    overflow-x: hidden;
-    margin-top: 15px;
+    /* overflow-x: hidden; */
+    padding: 20px;
+    border-radius: 10px;
+
+    /* margin-top: 15px; */
     -webkit-overflow-scrolling: touch;
     scrollbar-width: thin;
     scrollbar-color: #2c3e50 #f8fafc;
@@ -56,18 +58,19 @@
     padding: 8px 6px;
     text-align: center;
     border-bottom: 1px solid #edf2f7;
-    border-right: 1px solid #ffffff33;  /* Add vertical line */
+    border-right: 1px solid #ffffff33;
+    /* Add vertical line */
     white-space: normal;
     word-wrap: break-word;
     width: auto;
 }
 
 .table th:last-child {
-    border-right: none;  /* Remove border from last header cell */
+    border-right: none;
 }
 
 .table td {
-    padding: 8px 6px;
+    padding: 8px 5px;
     text-align: left;
     border-bottom: 1px solid #edf2f7;
     max-width: 300px;
@@ -85,7 +88,7 @@
 
 .input-field {
     width: 100%;
-    padding: 8px 10px;
+    padding: 8px 5px;
     font-size: 0.85rem;
     /* border: 1px solid #e2e8f0; */
     /* border-radius: 6px; */
@@ -123,7 +126,7 @@ input[type="number"].input-field::-webkit-inner-spin-button {
     display: flex;
     justify-content: flex-end;
     gap: 8px;
-    margin-top: 16px;
+    /* margin-top: 16px; */
     padding: 0 16px 8px;
 }
 
@@ -151,7 +154,8 @@ input[type="number"].input-field::-webkit-inner-spin-button {
 
 @media (max-width: 768px) {
     .page {
-        padding: 6px;
+        padding: 12px;
+
     }
 
     .table {
@@ -192,13 +196,13 @@ input[type="number"].input-field::-webkit-inner-spin-button {
     .page {
         padding: 12px;
     }
-    
+
     .table th,
     .table td {
         padding: 10px 12px;
         font-size: 0.9rem;
     }
-    
+
     .button {
         padding: 8px 20px;
         font-size: 0.9rem;
@@ -209,19 +213,19 @@ input[type="number"].input-field::-webkit-inner-spin-button {
     .page {
         padding: 4px;
     }
-    
+
     .table th,
     .table td {
         padding: 4px 3px;
         font-size: 0.75rem;
     }
-    
+
     .button {
         padding: 4px 12px;
         font-size: 0.8rem;
         min-width: 60px;
     }
-    
+
     .heading {
         font-size: 1rem;
         margin: 6px 0;
@@ -250,7 +254,7 @@ input[type="number"].input-field::-webkit-inner-spin-button {
         max-width: 150px;
         font-size: 12px;
     }
-    
+
     .table th {
         font-size: 12px;
         padding: 6px 4px;
@@ -264,7 +268,7 @@ input[type="number"].input-field::-webkit-inner-spin-button {
         word-break: break-word;
         min-width: 0;
     }
-    
+
     .table th {
         white-space: normal;
         word-break: break-word;

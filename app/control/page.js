@@ -92,7 +92,7 @@ const Control = () => {
         </button>
       </div>
       <div className={styles.tableContainer} onScroll={handleScroll}>
-        <div className={styles.scrollIndicator}></div>
+        {/* <div className={styles.scrollIndicator}></div> */}
         <table className={styles["table"]}>
           <thead>
             <tr>

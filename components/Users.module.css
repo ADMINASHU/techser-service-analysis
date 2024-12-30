@@ -1,3 +1,9 @@
+.userContainer{
+  min-height: calc(100vh - 100px);
+  /* display: flex; */
+  /* justify-content: center; */
+  /* align-items: center; */
+}
 .container {
   padding: 24px;
   margin: auto;
@@ -14,7 +20,7 @@
   margin-top: 20px;
   background: white;
   border-radius: 8px;
-  overflow: hidden;
+  /* overflow: hidden; */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
   min-width: 650px; /* Minimum width before horizontal scroll */
   font-size: 0.9rem; /* Reduced font size */
