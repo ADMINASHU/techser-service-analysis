@@ -291,9 +291,10 @@
   height: 26px;
   width: 26px;
   left: 4px;
-  bottom: 4px;
+  top:2px;
+  bottom: 2px;
   background-color: white; /* Changed back to white */
-  border: 2px solid white;
+  border: 2px solid #cc0000;
   transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   border-radius: 50%;
   opacity: 1;
@@ -303,6 +304,8 @@
 .toggleSwitch input:checked + .slider:before {
   transform: translateX(85px);
   background-color: white; /* Changed back to white */
+  border: 2px solid #45a049;
+
 }
 
 .toggleText {
