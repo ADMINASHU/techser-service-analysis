@@ -3,7 +3,7 @@
     margin: 0;
     background-color: #ffffff;
     width: 100%;
-    min-height: 90vh;
+    min-height: 80vh;
     display: flex;
     flex-direction: column;
 }

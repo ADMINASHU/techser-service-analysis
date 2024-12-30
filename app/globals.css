@@ -7,6 +7,7 @@
 html,
 body {
   height: 100%;
+  overflow-x: hidden;
 }
 
 body {
@@ -14,6 +15,7 @@ body {
   background-color: #f5f5f5;
   padding-top: 55px;
   font-size: 14px;
+  position: relative;
 }
 
 input:focus {
@@ -64,7 +66,7 @@ input:focus {
 }
 
 .page {
-  max-height: calc(100vh - 60px);
+  max-height: calc(100vh - 115px); /* Adjusted to account for navbar and footer */
   overflow-y: auto;
   padding-bottom: 16px;
 }
@@ -86,4 +88,10 @@ input:focus {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+
+/* Footer Styles */
+.footer-link {
+  @apply text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 
+         transition-colors duration-200 relative font-medium tracking-wide;
 }
