@@ -89,32 +89,51 @@
 @media (max-width: 768px) {
   .footerContent {
     padding: 0 12px;
+    justify-content: space-between;
   }
   
   .navLinks {
-    gap: 1rem;
+    display: none; /* Hide navigation links on medium screens */
   }
   
   .link {
     font-size: 0.7rem;
   }
-}
 
-@media (max-width: 480px) {
-  .navLinks {
-    display: none;
-  }
-  
-  .footerContent {
-    justify-content: space-between;
-    padding: 0 10px;
-  }
-  
   .legalLinks {
     gap: 0.75rem;
   }
+}
+
+@media (max-width: 480px) {
+  .footerContent {
+    padding: 0 10px;
+  }
   
   .brandSection {
-    font-size: 0.7rem;
+    font-size: 0.65rem;
+  }
+
+  .legalLinks {
+    gap: 0.5rem;
+  }
+
+  .link {
+    font-size: 0.65rem;
+    padding: 4px 6px;
+  }
+}
+
+@media (max-width: 360px) {
+  .brandSection {
+    max-width: 120px; /* Limit brand section width on very small screens */
+  }
+
+  .legalLinks {
+    gap: 0.25rem;
+  }
+
+  .link {
+    padding: 4px;
   }
 }
