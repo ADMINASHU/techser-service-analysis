@@ -117,9 +117,9 @@ const TableView = ({ loggedUser }) => {
   };
 
   const userData = useMemo(() => {
-    if (!processedData || !loggedUser?.userID) return null;
+    if (!processedData || !loggedUser.userID) return null;
     return calculateUserStats(processedData, loggedUser.userID);
-  }, [processedData, loggedUser, filters]);
+  }, [processedData, loggedUser, filters,calculateUserStats]);
 
   if (!userData) {
     return (
