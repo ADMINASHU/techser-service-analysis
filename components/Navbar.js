@@ -134,7 +134,19 @@ export default function Navbar({ isAuthenticated, loggedUser }) {
 
         <Logout />
       </div>
-      <button className={styles.menuButton} onClick={toggleMenu}>
+   
+      <Link href="/"  className={styles.menuButton} >
+          <Image
+            src="/logo.png"
+            alt="Company image"
+            priority
+            width={100}
+            height={20}
+            className={styles.logo}
+            onClick={menuOpen ? toggleMenu : null}
+          />
+        </Link>
+        <button className={styles.menuButton} onClick={toggleMenu}>
         ☰
       </button>
       {menuOpen && (
@@ -179,35 +191,35 @@ export default function Navbar({ isAuthenticated, loggedUser }) {
             }
             onClick={toggleDash}
           >
-            Dashboard
+            Dashboard  ▼
           </Link>
           {dashOpen && (
             <div className={styles.newResponsiveDash}>
               <Link
                 href="/dashboard/engineer"
                 className={pathname === "/dashboard/engineer" ? styles.activeLink : ""}
-                onClick={toggleDash}
+                onClick={toggleMenu}
               >
                 Engineer
               </Link>
               <Link
                 href="/dashboard/branch"
                 className={pathname === "/dashboard/branch" ? styles.activeLink : ""}
-                onClick={toggleDash}
+                onClick={toggleMenu}
               >
                 Branch
               </Link>
               <Link
                 href="/dashboard/region"
                 className={pathname === "/dashboard/region" ? styles.activeLink : ""}
-                onClick={toggleDash}
+                onClick={toggleMenu}
               >
                 Region
               </Link>
               <Link
                 href="/dashboard/customer"
                 className={pathname === "/dashboard/customer" ? styles.activeLink : ""}
-                onClick={toggleDash}
+                onClick={toggleMenu}
               >
                 Customer
               </Link>

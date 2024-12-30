@@ -162,8 +162,8 @@
   font-size: 14px;  /* Reduced from 18px */
   flex-direction: column;
   position: absolute;
-  top: 45px;  /* Reduced from 50px */
-  left: 45px;  /* Reduced from 50px */
+  top: 40px;  /* Reduced from 50px */
+  right: 40px;  /* Reduced from 50px */
   border-radius: 8px;
   background: linear-gradient(135deg, rgba(248, 47, 32, 0.5), rgba(211, 211, 211, 0.4)), rgba(0, 0, 0, 0.9);
   backdrop-filter: blur(10px);
@@ -180,18 +180,20 @@
   font-size: 14px;  /* Reduced from 18px */
   flex-direction: column;
   position: absolute;
-  top: 45px;  /* Reduced from 50px */
+  top: 52px;  /* Reduced from 50px */
   width: 180px;  /* Reduced from 200px */
   border-radius: 8px;
   left: 140px;  /* Reduced from 150px */
-  background: linear-gradient(135deg, rgba(248, 47, 32, 0.5), rgba(211, 211, 211, 0.4)), rgba(0, 0, 0, 0.9);
-  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
   padding: 8px;  /* Reduced from 10px */
   z-index: 1001;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(255, 255, 255, 0.1) inset;
-  transform: translateY(-10px);
-  opacity: 0;
-  animation: slideDown 0.3s ease forwards;
+  background: linear-gradient(135deg, rgba(21, 21, 21, 0.95), rgba(51, 51, 51, 0.95));
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  transform-origin: top right;
+  animation: scaleIn 0.3s ease forwards;
+
 }
 
 .responsiveMenu a {
@@ -217,7 +219,10 @@
 }
 
 .responsiveDash a:hover {
-  background-color: #333;
+ 
+    background: rgba(255, 255, 255, 0.1);
+    padding-left: 16px;
+  
 }
 
 .logo {
@@ -260,6 +265,7 @@
   .responsiveMenu {
     display: flex;
     width: 250px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
     background: linear-gradient(135deg, rgba(21, 21, 21, 0.95), rgba(51, 51, 51, 0.95));
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.1);
