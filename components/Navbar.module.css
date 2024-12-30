@@ -2,16 +2,21 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 6px 16px;  /* Reduced padding */
-  background: linear-gradient(135deg, rgba(21, 21, 21, 0.5), rgba(255, 255, 255, 0.1), rgba(248, 47, 32, 0.3), rgba(51, 51, 51, 0.6)), rgba(51, 51, 51, 0.7);
-  backdrop-filter: blur(10px);
+  padding: 6px 16px;
+  background: linear-gradient(135deg, rgba(21, 21, 21, 0.8), rgba(51, 51, 51, 0.9));
+  backdrop-filter: blur(8px);
   color: white;
   position: fixed;
   top: 0;
   width: 100%;
   z-index: 1000;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(255, 255, 255, 0.1) inset;
-  transition: background-color 0.3s ease, backdrop-filter 0.3s ease;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.navbar:hover {
+  background: linear-gradient(135deg, rgba(21, 21, 21, 0.9), rgba(51, 51, 51, 1));
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
 }
 
 .progressBarContainer {
@@ -36,19 +41,39 @@
 }
 
 .navLinks a {
-  margin-right: 16px;  /* Reduced from 20px */
+  margin-right: 16px;
   text-decoration: none;
-  transition: color 0.3s ease;
-  font-size: 13px;  /* Added font size */
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.8);
+  transition: all 0.3s ease;
+  position: relative;
+  padding: 4px 8px;
 }
 
-.nlink {
+.navLinks a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #ee1313, #ff4c4c);
+  transition: width 0.3s ease;
+}
+
+.navLinks a:hover::after,
+.activeLink::after {
+  width: 100%;
+}
+
+.navLinks a:hover {
   color: white;
+  transform: translateY(-1px);
 }
 
-.navLinks a:hover,
 .activeLink {
-  color: #ee1313;
+  color: white !important;
+  font-weight: 500;
 }
 
 .profileSection {
@@ -65,6 +90,15 @@
   text-decoration: none;
   transition: color 0.3s ease;
   gap: 8px;  /* Added small gap */
+  padding: 4px 8px 4px 12px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.profileContainer:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
 }
 
 .profileName {
@@ -97,17 +131,21 @@
 }
 
 .logoutButton {
-  padding: 4px 4px;  /* Reduced padding */
-  background-color: #ff4c4c;
+  padding: 4px 8px;
+  background: linear-gradient(135deg, #ff4c4c, #ee1313);
   color: white;
   border: none;
+  border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  font-size: 12px;  /* Added font size */
+  transition: all 0.3s ease;
+  font-size: 12px;
+  opacity: 0.9;
 }
 
 .logoutButton:hover {
-  background-color: #e63946;
+  opacity: 1;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(238, 19, 19, 0.4);
 }
 
 .menuButton {
@@ -132,6 +170,9 @@
   padding: 8px;  /* Reduced from 10px */
   z-index: 1001;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(255, 255, 255, 0.1) inset;
+  transform: translateY(-10px);
+  opacity: 0;
+  animation: slideDown 0.3s ease forwards;
 }
 
 .responsiveDash {
@@ -148,6 +189,9 @@
   padding: 8px;  /* Reduced from 10px */
   z-index: 1001;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(255, 255, 255, 0.1) inset;
+  transform: translateY(-10px);
+  opacity: 0;
+  animation: slideDown 0.3s ease forwards;
 }
 
 .responsiveMenu a {
@@ -193,6 +237,13 @@
   margin: 10px ;
 }
 
+@keyframes slideDown {
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
 @media (max-width: 768px) {
   .navLinks {
     display: none;
@@ -209,6 +260,23 @@
   .responsiveMenu {
     display: flex;
     width: 250px;
+    background: linear-gradient(135deg, rgba(21, 21, 21, 0.95), rgba(51, 51, 51, 0.95));
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    transform-origin: top right;
+    animation: scaleIn 0.3s ease forwards;
+  }
+
+  .responsiveMenu a {
+    border-radius: 4px;
+    margin: 2px 0;
+    transition: all 0.2s ease;
+  }
+
+  .responsiveMenu a:hover {
+    background: rgba(255, 255, 255, 0.1);
+    padding-left: 16px;
   }
 
   .responsiveDash {
@@ -255,5 +323,27 @@
     width: 28px;
     height: 28px;
     object-fit: cover;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.95) translateY(-10px);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar {
+    padding: 4px 12px;
+  }
+  
+  .logo {
+    width: 80px !important;
+    height: 16px !important;
   }
 }

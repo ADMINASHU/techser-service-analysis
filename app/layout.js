@@ -42,7 +42,7 @@ export default async function RootLayout({ children }) {
           <main className="flex-1 w-full">
             {children}
           </main>
-          <Footer />
+          <Footer  isAuthenticated={isAuthenticated}  />
           <SpeedInsights />
         </body>
       </html>

@@ -1,7 +1,10 @@
 import Link from 'next/link';
 import styles from './Footer.module.css';
 
-const Footer = () => {
+const Footer = ({isAuthenticated}) => {
+  if (!isAuthenticated) {
+    return null;
+  }
   return (
     <footer className={styles.footer}>
       <div className={styles.footerContent}>

@@ -3,13 +3,19 @@
   justify-content: center;
   align-items: center;
   height: 45px;
-  background: linear-gradient(135deg, rgba(21, 21, 21, 0.5), rgba(255, 255, 255, 0.1), rgba(248, 47, 32, 0.3), rgba(51, 51, 51, 0.6)), rgba(51, 51, 51, 0.7);
-  backdrop-filter: blur(10px);
+  background: linear-gradient(135deg, rgba(21, 21, 21, 0.8), rgba(51, 51, 51, 0.9));
+  backdrop-filter: blur(8px);
   position: sticky;
   bottom: 0;
   width: 100%;
   z-index: 1000;
-  box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.footer:hover {
+  background: linear-gradient(135deg, rgba(21, 21, 21, 0.9), rgba(51, 51, 51, 1));
+  box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.4);
 }
 
 .footerContent {
@@ -18,13 +24,18 @@
   align-items: center;
   width: 100%;
   max-width: 1200px;
-  padding: 0 20px;
+  padding: 0 16px;
 }
 
 .brandSection {
-  color: white;
+  color: rgba(255, 255, 255, 0.8);
   font-size: 0.75rem;
   font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.brandSection:hover {
+  color: white;
 }
 
 .brandText {
@@ -36,32 +47,33 @@
 
 .navLinks, .legalLinks {
   display: flex;
-  gap: 1.5rem;
+  gap: 1.25rem;
   align-items: center;
 }
 
 .link {
-  color: white;
+  color: rgba(255, 255, 255, 0.8);
   text-decoration: none;
   font-size: 0.75rem;
-  transition: color 0.3s ease, transform 0.2s ease;
+  transition: all 0.3s ease;
   position: relative;
-}
-
-.link:hover {
-  color: #ee1313;
-  transform: translateY(-1px);
+  padding: 4px 8px;
 }
 
 .link:after {
   content: '';
   position: absolute;
-  width: 0;
-  height: 1px;
   bottom: -2px;
   left: 0;
+  width: 0;
+  height: 2px;
   background: linear-gradient(90deg, #ee1313, #ff4c4c);
   transition: width 0.3s ease;
+}
+
+.link:hover {
+  color: white;
+  transform: translateY(-1px);
 }
 
 .link:hover:after {
@@ -71,28 +83,38 @@
 .divider {
   color: rgba(255, 255, 255, 0.3);
   font-size: 0.75rem;
+  user-select: none;
 }
 
 @media (max-width: 768px) {
   .footerContent {
-    padding: 0 10px;
+    padding: 0 12px;
   }
   
   .navLinks {
     gap: 1rem;
   }
   
-  .legalLinks {
-    gap: 0.75rem;
+  .link {
+    font-size: 0.7rem;
   }
 }
 
-@media (max-width: 576px) {
+@media (max-width: 480px) {
   .navLinks {
     display: none;
   }
   
   .footerContent {
     justify-content: space-between;
+    padding: 0 10px;
+  }
+  
+  .legalLinks {
+    gap: 0.75rem;
+  }
+  
+  .brandSection {
+    font-size: 0.7rem;
   }
 }

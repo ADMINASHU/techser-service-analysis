@@ -95,3 +95,25 @@ input:focus {
   @apply text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 
          transition-colors duration-200 relative font-medium tracking-wide;
 }
+
+/* Swiper Custom Styles */
+.swiper-button-next,
+.swiper-button-prev {
+  color: #ee1313 !important;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  opacity: 1;
+}
+
+.swiper-pagination-bullet {
+  background: #ee1313 !important;
+  opacity: 0.6;
+}
+
+.swiper-pagination-bullet-active {
+  opacity: 1;
+}
