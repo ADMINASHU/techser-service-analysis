@@ -1,19 +1,34 @@
 "use client";
 
-import { useState, useEffect,useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import styles from "./Control.module.css"; // Import the CSS module
-import  DataContext  from "@/context/DataContext";
+import DataContext from "@/context/DataContext";
 
 const Control = () => {
   const [points, setPoints] = useState({});
   const [editing, setEditing] = useState(false);
-  // const [yearData, setYearData] = useState({ year: '', selectYears: [] }); 
+  // const [yearData, setYearData] = useState({ year: '', selectYears: [] });
   const { yearData, setYearData } = useContext(DataContext);
 
   useEffect(() => {
     fetchPoints();
+  }, []);
+
+  useEffect(() => {
+    const tableContainer = document.querySelector(`.${styles.tableContainer}`);
+    const handleScroll = () => {
+      if (tableContainer) {
+        const maxScroll = tableContainer.scrollWidth - tableContainer.clientWidth;
+        const currentScroll = tableContainer.scrollLeft;
+        const scrollPercentage = (currentScroll / maxScroll) * 100;
+        tableContainer.style.setProperty('--scroll', `${scrollPercentage}%`);
+      }
+    };
+
+    tableContainer?.addEventListener('scroll', handleScroll);
+    return () => tableContainer?.removeEventListener('scroll', handleScroll);
   }, []);
 
   const fetchPoints = async () => {
@@ -25,15 +40,13 @@ const Control = () => {
     }
   };
 
-
-
   const handleYear = async (e) => {
     const selectedYear = e.target.value;
     try {
       // Update local state immediately
-      setYearData(prev => ({
+      setYearData((prev) => ({
         ...prev,
-        year: selectedYear
+        year: selectedYear,
       }));
 
       const response = await axios.put("/api/years", {
@@ -114,8 +127,20 @@ const Control = () => {
         </button>
       </div>
       <div className={styles.tableContainer}>
-        {/* <div className={styles.scrollIndicator}></div> */}
+        <div className={styles.scrollIndicator}></div>
         <table className={styles["table"]}>
+          <colgroup>
+            <col /> {/* Category column */}
+          </colgroup>
+          <colgroup className={styles.columnGroup}>
+            <col span="3" /> {/* New group */}
+          </colgroup>
+          <colgroup className={styles.columnGroup}>
+            <col span="3" /> {/* Pending group */}
+          </colgroup>
+          <colgroup className={styles.columnGroup}>
+            <col span="5" /> {/* Closed group */}
+          </colgroup>
           <thead>
             <tr>
               <th rowSpan={2}>Category</th>
@@ -310,18 +335,22 @@ const Control = () => {
         </table>
       </div>
       <div className={styles.tableContainer}>
-        <select 
-          name="year" 
-          value={yearData.year || ''} 
-          onChange={handleYear}
-        >
-          <option value="">Select Year</option>
-          {yearData.selectYears?.map((year) => (
-            <option key={year} value={year}>
-              {year}
-            </option>
-          ))}
-        </select>
+        <div className={styles.yearSelectionContainer}>
+          <h2>Select the year for Dashboard</h2>
+          <select 
+            name="year" 
+            value={yearData.year || ""} 
+            onChange={handleYear}
+            className={styles.yearSelect}
+          >
+            <option value="">Select Year</option>
+            {yearData.selectYears?.map((year) => (
+              <option key={year} value={year}>
+                {year}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
     </div>
   );
