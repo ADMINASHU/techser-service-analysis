@@ -32,6 +32,8 @@
     -webkit-overflow-scrolling: touch;
     scrollbar-width: thin;
     scrollbar-color: #2c3e50 #f8fafc;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .tableContainer::-webkit-scrollbar {
@@ -295,7 +297,7 @@ input[type="number"].input-field::-webkit-inner-spin-button {
 .yearSelectionContainer h2 {
     color: #2c3e50;
     font-size: 1.2rem;
-    margin-bottom: 12px;
+    margin-bottom: 20px;
     font-weight: 500;
 }
 
