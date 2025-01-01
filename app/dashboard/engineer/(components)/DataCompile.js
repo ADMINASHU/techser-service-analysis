@@ -11,14 +11,13 @@ const DataCompile = () => {
   useEffect(() => {
     if (processedData.length > 0) {
       const processData = async () => {
-        const filterProcessData = processedData.filter((item) => item.year === filterYear);
-
+        const filterProcessedData = processedData.filter((item) => item.year === filterYear);
         const uniqueEngineers = [
-          ...new Set(filterProcessData.map((item) => item.assignedTo).filter(Boolean)),
+          ...new Set(filterProcessedData.map((item) => item.assignedTo).filter(Boolean)),
         ].sort();
 
-        // Count occurrences of each engineer in filterData based on conditions
-        const engineerCallCount = filterProcessData.reduce((acc, item) => {
+        // Count occurrences of each engineer in processedData based on conditions
+        const engineerCallCount = filterProcessedData.reduce((acc, item) => {
           if (item.assignedTo) {
             acc[item.assignedTo] = (acc[item.assignedTo] || 0) + 1;
 
@@ -81,7 +80,7 @@ const DataCompile = () => {
         // Map unique engineers to regions and branches
         let totalVisitsSum = 0;
         const finalData = uniqueEngineers.map((engineer) => {
-          const engineerData = filterProcessData.find((item) => item.assignedTo === engineer);
+          const engineerData = filterProcessedData.find((item) => item.assignedTo === engineer);
           const totalAssigned = engineerCallCount[engineer];
           const newBreakdown = engineerCallCount[`${engineer}_newBreakdown`] || 0;
           const newInstallation = engineerCallCount[`${engineer}_newInstallation`] || 0;
@@ -132,7 +131,7 @@ const DataCompile = () => {
             // openCall, // Add openCall to the final data
             index,
             accuracy,
-            account: engineerData.account, // Add account to the final data, assuming account is a field in the filterData object. If not, you can remove this line and add account to the header row instead.
+            account: engineerData.account, // Add account to the final data, assuming account is a field in the processedData object. If not, you can remove this line and add account to the header row instead.
           };
         });
 

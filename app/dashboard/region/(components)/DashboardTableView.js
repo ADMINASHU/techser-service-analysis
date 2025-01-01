@@ -8,9 +8,36 @@ const DashboardTableView = ({ data, averageTotalVisits, filterYear }) => {
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
   const [hoveredRow, setHoveredRow] = useState(null);
 
+  const selectedColumns = [
+    "region",
+    "branch",
+    "engineer",
+    "totalCallAssigned",
+    "newBreakdown",
+    "newInstallation",
+    "newPM",
+    "pendBreakdown",
+    "pendInstallation",
+    "pendPM",
+    "closeBreakdown",
+    "closeInstallation",
+    "closePM",
+    "pCloseBreakdown",
+    "pCloseInstallation",
+    "pClosePM",
+    "totalVisits",
+    "ePoint",
+    "bPoint",
+    "rPoint",
+    "index",
+    "accuracy",
+  ];
+
   const handleSmartFilterToggle = () => {
     setSmartFilter((prevSmartFilter) => !prevSmartFilter);
   };
+
+
 
   const handleSort = (key) => {
     let direction = "asc";
@@ -30,7 +57,8 @@ const DashboardTableView = ({ data, averageTotalVisits, filterYear }) => {
       ? data
           .filter((row) => row.region !== "Region")
           .filter((row) => row.totalVisits > averageTotalVisits)
-      : data.filter((row) => row.region !== "Region");
+      : data
+          .filter((row) => row.region !== "Region")
 
     if (sortConfig.key) {
       newFilteredData = [...newFilteredData].sort((a, b) => {
@@ -113,6 +141,7 @@ const DashboardTableView = ({ data, averageTotalVisits, filterYear }) => {
             <span className={styles.toggleText}>{smartFilter ? "Smart" : "Regular"}</span>
           </span>
         </label>
+    
         <button className={styles.print} onClick={handlePrint}>
           Print
         </button>
@@ -122,10 +151,9 @@ const DashboardTableView = ({ data, averageTotalVisits, filterYear }) => {
         <table ref={tableRef}>
           <thead>
             <tr>
-              <th
-                colSpan={4}
-                className={styles.tableHeader}
-              >{`Dashboard Region [${filterYear}]`}</th>
+              <th colSpan={4} className={styles.tableHeader}>
+                {`Dashboard Region [${filterYear}]`}
+              </th>
               <th colSpan={1} className={styles.tableHeader}>
                 Entry
               </th>
@@ -154,20 +182,10 @@ const DashboardTableView = ({ data, averageTotalVisits, filterYear }) => {
             {data?.length > 0 && (
               <tr>
                 <th className={styles.tableHeader}>S.No.</th>
-                {Object.values(data[0])?.map((value, index) => (
-                  <th
-                    key={index}
-                    onClick={() => handleSort(Object.keys(data[0])[index])}
-                    className={styles.tableHeader}
-                  >
-                    {value}
-                    <span className={styles.sortIndicator}>
-                      {sortConfig.key === Object.keys(data[0])[index]
-                        ? sortConfig.direction === "asc"
-                          ? "▲"
-                          : "▼"
-                        : ""}
-                    </span>
+                {selectedColumns.map((col, index) => (
+                  <th key={index} onClick={() => handleSort(col)} className={styles.tableHeader}>
+                    {data[0][col]}
+                    {sortConfig.key === col ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
                   </th>
                 ))}
               </tr>
@@ -182,15 +200,16 @@ const DashboardTableView = ({ data, averageTotalVisits, filterYear }) => {
                 onMouseLeave={handleRowMouseLeave}
               >
                 <td className={hoveredRow === rowIndex ? styles.activeCell : ""}>{rowIndex + 1}</td>
-                {Object.values(row)?.map((value, colIndex) => (
+
+                {selectedColumns.map((col, colIndex) => (
                   <td
                     key={colIndex}
-                    style={colIndex === 20 ? { backgroundColor: getColor(value) } : {}}
+                    style={colIndex === 20 ? { backgroundColor: getColor(row[col]) } : {}}
                     className={`${styles.tableCell} ${
                       hoveredRow === rowIndex ? styles.activeCell : ""
                     }`}
                   >
-                    <div className={styles.tableCellContent}>{value}</div>
+                    <div className={styles.tableCellContent}>{row[col]}</div>
                   </td>
                 ))}
               </tr>

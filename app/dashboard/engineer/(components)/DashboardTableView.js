@@ -4,7 +4,7 @@ import styles from "../../Dashboard.module.css";
 import { regionList } from "@/lib/regions";
 import axios from "axios";
 
-const DashboardTableView = ({ data, averageTotalVisits,filterYear }) => {
+const DashboardTableView = ({ data, averageTotalVisits, filterYear }) => {
   const tableRef = useRef();
   const [smartFilter, setSmartFilter] = useState(false);
   const [filters, setFilters] = useState({
@@ -296,25 +296,40 @@ const DashboardTableView = ({ data, averageTotalVisits,filterYear }) => {
         <table ref={tableRef}>
           <thead>
             <tr>
-              <th colSpan={2} className={styles.tableHeader}>{`Dashboard Engineer [${filterYear}]`}</th>
-              <th colSpan={1} className={styles.tableHeader}>Assigned</th>
-              <th colSpan={3} className={styles.tableHeader}>New</th>
-              <th colSpan={3} className={styles.tableHeader}>Pending</th>
-              <th colSpan={3} className={styles.tableHeader}>Closed in 1st Attempt</th>
-              <th colSpan={3} className={styles.tableHeader}>Pending Call Closed</th>
-              <th colSpan={2} className={styles.tableHeader}>Total</th>
-              <th colSpan={1} className={styles.tableHeader}>Index</th>
-              <th colSpan={1} className={styles.tableHeader}>Accuracy</th>
+              <th
+                colSpan={2}
+                className={styles.tableHeader}
+              >{`Dashboard Engineer [${filterYear}]`}</th>
+              <th colSpan={1} className={styles.tableHeader}>
+                Assigned
+              </th>
+              <th colSpan={3} className={styles.tableHeader}>
+                New
+              </th>
+              <th colSpan={3} className={styles.tableHeader}>
+                Pending
+              </th>
+              <th colSpan={3} className={styles.tableHeader}>
+                Closed in 1st Attempt
+              </th>
+              <th colSpan={3} className={styles.tableHeader}>
+                Pending Call Closed
+              </th>
+              <th colSpan={2} className={styles.tableHeader}>
+                Total
+              </th>
+              <th colSpan={1} className={styles.tableHeader}>
+                Index
+              </th>
+              <th colSpan={1} className={styles.tableHeader}>
+                Accuracy
+              </th>
             </tr>
             {data?.length > 0 && (
               <tr>
                 <th className={styles.tableHeader}>S.No.</th>
                 {selectedColumns.map((col, index) => (
-                  <th 
-                    key={index} 
-                    onClick={() => handleSort(col)}
-                    className={styles.tableHeader}
-                  >
+                  <th key={index} onClick={() => handleSort(col)} className={styles.tableHeader}>
                     {data[0][col]}
                     {sortConfig.key === col ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
                   </th>
@@ -342,9 +357,7 @@ const DashboardTableView = ({ data, averageTotalVisits,filterYear }) => {
                     onMouseEnter={(event) => handleCellMouseEnter(event, colIndex, row)}
                     onMouseLeave={handleCellMouseLeave}
                   >
-                    <div className={styles.tableCellContent}>
-                      {row[col]}
-                    </div>
+                    <div className={styles.tableCellContent}>{row[col]}</div>
                   </td>
                 ))}
               </tr>

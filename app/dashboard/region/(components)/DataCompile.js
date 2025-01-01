@@ -11,9 +11,9 @@ const DataCompile = () => {
   useEffect(() => {
     if (processedData.length > 0) {
       const processData = async () => {
-        const filterProcessData = processedData.filter((item) => item.year === filterYear);
+        const filterProcessedData = processedData.filter((item) => item.year === filterYear);
 
-        const uniqueEngineersPerRegion = filterProcessData.reduce((acc, item) => {
+        const uniqueEngineersPerRegion = filterProcessedData.reduce((acc, item) => {
           if (item.assignedTo && item.region) {
             if (!acc[item.region]) {
               acc[item.region] = new Set();
@@ -22,7 +22,7 @@ const DataCompile = () => {
           }
           return acc;
         }, {});
-        const uniqueBranchPerRegion = filterProcessData.reduce((acc, item) => {
+        const uniqueBranchPerRegion = filterProcessedData.reduce((acc, item) => {
           if (item.branch && item.region) {
             if (!acc[item.region]) {
               acc[item.region] = new Set();
@@ -33,11 +33,11 @@ const DataCompile = () => {
         }, {});
 
         const uniqueRegion = [
-          ...new Set(filterProcessData.map((item) => item.region).filter(Boolean)),
+          ...new Set(filterProcessedData.map((item) => item.region).filter(Boolean)),
         ].sort();
 
         // Count occurrences of each engineer in processedData based on conditions
-        const regionCallCount = filterProcessData.reduce((acc, item) => {
+        const regionCallCount = filterProcessedData.reduce((acc, item) => {
           if (item.region) {
             acc[item.region] = (acc[item.region] || 0) + 1;
 

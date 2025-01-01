@@ -1,23 +1,20 @@
 "use client";
 
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect,useContext } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import styles from "./Control.module.css"; // Import the CSS module
-import DataContext from "@/context/DataContext";
+import  DataContext  from "@/context/DataContext";
 
 const Control = () => {
   const [points, setPoints] = useState({});
   const [editing, setEditing] = useState(false);
-  const [yearData, setYearData] = useState([]);
-  const { filterYear, setFilterYear } = useContext(DataContext);
-  const year = yearData.year;
-  const selectYears = yearData.selectYears;
+  // const [yearData, setYearData] = useState({ year: '', selectYears: [] }); 
+  const { yearData, setYearData } = useContext(DataContext);
 
   useEffect(() => {
     fetchPoints();
-    fetchYears();
-  }, [year]);
+  }, []);
 
   const fetchPoints = async () => {
     try {
@@ -28,18 +25,32 @@ const Control = () => {
     }
   };
 
-  const fetchYears = async () => {
+
+
+  const handleYear = async (e) => {
+    const selectedYear = e.target.value;
     try {
-      const response = await axios.get("/api/years");
-      setYearData(response.data[0]);
-      console.log(response.data[0]);
+      // Update local state immediately
+      setYearData(prev => ({
+        ...prev,
+        year: selectedYear
+      }));
+
+      const response = await axios.put("/api/years", {
+        year: selectedYear,
+        selectYears: yearData.selectYears,
+      });
+
+      if (response.data && response.data[0]) {
+        setYearData(response.data[0]);
+      }
     } catch (error) {
-      // console.error("Error fetching points:", error);
+      // console.error("Error updating year:", error);
+      // Revert on error
+      fetchYears();
     }
   };
-  const handleYear = async (e) => {
-    const response = await axios.put("/api/years", { ...yearData, year: e.target.value });
-  };
+
   const handleSave = async () => {
     try {
       const response = await axios.put("/api/control", points);
@@ -299,9 +310,17 @@ const Control = () => {
         </table>
       </div>
       <div className={styles.tableContainer}>
-        <select name="year"  value={year} onChange={handleYear}>
+        <select 
+          name="year" 
+          value={yearData.year || ''} 
+          onChange={handleYear}
+        >
           <option value="">Select Year</option>
-          {selectYears && selectYears.map((year) => <option value={year} key={year}>{year}</option>)}
+          {yearData.selectYears?.map((year) => (
+            <option key={year} value={year}>
+              {year}
+            </option>
+          ))}
         </select>
       </div>
     </div>

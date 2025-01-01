@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useState, useEffect } from "react";
+import axios from "axios";
 
 const DataContext = createContext();
 
@@ -11,7 +12,20 @@ export const DataProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [startRow, setStartRow] = useState(0);
   const [totalRows, setTotalRows] = useState(0);
-  const [filterYear, setFilterYear] = useState("2024");
+  const [yearData, setYearData] = useState({
+    year: new Date().getFullYear.toString(),
+    selectYears: [],
+  });
+
+  useEffect(() => {
+    const fetchYears = async () => {
+      const response = await axios.get("/api/years");
+      if (response.data && response.data[0]) {
+        setYearData(response.data[0]);
+      }
+    };
+    fetchYears();
+  }, []);
 
   const fetchDataChunk = async (startRow, chunkSize) => {
     try {
@@ -77,10 +91,6 @@ export const DataProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    setFilterYear(new Date().getFullYear().toString());
-  }, []);
-
-  useEffect(() => {
     if (startRow < totalRows || totalRows === 0) {
       setLoading(true);
       const timer = setTimeout(async () => {
@@ -94,7 +104,15 @@ export const DataProvider = ({ children }) => {
 
   return (
     <DataContext.Provider
-      value={{ processedData, setProcessedData, filterYear, setFilterYear, loading, totalRows }}
+      value={{
+        processedData,
+        setProcessedData,
+        filterYear: yearData.year,
+        yearData,
+        setYearData,
+        loading,
+        totalRows,
+      }}
     >
       {children}
     </DataContext.Provider>

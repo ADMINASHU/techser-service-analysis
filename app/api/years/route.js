@@ -19,6 +19,7 @@ export async function GET() {
 
 export async function PUT(request) {
   const { year, selectYears } = await request.json();
+  
   await Year.deleteMany({});
 
   try {
