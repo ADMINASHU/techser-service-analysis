@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import styles from "../../Dashboard.module.css";
 import { regionList } from "@/lib/regions";
 
-const DashboardTableView = ({ data, averageTotalVisits }) => {
+const DashboardTableView = ({ data, averageTotalVisits,filterYear }) => {
   const tableRef = useRef();
 
   const [smartFilter, setSmartFilter] = useState(false);
@@ -169,7 +169,7 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
         <table ref={tableRef}>
           <thead>
             <tr>
-              <th colSpan={3} className={styles.tableHeader}>Dashboard Branch</th>
+              <th colSpan={3} className={styles.tableHeader}>{`Dashboard Branch [${filterYear}]`}</th>
               <th colSpan={2} className={styles.tableHeader}>Total</th>
               <th colSpan={3} className={styles.tableHeader}>New</th>
               <th colSpan={3} className={styles.tableHeader}>Pending</th>

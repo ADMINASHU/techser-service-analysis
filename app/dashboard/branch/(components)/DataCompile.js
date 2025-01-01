@@ -5,12 +5,14 @@ import DashboardTableView from "./DashboardTableView";
 import DataContext from "@/context/DataContext";
 
 const DataCompile = () => {
-  const { processedData } = useContext(DataContext);
+  const { processedData, filterYear } = useContext(DataContext);
   const [data, setData] = useState({});
   useEffect(() => {
     if (processedData.length > 0) {
       const processData = async () => {
-        const uniqueEngineersPerBranch = processedData.reduce((acc, item) => {
+        const filterProcessData = processedData.filter((item) => item.year === filterYear);
+
+        const uniqueEngineersPerBranch = filterProcessData.reduce((acc, item) => {
           if (item.assignedTo && item.branch) {
             if (!acc[item.branch]) {
               acc[item.branch] = new Set();
@@ -21,11 +23,11 @@ const DataCompile = () => {
         }, {});
 
         const uniqueBranch = [
-          ...new Set(processedData.map((item) => item.branch).filter(Boolean)),
+          ...new Set(filterProcessData.map((item) => item.branch).filter(Boolean)),
         ].sort();
 
         // Count occurrences of each engineer in processedData based on conditions
-        const branchCallCount = processedData.reduce((acc, item) => {
+        const branchCallCount = filterProcessData.reduce((acc, item) => {
           if (item.branch) {
             acc[item.branch] = (acc[item.branch] || 0) + 1;
 
@@ -90,7 +92,7 @@ const DataCompile = () => {
         const finalData = uniqueBranch.map((branch) => {
           // console.log(uniqueEngineersPerBranch[branch]);
 
-          const branchData = processedData.find((item) => item.branch === branch);
+          const branchData = filterProcessData.find((item) => item.branch === branch);
           const totalAssigned = branchCallCount[branch];
           const newBreakdown = branchCallCount[`${branch}_newBreakdown`] || 0;
           const newInstallation = branchCallCount[`${branch}_newInstallation`] || 0;
@@ -180,15 +182,16 @@ const DataCompile = () => {
         // Combine header with data
         const finalDataWithHeader = [header, ...finalData].filter((row) => row.region !== "");
 
-        setData({ finalDataWithHeader, averageTotalVisits });
+        setData({ finalDataWithHeader, averageTotalVisits, filterYear });
       };
       processData();
     }
-  }, [processedData, setData]);
+  }, [processedData, filterYear, setData]);
   return (
     <DashboardTableView
       data={data.finalDataWithHeader}
       averageTotalVisits={data.averageTotalVisits}
+      filterYear={data.filterYear}
     />
   );
 };

@@ -5,13 +5,15 @@ import DashboardTableView from "./DashboardTableView";
 import DataContext from "@/context/DataContext";
 
 const DataCompile = () => {
-  const { processedData } = useContext(DataContext);
+  const { processedData,filterYear } = useContext(DataContext);
   const [data, setData] = useState({});
 
   useEffect(() => {
     if (processedData.length > 0) {
       const processData = async () => {
-        const uniqueEngineersPerRegion = processedData.reduce((acc, item) => {
+        const filterProcessData = processedData.filter((item) => item.year === filterYear);
+
+        const uniqueEngineersPerRegion = filterProcessData.reduce((acc, item) => {
           if (item.assignedTo && item.region) {
             if (!acc[item.region]) {
               acc[item.region] = new Set();
@@ -20,7 +22,7 @@ const DataCompile = () => {
           }
           return acc;
         }, {});
-        const uniqueBranchPerRegion = processedData.reduce((acc, item) => {
+        const uniqueBranchPerRegion = filterProcessData.reduce((acc, item) => {
           if (item.branch && item.region) {
             if (!acc[item.region]) {
               acc[item.region] = new Set();
@@ -31,11 +33,11 @@ const DataCompile = () => {
         }, {});
 
         const uniqueRegion = [
-          ...new Set(processedData.map((item) => item.region).filter(Boolean)),
+          ...new Set(filterProcessData.map((item) => item.region).filter(Boolean)),
         ].sort();
 
         // Count occurrences of each engineer in processedData based on conditions
-        const regionCallCount = processedData.reduce((acc, item) => {
+        const regionCallCount = filterProcessData.reduce((acc, item) => {
           if (item.region) {
             acc[item.region] = (acc[item.region] || 0) + 1;
 
@@ -187,15 +189,16 @@ const DataCompile = () => {
         // Combine header with data
         const finalDataWithHeader = [header, ...finalData].filter((row) => row.region !== "");
 
-        setData({ finalDataWithHeader, averageTotalVisits });
+        setData({ finalDataWithHeader, averageTotalVisits, filterYear  });
       };
       processData();
     }
-  }, [processedData, setData]);
+  }, [processedData,filterYear, setData]);
   return (
     <DashboardTableView
       data={data.finalDataWithHeader}
       averageTotalVisits={data.averageTotalVisits}
+      filterYear={data.filterYear}
     />
   );
 };

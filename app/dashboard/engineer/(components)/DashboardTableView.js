@@ -4,7 +4,7 @@ import styles from "../../Dashboard.module.css";
 import { regionList } from "@/lib/regions";
 import axios from "axios";
 
-const DashboardTableView = ({ data, averageTotalVisits }) => {
+const DashboardTableView = ({ data, averageTotalVisits,filterYear }) => {
   const tableRef = useRef();
   const [smartFilter, setSmartFilter] = useState(false);
   const [filters, setFilters] = useState({
@@ -296,7 +296,7 @@ const DashboardTableView = ({ data, averageTotalVisits }) => {
         <table ref={tableRef}>
           <thead>
             <tr>
-              <th colSpan={2} className={styles.tableHeader}>Dashboard Engineer</th>
+              <th colSpan={2} className={styles.tableHeader}>{`Dashboard Engineer [${filterYear}]`}</th>
               <th colSpan={1} className={styles.tableHeader}>Assigned</th>
               <th colSpan={3} className={styles.tableHeader}>New</th>
               <th colSpan={3} className={styles.tableHeader}>Pending</th>

@@ -1,18 +1,23 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import styles from "./Control.module.css"; // Import the CSS module
+import DataContext from "@/context/DataContext";
 
 const Control = () => {
   const [points, setPoints] = useState({});
   const [editing, setEditing] = useState(false);
-  // const [data, setData] = useState([]);
+  const [yearData, setYearData] = useState([]);
+  const { filterYear, setFilterYear } = useContext(DataContext);
+  const year = yearData.year;
+  const selectYears = yearData.selectYears;
 
   useEffect(() => {
     fetchPoints();
-  }, []);
+    fetchYears();
+  }, [year]);
 
   const fetchPoints = async () => {
     try {
@@ -23,6 +28,18 @@ const Control = () => {
     }
   };
 
+  const fetchYears = async () => {
+    try {
+      const response = await axios.get("/api/years");
+      setYearData(response.data[0]);
+      console.log(response.data[0]);
+    } catch (error) {
+      // console.error("Error fetching points:", error);
+    }
+  };
+  const handleYear = async (e) => {
+    const response = await axios.put("/api/years", { ...yearData, year: e.target.value });
+  };
   const handleSave = async () => {
     try {
       const response = await axios.put("/api/control", points);
@@ -76,12 +93,6 @@ const Control = () => {
   const displayClosedValue = (closed) => {
     return Array.isArray(closed) ? closed.join(", ") : closed;
   };
-  
-  const handleScroll = (e) => {
-    const container = e.target;
-    const scrollPercentage = (container.scrollLeft / (container.scrollWidth - container.clientWidth)) * 100;
-    container.style.setProperty('--scroll-position', `${scrollPercentage}%`);
-  };
 
   return (
     <div className={styles.page}>
@@ -91,7 +102,7 @@ const Control = () => {
           {editing ? "Save" : "Edit"}
         </button>
       </div>
-      <div className={styles.tableContainer} onScroll={handleScroll}>
+      <div className={styles.tableContainer}>
         {/* <div className={styles.scrollIndicator}></div> */}
         <table className={styles["table"]}>
           <thead>
@@ -139,9 +150,10 @@ const Control = () => {
                       onChange={(e) => handleChange(category, "branch", "new", 0, e.target.value)}
                       className={styles["input-field"]}
                     />
-                  ) : (<>
-                    <span className={styles["input-field"]}>{points[category].branch.new}</span>
-                    {category==="BREAKDOWN" && <span>/ day; after 3 day</span>}
+                  ) : (
+                    <>
+                      <span className={styles["input-field"]}>{points[category].branch.new}</span>
+                      {category === "BREAKDOWN" && <span>/ day; after 3 day</span>}
                     </>
                   )}
                 </td>
@@ -174,13 +186,21 @@ const Control = () => {
                     <input
                       type="number"
                       value={points[category].branch.pending}
-                      onChange={(e) => handleChange(category, "branch", "pending", 0, e.target.value)}
+                      onChange={(e) =>
+                        handleChange(category, "branch", "pending", 0, e.target.value)
+                      }
                       className={styles["input-field"]}
                     />
-                  ) : (<>
-                    <span className={styles["input-field"]}>{points[category].branch.pending}</span>
-                    {category==="BREAKDOWN" ? <span>/ day; after 3 day</span> : <span> per visit</span>}
-                    
+                  ) : (
+                    <>
+                      <span className={styles["input-field"]}>
+                        {points[category].branch.pending}
+                      </span>
+                      {category === "BREAKDOWN" ? (
+                        <span>/ day; after 3 day</span>
+                      ) : (
+                        <span> per visit</span>
+                      )}
                     </>
                   )}
                 </td>
@@ -189,7 +209,9 @@ const Control = () => {
                     <input
                       type="number"
                       value={points[category].region.pending}
-                      onChange={(e) => handleChange(category, "region", "pending", 0, e.target.value)}
+                      onChange={(e) =>
+                        handleChange(category, "region", "pending", 0, e.target.value)
+                      }
                       className={styles["input-field"]}
                     />
                   ) : (
@@ -237,16 +259,21 @@ const Control = () => {
                     <input
                       type="number"
                       value={displayClosedValue(points[category].branch.closed)}
-                      onChange={(e) => handleChange(category, "branch", "closed", 0, e.target.value)}
+                      onChange={(e) =>
+                        handleChange(category, "branch", "closed", 0, e.target.value)
+                      }
                       className={styles["input-field"]}
                     />
-                  ) : (<>
-                    <span className={styles["input-field"]}>
-                      {displayClosedValue(points[category].branch.closed)}
-                    </span>
-                    {category==="BREAKDOWN" ? <span>/ day; after 3 day</span> : <span> per visit</span>
-
-                    }
+                  ) : (
+                    <>
+                      <span className={styles["input-field"]}>
+                        {displayClosedValue(points[category].branch.closed)}
+                      </span>
+                      {category === "BREAKDOWN" ? (
+                        <span>/ day; after 3 day</span>
+                      ) : (
+                        <span> per visit</span>
+                      )}
                     </>
                   )}
                 </td>
@@ -255,7 +282,9 @@ const Control = () => {
                     <input
                       type="number"
                       value={displayClosedValue(points[category].region.closed)}
-                      onChange={(e) => handleChange(category, "region", "closed", 0, e.target.value)}
+                      onChange={(e) =>
+                        handleChange(category, "region", "closed", 0, e.target.value)
+                      }
                       className={styles["input-field"]}
                     />
                   ) : (
@@ -269,22 +298,14 @@ const Control = () => {
           </tbody>
         </table>
       </div>
+      <div className={styles.tableContainer}>
+        <select name="year"  value={year} onChange={handleYear}>
+          <option value="">Select Year</option>
+          {selectYears && selectYears.map((year) => <option value={year} key={year}>{year}</option>)}
+        </select>
+      </div>
     </div>
   );
-};
-
-const storeDataInLocalStorage = (key, data) => {
-  if (typeof window !== "undefined") {
-    localStorage.setItem(key, JSON.stringify(data));
-  }
-};
-
-const retrieveDataFromLocalStorage = (key) => {
-  if (typeof window !== "undefined") {
-    const data = localStorage.getItem(key);
-    return data ? JSON.parse(data) : null;
-  }
-  return null;
 };
 
 export default Control;
