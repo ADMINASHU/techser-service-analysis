@@ -37,8 +37,6 @@ const DashboardTableView = ({ data, averageTotalVisits, filterYear }) => {
     setSmartFilter((prevSmartFilter) => !prevSmartFilter);
   };
 
-
-
   const handleSort = (key) => {
     let direction = "asc";
     if (sortConfig.key === key && sortConfig.direction === "asc") {
@@ -57,8 +55,7 @@ const DashboardTableView = ({ data, averageTotalVisits, filterYear }) => {
       ? data
           .filter((row) => row.region !== "Region")
           .filter((row) => row.totalVisits > averageTotalVisits)
-      : data
-          .filter((row) => row.region !== "Region")
+      : data.filter((row) => row.region !== "Region");
 
     if (sortConfig.key) {
       newFilteredData = [...newFilteredData].sort((a, b) => {
@@ -141,7 +138,7 @@ const DashboardTableView = ({ data, averageTotalVisits, filterYear }) => {
             <span className={styles.toggleText}>{smartFilter ? "Smart" : "Regular"}</span>
           </span>
         </label>
-    
+
         <button className={styles.print} onClick={handlePrint}>
           Print
         </button>
@@ -152,7 +149,9 @@ const DashboardTableView = ({ data, averageTotalVisits, filterYear }) => {
           <thead>
             <tr>
               <th colSpan={4} className={styles.tableHeader}>
-                {`Dashboard Region [${filterYear}]`}
+                {`Dashboard Region [${
+                  filterYear ? filterYear : new Date().getFullYear().toString()
+                }]`}
               </th>
               <th colSpan={1} className={styles.tableHeader}>
                 Entry

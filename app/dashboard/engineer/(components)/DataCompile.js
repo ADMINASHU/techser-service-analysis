@@ -5,13 +5,17 @@ import DashboardTableView from "./DashboardTableView";
 import DataContext from "@/context/DataContext";
 
 const DataCompile = () => {
-  const { processedData, filterYear } = useContext(DataContext);
+  const { processedData, filterYear, yearLoading } = useContext(DataContext);
   const [data, setData] = useState({});
+  const currentYear = new Date().getFullYear().toString();
 
   useEffect(() => {
-    if (processedData.length > 0) {
+    if (processedData.length > 0 && !yearLoading) {
       const processData = async () => {
-        const filterProcessedData = processedData.filter((item) => item.year === filterYear);
+        const yearToUse = filterYear || currentYear;
+        const filterProcessedData = processedData.filter(
+          (item) => item.year === yearToUse
+        );
         const uniqueEngineers = [
           ...new Set(filterProcessedData.map((item) => item.assignedTo).filter(Boolean)),
         ].sort();
@@ -167,12 +171,17 @@ const DataCompile = () => {
         // Combine header with data
         const finalDataWithHeader = [header, ...finalData];
 
-        setData({ finalDataWithHeader, averageTotalVisits, filterYear });
+        setData({ finalDataWithHeader, averageTotalVisits, filterYear: yearToUse });
       };
 
       processData();
     }
-  }, [processedData, filterYear, setData]);
+  }, [processedData, filterYear, yearLoading]);
+
+  if (yearLoading) {
+    return <div>Loading year data...</div>;
+  }
+
   return (
     <DashboardTableView
       data={data.finalDataWithHeader}

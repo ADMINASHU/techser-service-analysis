@@ -5,20 +5,24 @@ import DashboardTableView from "./DashboardTableView";
 import DataContext from "@/context/DataContext";
 
 const DataCompile = () => {
-  const { processedData,filterYear } = useContext(DataContext);
+  const { processedData, filterYear } = useContext(DataContext);
   const [data, setData] = useState({});
+  const currentYear = new Date().getFullYear().toString();
 
   useEffect(() => {
     if (processedData.length > 0) {
       const processData = async () => {
-        const filterProcessedData = processedData.filter((item) => item.year === filterYear);
+        const yearToUse = filterYear || currentYear;
+        const filterProcessedData = processedData.filter(
+          (item) => item.year === yearToUse
+        );
 
         const uniqueEngineersPerRegion = filterProcessedData.reduce((acc, item) => {
-          if (item.assignedTo && item.region) {
-            if (!acc[item.region]) {
-              acc[item.region] = new Set();
+          if (item.assignedTo && item.account.erRegion) {
+            if (!acc[item.account.erRegion]) {
+              acc[item.account.erRegion] = new Set();
             }
-            acc[item.region].add(item.assignedTo);
+            acc[item.account.erRegion].add(item.assignedTo);
           }
           return acc;
         }, {});
@@ -189,11 +193,11 @@ const DataCompile = () => {
         // Combine header with data
         const finalDataWithHeader = [header, ...finalData].filter((row) => row.region !== "");
 
-        setData({ finalDataWithHeader, averageTotalVisits, filterYear  });
+        setData({ finalDataWithHeader, averageTotalVisits, filterYear: yearToUse });
       };
       processData();
     }
-  }, [processedData,filterYear, setData]);
+  }, [processedData, filterYear, setData]);
   return (
     <DashboardTableView
       data={data.finalDataWithHeader}

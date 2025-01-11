@@ -10,11 +10,13 @@ const CHUNK_SIZE = 400; // Number of rows to fetch per chunk
 export const DataProvider = ({ children }) => {
   const [processedData, setProcessedData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [yearLoading, setYearLoading] = useState(true); // Add this line
   const [startRow, setStartRow] = useState(0);
   const [totalRows, setTotalRows] = useState(0);
+  const defaultYear = new Date().getFullYear().toString();
   const [yearData, setYearData] = useState({
-    year: new Date().getFullYear.toString(),
-    selectYears: ["2024", "2025", "2026", "2027", "2028", "2029"],
+    year: defaultYear,
+    selectYears: [(parseInt(defaultYear) - 1).toString(), defaultYear, (parseInt(defaultYear) + 1).toString(), (parseInt(defaultYear) + 2).toString()],
   });
 
   const fetchDataChunk = async (startRow, chunkSize) => {
@@ -75,9 +77,16 @@ export const DataProvider = ({ children }) => {
 
   useEffect(() => {
     const fetchYears = async () => {
-      const response = await axios.get("/api/years");
-      if (response.data && response.data[0]) {
-        setYearData(response.data[0]);
+      setYearLoading(true);
+      try {
+        const response = await axios.get("/api/years");
+        if (response.data && response.data[0]) {
+          setYearData(response.data[0]);
+        }
+      } catch (error) {
+        console.error("Error fetching years:", error);
+      } finally {
+        setYearLoading(false);
       }
     };
     fetchYears();
@@ -112,6 +121,7 @@ export const DataProvider = ({ children }) => {
         yearData,
         setYearData,
         loading,
+        yearLoading, // Add this line
         totalRows,
       }}
     >

@@ -169,10 +169,9 @@ const DashboardTableView = ({ data, averageTotalVisits, filterYear }) => {
         <table ref={tableRef}>
           <thead>
             <tr>
-              <th
-                colSpan={3}
-                className={styles.tableHeader}
-              >{`Dashboard Branch [${filterYear}]`}</th>
+              <th colSpan={3} className={styles.tableHeader}>{`Dashboard Branch [${
+                filterYear ? filterYear : new Date().getFullYear().toString()
+              }]`}</th>
               <th colSpan={2} className={styles.tableHeader}>
                 Total
               </th>

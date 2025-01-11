@@ -7,17 +7,22 @@ import DataContext from "@/context/DataContext";
 const DataCompile = () => {
   const { processedData, filterYear } = useContext(DataContext);
   const [data, setData] = useState({});
+  const currentYear = new Date().getFullYear().toString();
+
   useEffect(() => {
     if (processedData.length > 0) {
       const processData = async () => {
-        const filterProcessData = processedData.filter((item) => item.year === filterYear);
+        const yearToUse = filterYear || currentYear;
+        const filterProcessData = processedData.filter(
+          (item) => item.year === yearToUse
+        );
 
         const uniqueEngineersPerBranch = filterProcessData.reduce((acc, item) => {
-          if (item.assignedTo && item.branch) {
-            if (!acc[item.branch]) {
-              acc[item.branch] = new Set();
+          if (item.assignedTo && item.account.erBranch) {
+            if (!acc[item.account.erBranch]) {
+              acc[item.account.erBranch] = new Set();
             }
-            acc[item.branch].add(item.assignedTo);
+            acc[item.account.erBranch].add(item.assignedTo);
           }
           return acc;
         }, {});
@@ -182,7 +187,7 @@ const DataCompile = () => {
         // Combine header with data
         const finalDataWithHeader = [header, ...finalData].filter((row) => row.region !== "");
 
-        setData({ finalDataWithHeader, averageTotalVisits, filterYear });
+        setData({ finalDataWithHeader, averageTotalVisits, filterYear: yearToUse });
       };
       processData();
     }
