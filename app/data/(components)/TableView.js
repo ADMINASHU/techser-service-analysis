@@ -23,9 +23,14 @@ const TableView = ({ data }) => {
     "rPoint",
   ];
 
+  const getCurrentMonthName = () => {
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    return months[new Date().getMonth()];
+  };
+
   const [filters, setFilters] = useState({
-    year: data[data.length - 1]?.year,
-    month: data[data.length - 1]?.month,
+    year: new Date().getFullYear().toString(),
+    month: getCurrentMonthName(),
     region: "ALL Region",
     branch: "",
     natureOfComplaint: "",

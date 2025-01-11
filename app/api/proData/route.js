@@ -1,5 +1,5 @@
 import connectToServiceEaseDB from "../../../lib/serviceDB";
-import { Data } from "../../../models/Data";
+import { Data, NewData } from "../../../models/Data";
 import Point from "../../../models/Point";
 import UserData from "../../../models/UserData";
 import { NextResponse } from "next/server";
@@ -23,7 +23,7 @@ export async function GET(request) {
     const users = await UserData.find({});
     const point = await Point.find({});
 
-    const data = await Data.find({}).skip(startRow).limit(chunkSize);
+    const data = await NewData.find({}).skip(startRow).limit(chunkSize);
     if (!point || !data) {
       return NextResponse.status(500).json({
         message: "Error fetching points and data from database",
@@ -35,15 +35,9 @@ export async function GET(request) {
       return acc;
     }, {});
 
-    const parseDate = (dateStr) => {
-      const dates = dateStr.match(/\d{2}\.\w{3}\.\d{4} \d{2}:\d{2}/g);
-      return dates ? dates[dates.length - 1] : null;
-    };
-
     const newData = data.reduce((acc, item) => {
       const callDate = item.callDate;
-      const dateStr = item.callStartEndDate;
-      const lastDate = dateStr ? parseDate(dateStr) : null;
+      const lastDate = item.callEndDate;
       const parsedCallDate = callDate ? parse(callDate, "dd.MMM.yyyy HH:mm", new Date()) : null;
       const parsedLastDate = lastDate
         ? parse(lastDate, "dd.MMM.yyyy HH:mm", new Date())
@@ -60,24 +54,30 @@ export async function GET(request) {
 
       if (!duration || parseFloat(duration) < 0) return acc;
 
-      const complaintID = item.callNo.match(/B\d{2}[A-Z]\d+-\d+(?:-\d+)?/)?.[0] || "";
+      const complaintID = item.callNo || "";
       const originalComplaintID = complaintID.includes("-")
         ? complaintID.split("-").slice(0, 2).join("-")
         : complaintID;
-      const status = item.callNo.match(/(COMPLETED|NEW|IN PROCESS)/)?.[0] || "";
-      const natureOfComplaint = item.callNo.match(/(BREAKDOWN|INSTALLATION|PM)/)?.[0] || "";
-      const assignedTo =
-        item.engineerName.match(/^[A-Za-z]+(?: [A-Za-z]+)?/)?.[0] !== "NOT ALLOCATED"
-          ? item.engineerName.match(/^[A-Za-z]+(?: [A-Za-z]+)?/)?.[0]
-          : "";
-      const regionPattern = new RegExp(
-        regionList.map((region) => region.toUpperCase()).join("|"),
-        "g"
-      );
-      const region = item.regionBranch.toUpperCase().match(regionPattern)?.[0] || "";
-      const branch = item.regionBranch.toUpperCase().replace(regionPattern, "").trim() || region;
-      const month = parsedCallDate ? format(parsedCallDate, "MMM") : "";
-      const year = parsedCallDate ? format(parsedCallDate, "yyyy") : "";
+      const assignedTo = item.engineerName !== "NOT ALLOCATED" ? item.engineerName : "";
+      function getMonthName(monthNumber) {
+        const monthNames = [
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec",
+        ];
+        return monthNames[monthNumber - 1];
+      }
+      const monthName = getMonthName(parseInt(item.month));
+      const branch = item.branch || "";
 
       acc.push({
         regDate: callDate,
@@ -85,13 +85,13 @@ export async function GET(request) {
         duration,
         complaintID,
         origComplaintID: originalComplaintID,
-        natureOfComplaint,
-        status,
+        natureOfComplaint: item.natureOfComplaint.toUpperCase(),
+        status: item.callStatus || "",
         assignedTo,
-        region,
+        region: item.region || "",
         branch: branch === "BHOOPAL" ? "BHOPAL" : branch,
-        month,
-        year,
+        month: monthName,
+        year: item.year,
       });
       return acc;
     }, []);
@@ -178,16 +178,18 @@ export async function GET(request) {
         })();
 
         // Find the matching user
-        const matchingUser = users.find((user) =>
-          user.NAME.includes(item.assignedTo?.toUpperCase())
-        );
+        const matchingUser = users.find((user) => user.NAME?.trim()?.toLowerCase() === item.assignedTo?.trim()?.toLowerCase());
         // console.log(item)
         const erID = item.assignedTo ? (matchingUser ? matchingUser.USERNAME : "") : "";
         const erName = item.assignedTo ? (matchingUser ? matchingUser.NAME : "") : "";
         const erMob = item.assignedTo ? (matchingUser ? matchingUser.PHONENO : "") : "";
         const erEmail = item.assignedTo ? (matchingUser ? matchingUser.EMAIL : "") : "";
         const erDesignation = item.assignedTo ? (matchingUser ? matchingUser.DESIGNATION : "") : "";
-        const erWorkLocation = item.assignedTo ? (matchingUser ? matchingUser.WORKLOCATION : "") : "";
+        const erWorkLocation = item.assignedTo
+          ? matchingUser
+            ? matchingUser.WORKLOCATION
+            : ""
+          : "";
         const erBranch = item.assignedTo ? (matchingUser ? matchingUser.BRANCH : "") : "";
         const erRegion = item.assignedTo ? (matchingUser ? matchingUser.REGION : "") : "";
         const erAddress = item.assignedTo ? (matchingUser ? matchingUser.ADDRESS : "") : "";
@@ -220,7 +222,7 @@ export async function GET(request) {
       })
       .filter((row) => row.region !== "Region");
 
-    const totalRows = await Data.countDocuments();
+    const totalRows = await NewData.countDocuments();
 
     return NextResponse.json(
       { finalPointData, totalRows },

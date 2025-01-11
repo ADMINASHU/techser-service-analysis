@@ -14,18 +14,8 @@ export const DataProvider = ({ children }) => {
   const [totalRows, setTotalRows] = useState(0);
   const [yearData, setYearData] = useState({
     year: new Date().getFullYear.toString(),
-    selectYears: [],
+    selectYears: ["2024", "2025", "2026", "2027", "2028", "2029"],
   });
-
-  useEffect(() => {
-    const fetchYears = async () => {
-      const response = await axios.get("/api/years");
-      if (response.data && response.data[0]) {
-        setYearData(response.data[0]);
-      }
-    };
-    fetchYears();
-  }, []);
 
   const fetchDataChunk = async (startRow, chunkSize) => {
     try {
@@ -84,6 +74,17 @@ export const DataProvider = ({ children }) => {
   };
 
   useEffect(() => {
+    const fetchYears = async () => {
+      const response = await axios.get("/api/years");
+      if (response.data && response.data[0]) {
+        setYearData(response.data[0]);
+      }
+    };
+    fetchYears();
+  }, []);
+
+  useEffect(() => {
+    
     const fetchData = async () => {
       await fetchDataChunk(0, CHUNK_SIZE);
     };
