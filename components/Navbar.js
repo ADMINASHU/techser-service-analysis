@@ -99,6 +99,11 @@ export default function Navbar({ isAuthenticated, loggedUser }) {
             Data
           </Link>
         )}
+        {level <= 1 && (
+          <Link href="/system" className={pathname === "/system" ? styles.activeLink : styles.nlink}>
+            Sys Data
+          </Link>
+        )}
         {level <= 3 && (
           <Link href="/users" className={pathname === "/users" ? styles.activeLink : styles.nlink}>
             Users
@@ -233,6 +238,15 @@ export default function Navbar({ isAuthenticated, loggedUser }) {
               onClick={toggleMenu}
             >
               Data
+            </Link>
+          )}
+          {level <= 1 && (
+            <Link
+              href="/system"
+              className={pathname === "/system" ? styles.activeLink : ""}
+              onClick={toggleMenu}
+            >
+              Sys Data
             </Link>
           )}
 
