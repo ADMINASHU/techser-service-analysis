@@ -5,7 +5,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { auth } from "@/auth";
 import { DataProvider } from "../context/DataContext";
-
+import { ProductProvider } from "@/context/ProductContext";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -36,16 +36,18 @@ export default async function RootLayout({ children }) {
 
   return (
     <DataProvider>
-      <html lang="en">
-        <body className={`${geistSans.variable} ${geistMono.variable} text-sm flex flex-col min-h-screen overflow-x-hidden`}>
-          <Navbar isAuthenticated={isAuthenticated} session={session} loggedUser={loggedUser} />
-          <main className="flex-1 w-full">
-            {children}
-          </main>
-          <Footer  isAuthenticated={isAuthenticated} loggedUser={loggedUser} />
-          <SpeedInsights />
-        </body>
-      </html>
+      <ProductProvider>
+        <html lang="en">
+          <body
+            className={`${geistSans.variable} ${geistMono.variable} text-sm flex flex-col min-h-screen overflow-x-hidden`}
+          >
+            <Navbar isAuthenticated={isAuthenticated} session={session} loggedUser={loggedUser} />
+            <main className="flex-1 w-full">{children}</main>
+            <Footer isAuthenticated={isAuthenticated} loggedUser={loggedUser} />
+            <SpeedInsights />
+          </body>
+        </html>
+      </ProductProvider>
     </DataProvider>
   );
 }
