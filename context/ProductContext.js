@@ -1,8 +1,5 @@
 "use client";
 import { createContext, useState, useEffect } from "react";
-import axios from "axios";
-import connectToServiceEaseDB from "../lib/serviceDB";
-import CPData from "../models/CPData";
 
 const ProductContext = createContext();
 const CHUNK_SIZE = 400; // Number of rows to fetch per chunk
@@ -15,16 +12,33 @@ export const ProductProvider = ({ children }) => {
 
   const fetchCPDataChunk = async (startRow, chunkSize) => {
     try {
-      const response = await axios.get(`/api/cpData?startRow=${startRow}&chunkSize=${chunkSize}`);
-      if (response.data && !response.data.error) {
-        setCpData((prevData) => [...prevData, ...response.data]);
-        setTotalRows(response.data.totalRows);
+      const response = await fetch(`/api/cpData?startRow=${startRow}&chunkSize=${chunkSize}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const result = await response.json();
+      if (!result.error) {
+        setCpData((prevData) => {
+          const updatedData = [...prevData, ...result.finalData];
+          const uniqueFinalData = removeDuplicates(updatedData, "id");
+          return uniqueFinalData;
+        });
+        setTotalRows(result.totalRows);
       }
     } catch (error) {
       console.error("Error fetching CPData:", error);
     } finally {
       setLoading(false);
     }
+  };
+
+  const removeDuplicates = (array, key) => {
+    const seen = new Set();
+    return array.filter((item) => {
+      const duplicate = seen.has(item[key]);
+      seen.add(item[key]);
+      return !duplicate;
+    });
   };
 
   useEffect(() => {
@@ -47,11 +61,8 @@ export const ProductProvider = ({ children }) => {
     }
   }, [startRow, totalRows]);
 
-  return (
-    <ProductContext.Provider value={{ cpData, loading }}>
-      {children}
-    </ProductContext.Provider>
-  );
+  console.log(cpData);
+  return <ProductContext.Provider value={{ cpData, loading }}>{children}</ProductContext.Provider>;
 };
 
 export default ProductContext;

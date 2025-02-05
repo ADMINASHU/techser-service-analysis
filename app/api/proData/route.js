@@ -1,10 +1,10 @@
 import connectToServiceEaseDB from "../../../lib/serviceDB";
-import { Data, NewData } from "../../../models/Data";
+import { NewData } from "../../../models/Data";
 import Point from "../../../models/Point";
 import UserData from "../../../models/UserData";
 import { NextResponse } from "next/server";
 import { parse, differenceInHours, format, isValid } from "date-fns";
-import { regionList } from "@/lib/regions";
+
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
