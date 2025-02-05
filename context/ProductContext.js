@@ -4,6 +4,22 @@ import { createContext, useState, useEffect } from "react";
 const ProductContext = createContext();
 const CHUNK_SIZE = 400; // Number of rows to fetch per chunk
 
+const addComplaintCounts = (data) => {
+  return data.map((item) => {
+    const breakdown = item.callIds.filter((call) => call.natureOfComplaint === "BREAKDOWN").length;
+    const installation = item.callIds.filter(
+      (call) => call.natureOfComplaint === "INSTALLATION"
+    ).length;
+    const pm = item.callIds.filter((call) => call.natureOfComplaint === "PM").length;
+    return {
+      ...item,
+      breakdown,
+      installation,
+      pm,
+    };
+  });
+};
+
 export const ProductProvider = ({ children }) => {
   const [cpData, setCpData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -21,7 +37,8 @@ export const ProductProvider = ({ children }) => {
         setCpData((prevData) => {
           const updatedData = [...prevData, ...result.finalData];
           const uniqueFinalData = removeDuplicates(updatedData, "id");
-          return uniqueFinalData;
+          const finalDataWithCounts = addComplaintCounts(uniqueFinalData);
+          return finalDataWithCounts;
         });
         setTotalRows(result.totalRows);
       }
@@ -61,8 +78,32 @@ export const ProductProvider = ({ children }) => {
     }
   }, [startRow, totalRows]);
 
-  console.log(cpData);
-  return <ProductContext.Provider value={{ cpData, loading }}>{children}</ProductContext.Provider>;
+  const productData = cpData.map((item) => {
+    return {
+      custId: item.custId,
+      customerName: item.customerName,
+      customerAddress: item.customerAddress,
+      region: item.region,
+      branch: item.branch,
+      serialNo: item.serialNo,
+      prodId: item.prodId,
+      prodDescription: item.prodDescription,
+      name: item.name,
+      category: item.category,
+      series: item.series,
+      model: item.model,
+      capacity: item.capacity,
+      capacityUnit: item.capacityUnit,
+      breakdown: item.breakdown,
+      installation: item.installation,
+      pm: item.pm,
+    };
+  });
+
+  console.log(productData);
+  return (
+    <ProductContext.Provider value={{ productData, loading }}>{children}</ProductContext.Provider>
+  );
 };
 
 export default ProductContext;
