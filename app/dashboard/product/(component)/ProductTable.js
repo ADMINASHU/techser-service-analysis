@@ -1,11 +1,8 @@
 "use client";
 
-import React, { useContext } from "react";
-import ProductContext from "@/context/ProductContext";
+import React from "react";
 
-const ProductTable = () => {
-  const { productData } = useContext(ProductContext);
-
+const ProductTable = ({ productData }) => {
   return (
     <div>
       <div>Product Page</div>
@@ -27,7 +24,7 @@ const ProductTable = () => {
           </tr>
         </thead>
         <tbody>
-          {productData.map((item, index) => (
+          {productData?.map((item, index) => (
             <tr key={index}>
               <td>{item.region}</td>
               <td>{item.branch}</td>

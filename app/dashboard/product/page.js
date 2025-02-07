@@ -1,11 +1,11 @@
 import React from "react";
 import styles from "../Dashboard.module.css";
-import ProductTable from "@/components/ProductTable";
+import ProductCompile from "./(component)/ProductCompile";
 
 const page = () => {
   return (
     <div className={styles.dash}>
-      <ProductTable />
+      <ProductCompile/> 
     </div>
   );
 };
