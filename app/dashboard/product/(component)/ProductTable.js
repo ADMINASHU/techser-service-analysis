@@ -1,47 +1,152 @@
 "use client";
 
-import React from "react";
+import React, { useContext } from "react";
+import ProductContext from "@/context/ProductContext";
+import styles from "../../Dashboard.module.css";
 
-const ProductTable = ({ productData }) => {
+const ProductTable = () => {
+  const { filters, setFilters, productData } = useContext(ProductContext);
+
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      [name]: value,
+    }));
+  };
+
+  const getUniqueValues = (key) => {
+    return [...new Set(productData.map((item) => item[key]))];
+  };
+
+  const getUniqueCapacities = () => {
+    const capacities = productData.map((item) => ({
+      capacity: item.capacity,
+      capacityUnit: item.capacityUnit,
+    }));
+    const uniqueCapacities = capacities.reduce((acc, current) => {
+      const x = acc.find(
+        (item) => item.capacity === current.capacity && item.capacityUnit === current.capacityUnit
+      );
+      if (!x) {
+        return acc.concat([current]);
+      } else {
+        return acc;
+      }
+    }, []);
+    return uniqueCapacities;
+  };
+
   return (
-    <div>
-      <div>Product Page</div>
-      <table>
-        <thead>
-          <tr>
-            <th>Region</th>
-            <th>Branch</th>
-            <th>Serial No</th>
-            <th>Product ID</th>
-            <th>Product Description</th>
-            <th>Name</th>
-            <th>Category</th>
-            <th>Series</th>
-            <th>Model</th>
-            <th>Capacity</th>
-            <th>Capacity Unit</th>
-            <th>Breakdown</th>
-          </tr>
-        </thead>
-        <tbody>
-          {productData?.map((item, index) => (
-            <tr key={index}>
-              <td>{item.region}</td>
-              <td>{item.branch}</td>
-              <td>{item.serialNo}</td>
-              <td>{item.prodId}</td>
-              <td>{item.prodDescription}</td>
-              <td>{item.name}</td>
-              <td>{item.category}</td>
-              <td>{item.series}</td>
-              <td>{item.model}</td>
-              <td>{item.capacity}</td>
-              <td>{item.capacityUnit}</td>
-              <td>{item.breakdown}</td>
-            </tr>
+    <div className={styles.page}>
+      <div className={styles.filterContainer}>
+        <select name="region" value={filters.region} onChange={handleFilterChange}>
+          <option value="">All Regions</option>
+          {getUniqueValues("region").map((region, index) => (
+            <option key={index} value={region}>
+              {region}
+            </option>
           ))}
-        </tbody>
-      </table>
+        </select>
+        <select name="branch" value={filters.branch} onChange={handleFilterChange}>
+          <option value="">All Branches</option>
+          {getUniqueValues("branch").map((branch, index) => (
+            <option key={index} value={branch}>
+              {branch}
+            </option>
+          ))}
+        </select>
+        <select name="name" value={filters.name} onChange={handleFilterChange}>
+          <option value="">All Products</option>
+          {getUniqueValues("name").map((name, index) => (
+            <option key={index} value={name}>
+              {name}
+            </option>
+          ))}
+        </select>
+        <select name="category" value={filters.category} onChange={handleFilterChange}>
+          <option value="">All Categories</option>
+          {getUniqueValues("category").map((category, index) => (
+            <option key={index} value={category}>
+              {category}
+            </option>
+          ))}
+        </select>
+        <select name="series" value={filters.series} onChange={handleFilterChange}>
+          <option value="">All Series</option>
+          {getUniqueValues("series").map((series, index) => (
+            <option key={index} value={series}>
+              {series}
+            </option>
+          ))}
+        </select>
+        <select name="model" value={filters.model} onChange={handleFilterChange}>
+          <option value="">All Models</option>
+          {getUniqueValues("model").map((model, index) => (
+            <option key={index} value={model}>
+              {model}
+            </option>
+          ))}
+        </select>
+        <select name="capacity" value={filters.capacity} onChange={handleFilterChange}>
+          <option value="">All Capacities</option>
+          {getUniqueCapacities().map((item, index) => (
+            <option key={index} value={item.capacity}>
+              {`${item.capacity} ${item.capacityUnit}`}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div className={styles.tableContainer}>
+        <table>
+          <thead>
+            <tr>
+              <th className={styles.tableHeader}>S No</th>
+              <th className={styles.tableHeader}>Product ID</th>
+              <th className={styles.tableHeader}>Product Description</th>
+              <th className={styles.tableHeader}>Category</th>
+              <th className={styles.tableHeader}>Series</th>
+              <th className={styles.tableHeader}>Model</th>
+              <th className={styles.tableHeader}>Product</th>
+              <th className={styles.tableHeader}>Capacity</th>
+              <th className={styles.tableHeader}>Breakdown</th>
+            </tr>
+          </thead>
+          <tbody>
+            {productData?.map((item, index) => (
+              <tr key={index} className={styles.tableRow}>
+                <td className={styles.tableCell}>
+                  <div className={styles.tableCellContent}>{index + 1}</div>
+                </td>
+                <td className={styles.tableCell}>
+                  <div className={styles.tableCellContent}>{item.prodId}</div>
+                </td>
+                <td className={styles.tableCell}>
+                  <div className={styles.tableCellContent}>{item.prodDescription}</div>
+                </td>
+                <td className={styles.tableCell}>
+                  <div className={styles.tableCellContent}>{item.category}</div>
+                </td>
+                <td className={styles.tableCell}>
+                  <div className={styles.tableCellContent}>{item.series}</div>
+                </td>
+                <td className={styles.tableCell}>
+                  <div className={styles.tableCellContent}>{item.model}</div>
+                </td>
+                <td className={styles.tableCell}>
+                  <div className={styles.tableCellContent}>{item.name}</div>
+                </td>
+                <td className={styles.tableCell}>
+                  <div className={styles.tableCellContent}>{`${item.capacity} ${item.capacityUnit}`}</div>
+                </td>
+                <td className={styles.tableCell}>
+                  <div className={styles.tableCellContent}>{item.breakdown}</div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

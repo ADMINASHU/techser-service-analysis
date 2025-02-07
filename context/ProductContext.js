@@ -20,11 +20,33 @@ const addComplaintCounts = (data) => {
   });
 };
 
+const mergeProductsByProdId = (data) => {
+  const mergedData = data.reduce((acc, item) => {
+    const existingItem = acc.find((prod) => prod.prodId === item.prodId);
+    if (existingItem) {
+      existingItem.breakdown += item.breakdown;
+    } else {
+      acc.push({ ...item });
+    }
+    return acc;
+  }, []);
+  return mergedData;
+};
+
 export const ProductProvider = ({ children }) => {
   const [cpData, setCpData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [startRow, setStartRow] = useState(0);
   const [totalRows, setTotalRows] = useState(0);
+  const [filters, setFilters] = useState({
+    region: "",
+    branch: "",
+    name: "",
+    category: "",
+    series: "",
+    model: "",
+    capacity: "",
+  });
 
   const fetchCPDataChunk = async (startRow, chunkSize) => {
     try {
@@ -108,10 +130,21 @@ export const ProductProvider = ({ children }) => {
     };
   });
 
+  const filteredProductData = mergeProductsByProdId(productData).filter((item) => {
+    return (
+      (filters.region === "" || item.region === filters.region) &&
+      (filters.branch === "" || item.branch === filters.branch) &&
+      (filters.name === "" || item.name === filters.name) &&
+      (filters.category === "" || item.category === filters.category) &&
+      (filters.series === "" || item.series === filters.series) &&
+      (filters.model === "" || item.model === filters.model) &&
+      (filters.capacity === "" || item.capacity === filters.capacity)
+    );
+  });
 
   console.log(productData);
   return (
-    <ProductContext.Provider value={{ productData, customerData, loading }}>
+    <ProductContext.Provider value={{ productData: filteredProductData, customerData, loading, filters, setFilters }}>
       {children}
     </ProductContext.Provider>
   );
