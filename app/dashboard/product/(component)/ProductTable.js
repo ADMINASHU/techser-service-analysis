@@ -15,6 +15,18 @@ const ProductTable = () => {
     }));
   };
 
+  const handleResetFilters = () => {
+    setFilters({
+      region: "",
+      branch: "",
+      name: "",
+      category: "",
+      series: "",
+      model: "",
+      capacity: "",
+    });
+  };
+
   const getUniqueValues = (key) => {
     return [...new Set(productData.map((item) => item[key]))];
   };
@@ -96,6 +108,9 @@ const ProductTable = () => {
             </option>
           ))}
         </select>
+        <button className={styles.button} onClick={handleResetFilters}>
+          Reset Filters
+        </button>
       </div>
       <div className={styles.tableContainer}>
         <table>
