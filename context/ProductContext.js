@@ -78,11 +78,21 @@ export const ProductProvider = ({ children }) => {
     }
   }, [startRow, totalRows]);
 
-  const productData = cpData.map((item) => {
+  const customerData = cpData.map((item) => {
     return {
       custId: item.custId,
       customerName: item.customerName,
       customerAddress: item.customerAddress,
+      region: item.region,
+      branch: item.branch,
+      breakdown: item.breakdown,
+      installation: item.installation,
+      pm: item.pm,
+    };
+  });
+
+  const productData = cpData.map((item) => {
+    return {
       region: item.region,
       branch: item.branch,
       serialNo: item.serialNo,
@@ -95,14 +105,15 @@ export const ProductProvider = ({ children }) => {
       capacity: item.capacity,
       capacityUnit: item.capacityUnit,
       breakdown: item.breakdown,
-      installation: item.installation,
-      pm: item.pm,
     };
   });
 
+
   console.log(productData);
   return (
-    <ProductContext.Provider value={{ productData, loading }}>{children}</ProductContext.Provider>
+    <ProductContext.Provider value={{ productData, customerData, loading }}>
+      {children}
+    </ProductContext.Provider>
   );
 };
 
