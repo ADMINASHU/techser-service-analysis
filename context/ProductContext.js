@@ -117,7 +117,6 @@ export const ProductProvider = ({ children }) => {
     return {
       region: item.region,
       branch: item.branch,
-      serialNo: item.serialNo,
       prodId: item.prodId,
       prodDescription: item.prodDescription,
       name: item.name,
@@ -142,7 +141,7 @@ export const ProductProvider = ({ children }) => {
     );
   });
 
-  console.log(productData);
+  // console.log(productData);
   return (
     <ProductContext.Provider value={{ productData: filteredProductData, customerData, loading, filters, setFilters }}>
       {children}

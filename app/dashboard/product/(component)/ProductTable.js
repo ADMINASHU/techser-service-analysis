@@ -1,11 +1,13 @@
 "use client";
 
-import React, { useContext } from "react";
+import React, { useContext, useState, useMemo } from "react";
 import ProductContext from "@/context/ProductContext";
 import styles from "../../Dashboard.module.css";
+import { utils, writeFile } from "xlsx";
 
 const ProductTable = () => {
   const { filters, setFilters, productData } = useContext(ProductContext);
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
@@ -26,6 +28,40 @@ const ProductTable = () => {
       capacity: "",
     });
   };
+
+  const handleExportToExcel = () => {
+    const exportData = productData.map(({ serialNo, ...rest }) => rest);
+    const worksheet = utils.json_to_sheet(exportData);
+    const workbook = utils.book_new();
+    utils.book_append_sheet(workbook, worksheet, "Product Data");
+    writeFile(workbook, "ProductData.xlsx");
+  };
+
+  const handleSort = (key) => {
+    let direction = "asc";
+    if (sortConfig.key === key && sortConfig.direction === "asc") {
+      direction = "desc";
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const sortedProductData = useMemo(() => {
+    if (sortConfig.key) {
+      return [...productData].sort((a, b) => {
+        const aValue = isNaN(a[sortConfig.key]) ? a[sortConfig.key] : parseFloat(a[sortConfig.key]);
+        const bValue = isNaN(b[sortConfig.key]) ? b[sortConfig.key] : parseFloat(b[sortConfig.key]);
+
+        if (aValue < bValue) {
+          return sortConfig.direction === "asc" ? -1 : 1;
+        }
+        if (aValue > bValue) {
+          return sortConfig.direction === "asc" ? 1 : -1;
+        }
+        return 0;
+      });
+    }
+    return productData;
+  }, [productData, sortConfig]);
 
   const getUniqueValues = (key) => {
     return [...new Set(productData.map((item) => item[key]))];
@@ -111,24 +147,43 @@ const ProductTable = () => {
         <button className={styles.button} onClick={handleResetFilters}>
           Reset Filters
         </button>
+        <button className={styles.button} onClick={handleExportToExcel}>
+          Export
+        </button>
       </div>
       <div className={styles.tableContainer}>
         <table>
           <thead>
             <tr>
               <th className={styles.tableHeader}>S No</th>
-              <th className={styles.tableHeader}>Product ID</th>
-              <th className={styles.tableHeader}>Product Description</th>
-              <th className={styles.tableHeader}>Category</th>
-              <th className={styles.tableHeader}>Series</th>
-              <th className={styles.tableHeader}>Model</th>
-              <th className={styles.tableHeader}>Product</th>
-              <th className={styles.tableHeader}>Capacity</th>
-              <th className={styles.tableHeader}>Breakdown</th>
+              <th className={styles.tableHeader} onClick={() => handleSort("prodId")}>
+                Product ID {sortConfig.key === "prodId" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+              </th>
+              <th className={styles.tableHeader} onClick={() => handleSort("prodDescription")}>
+                Product Description {sortConfig.key === "prodDescription" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+              </th>
+              <th className={styles.tableHeader} onClick={() => handleSort("category")}>
+                Category {sortConfig.key === "category" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+              </th>
+              <th className={styles.tableHeader} onClick={() => handleSort("series")}>
+                Series {sortConfig.key === "series" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+              </th>
+              <th className={styles.tableHeader} onClick={() => handleSort("model")}>
+                Model {sortConfig.key === "model" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+              </th>
+              <th className={styles.tableHeader} onClick={() => handleSort("name")}>
+                Product {sortConfig.key === "name" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+              </th>
+              <th className={styles.tableHeader} onClick={() => handleSort("capacity")}>
+                Capacity {sortConfig.key === "capacity" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+              </th>
+              <th className={styles.tableHeader} onClick={() => handleSort("breakdown")}>
+                Total {sortConfig.key === "breakdown" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+              </th>
             </tr>
           </thead>
           <tbody>
-            {productData?.map((item, index) => (
+            {sortedProductData?.map((item, index) => (
               <tr key={index} className={styles.tableRow}>
                 <td className={styles.tableCell}>
                   <div className={styles.tableCellContent}>{index + 1}</div>
