@@ -127,6 +127,7 @@ export const ProductProvider = ({ children }) => {
       series: item.series,
       model: item.model,
       capacity: item.capacity,
+      capacityUnit: item.capacityUnit,
       breakdown: item.breakdown,
       installation: item.installation,
       pm: item.pm,

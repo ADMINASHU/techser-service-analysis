@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useMemo } from "react";
 import ProductContext from "@/context/ProductContext";
 import styles from "../Dashboard.module.css";
+import { utils, writeFile } from "xlsx";
 
 const CustomerTable = () => {
   const { customerData, filters, setFilters } = useContext(ProductContext);
-  const [sortConfig, setSortConfig] = useState({ key: null, direction: "ascending" });
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
@@ -16,15 +17,6 @@ const CustomerTable = () => {
     }));
   };
 
-  const sortedCustomerData = [...customerData].sort((a, b) => {
-    if (a[sortConfig.key] < b[sortConfig.key]) {
-      return sortConfig.direction === "ascending" ? -1 : 1;
-    }
-    if (a[sortConfig.key] > b[sortConfig.key]) {
-      return sortConfig.direction === "ascending" ? 1 : -1;
-    }
-    return 0;
-  });
   const handleResetFilters = () => {
     setFilters({
       region: "",
@@ -41,19 +33,40 @@ const CustomerTable = () => {
     const exportData = customerData.map(({ serialNo, ...rest }) => rest);
     const worksheet = utils.json_to_sheet(exportData);
     const workbook = utils.book_new();
-    utils.book_append_sheet(workbook, worksheet, "customer Data");
-    writeFile(workbook, "customerData.xlsx");
+    utils.book_append_sheet(workbook, worksheet, "Customer Data");
+    writeFile(workbook, "CustomerData.xlsx");
   };
-  const requestSort = (key) => {
-    let direction = "ascending";
-    if (sortConfig.key === key && sortConfig.direction === "ascending") {
-      direction = "descending";
+
+  const handleSort = (key) => {
+    let direction = "asc";
+    if (sortConfig.key === key && sortConfig.direction === "asc") {
+      direction = "desc";
     }
     setSortConfig({ key, direction });
   };
+
+  const sortedCustomerData = useMemo(() => {
+    if (sortConfig.key) {
+      return [...customerData].sort((a, b) => {
+        const aValue = isNaN(a[sortConfig.key]) ? a[sortConfig.key] : parseFloat(a[sortConfig.key]);
+        const bValue = isNaN(b[sortConfig.key]) ? b[sortConfig.key] : parseFloat(b[sortConfig.key]);
+
+        if (aValue < bValue) {
+          return sortConfig.direction === "asc" ? -1 : 1;
+        }
+        if (aValue > bValue) {
+          return sortConfig.direction === "asc" ? 1 : -1;
+        }
+        return 0;
+      });
+    }
+    return customerData;
+  }, [customerData, sortConfig]);
+
   const getUniqueValues = (key) => {
     return [...new Set(customerData.map((item) => item[key]))];
   };
+
   const getUniqueCapacities = () => {
     const capacities = customerData.map((item) => ({
       capacity: item.capacity,
@@ -142,28 +155,63 @@ const CustomerTable = () => {
         <table>
           <thead>
             <tr>
-            <th className={styles.tableHeader}>S No</th>
-              <th onClick={() => requestSort("custId")}>Customer ID</th>
-              <th onClick={() => requestSort("customerName")}>Customer Name</th>
-              <th onClick={() => requestSort("customerAddress")}>Customer Address</th>
-              <th onClick={() => requestSort("region")}>Region</th>
-              <th onClick={() => requestSort("branch")}>Branch</th>
-              <th onClick={() => requestSort("breakdown")}>Breakdown</th>
-              <th onClick={() => requestSort("installation")}>Installation</th>
-              <th onClick={() => requestSort("pm")}>PM</th>
+              <th className={styles.tableHeader}>S No</th>
+              <th className={styles.tableHeader} onClick={() => handleSort("custId")}>
+                Customer ID {sortConfig.key === "custId" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+              </th>
+              <th className={styles.tableHeader} onClick={() => handleSort("customerName")}>
+                Customer Name {sortConfig.key === "customerName" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+              </th>
+              <th className={styles.tableHeader} onClick={() => handleSort("customerAddress")}>
+                Customer Address {sortConfig.key === "customerAddress" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+              </th>
+              <th className={styles.tableHeader} onClick={() => handleSort("region")}>
+                Region {sortConfig.key === "region" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+              </th>
+              <th className={styles.tableHeader} onClick={() => handleSort("branch")}>
+                Branch {sortConfig.key === "branch" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+              </th>
+              <th className={styles.tableHeader} onClick={() => handleSort("breakdown")}>
+                Breakdown {sortConfig.key === "breakdown" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+              </th>
+              <th className={styles.tableHeader} onClick={() => handleSort("installation")}>
+                Installation {sortConfig.key === "installation" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+              </th>
+              <th className={styles.tableHeader} onClick={() => handleSort("pm")}>
+                PM {sortConfig.key === "pm" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+              </th>
             </tr>
           </thead>
           <tbody>
             {sortedCustomerData.map((item, index) => (
-              <tr key={index}>
-                <td>{item.custId}</td>
-                <td>{item.customerName}</td>
-                <td>{item.customerAddress}</td>
-                <td>{item.region}</td>
-                <td>{item.branch}</td>
-                <td>{item.breakdown}</td>
-                <td>{item.installation}</td>
-                <td>{item.pm}</td>
+              <tr key={index} className={styles.tableRow}>
+                <td className={styles.tableCell}>
+                  <div className={styles.tableCellContent}>{index + 1}</div>
+                </td>
+                <td className={styles.tableCell}>
+                  <div className={styles.tableCellContent}>{item.custId}</div>
+                </td>
+                <td className={styles.tableCell}>
+                  <div className={styles.tableCellContent}>{item.customerName}</div>
+                </td>
+                <td className={styles.tableCell}>
+                  <div className={styles.tableCellContent}>{item.customerAddress}</div>
+                </td>
+                <td className={styles.tableCell}>
+                  <div className={styles.tableCellContent}>{item.region}</div>
+                </td>
+                <td className={styles.tableCell}>
+                  <div className={styles.tableCellContent}>{item.branch}</div>
+                </td>
+                <td className={styles.tableCell}>
+                  <div className={styles.tableCellContent}>{item.breakdown}</div>
+                </td>
+                <td className={styles.tableCell}>
+                  <div className={styles.tableCellContent}>{item.installation}</div>
+                </td>
+                <td className={styles.tableCell}>
+                  <div className={styles.tableCellContent}>{item.pm}</div>
+                </td>
               </tr>
             ))}
           </tbody>
