@@ -33,6 +33,21 @@ const mergeProductsByProdId = (data) => {
   return mergedData;
 };
 
+const mergeCustomersByCustId = (data) => {
+  const mergedData = data.reduce((acc, item) => {
+    const existingItem = acc.find((cust) => cust.custId === item.custId);
+    if (existingItem) {
+      existingItem.breakdown += item.breakdown;
+      existingItem.installation += item.installation;
+      existingItem.pm += item.pm;
+    } else {
+      acc.push({ ...item });
+    }
+    return acc;
+  }, []);
+  return mergedData;
+};
+
 export const ProductProvider = ({ children }) => {
   const [cpData, setCpData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -146,9 +161,21 @@ export const ProductProvider = ({ children }) => {
     );
   });
 
+  const filteredCustomerData = mergeCustomersByCustId(customerData).filter((item) => {
+    return (
+      (filters.region === "" || item.region === filters.region) &&
+      (filters.branch === "" || item.branch === filters.branch) &&
+      (filters.name === "" || item.name === filters.name) &&
+      (filters.category === "" || item.category === filters.category) &&
+      (filters.series === "" || item.series === filters.series) &&
+      (filters.model === "" || item.model === filters.model) &&
+      (filters.capacity === "" || item.capacity === filters.capacity)
+    );
+  });
+
   // console.log(productData);
   return (
-    <ProductContext.Provider value={{ productData: filteredProductData, customerData, loading, filters, setFilters }}>
+    <ProductContext.Provider value={{ productData: filteredProductData, customerData: filteredCustomerData, loading, filters, setFilters }}>
       {children}
     </ProductContext.Provider>
   );
