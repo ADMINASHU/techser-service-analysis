@@ -2,8 +2,7 @@
 
 import React, { useContext } from "react";
 import ProductContext from "@/context/ProductContext";
-import styles from "../../Dashboard.module.css";
-import { utils, writeFile } from "xlsx";
+
 const CustomerTable = () => {
   const { customerData } = useContext(ProductContext);
 
