@@ -1,11 +1,11 @@
 import React from "react";
 import styles from "../Dashboard.module.css";
-import CustomerTable from "@/components/CustomerTable";
+import CustomerTable from "@/app/dashboard/customer/CustomerTable";
 
 const page = () => {
   return (
     <div className={styles.dash}>
-      <CustomerTable />{" "}
+      <CustomerTable />
     </div>
   );
 };
