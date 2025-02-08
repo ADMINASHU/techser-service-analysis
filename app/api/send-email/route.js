@@ -34,7 +34,7 @@ export async function POST(request) {
     const mailOptions = {
       from: process.env.EMAIL_ID,
       to: email,
-      subject: "Password Reset for Techser Service Analysis App",
+      subject: "Password Reset for Techser Order Analysis App",
       html: `
       <html>
       <head>
@@ -80,7 +80,7 @@ export async function POST(request) {
       <body>
         <div class="email-container">
           <div class="email-header">
-            <h1>Techser Service Analysis App</h1>
+            <h1>Techser Order Analysis App</h1>
           </div>
           <div class="email-content">
             <p>Dear ${userName},</p>
@@ -93,7 +93,7 @@ export async function POST(request) {
           </div>
           <div class="footer">
             <p>Thank you,</p>
-            <p>Techser Service Analysis Team</p>
+            <p>Techser Order Analysis Team</p>
           </div>
         </div>
       </body>
