@@ -120,6 +120,8 @@ export const ProductProvider = ({ children }) => {
       custId: item.custId,
       customerName: item.customerName,
       customerAddress: item.customerAddress,
+      pincode: item.pincode,
+      state: item.state,
       region: item.region,
       branch: item.branch,
       name: item.name,

@@ -165,6 +165,12 @@ const CustomerTable = () => {
               <th className={styles.tableHeader} onClick={() => handleSort("customerAddress")}>
                 Customer Address {sortConfig.key === "customerAddress" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
               </th>
+              <th className={styles.tableHeader} onClick={() => handleSort("state")}>
+              State {sortConfig.key === "state" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+              </th>
+              <th className={styles.tableHeader} onClick={() => handleSort("pincode")}>
+              Pincode {sortConfig.key === "pincode" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+              </th>
               <th className={styles.tableHeader} onClick={() => handleSort("region")}>
                 Region {sortConfig.key === "region" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
               </th>
@@ -196,6 +202,12 @@ const CustomerTable = () => {
                 </td>
                 <td className={styles.tableCell}>
                   <div className={styles.tableCellContent}>{item.customerAddress}</div>
+                </td>
+                <td className={styles.tableCell}>
+                  <div className={styles.tableCellContent}>{item.state}</div>
+                </td>
+                <td className={styles.tableCell}>
+                  <div className={styles.tableCellContent}>{item.pincode}</div>
                 </td>
                 <td className={styles.tableCell}>
                   <div className={styles.tableCellContent}>{item.region}</div>
