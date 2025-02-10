@@ -92,7 +92,18 @@ export default function Navbar({ isAuthenticated, loggedUser }) {
           }
           onClick={toggleDash}
         >
-          {`Dashboard  ${dashOpen ? "▴" : "▾"} `}
+          {`Dashboard ${
+            pathname === "/dashboard/engineer" ||
+            pathname === "/dashboard/branch" ||
+            pathname === "/dashboard/region" ||
+            pathname === "/dashboard/product" ||
+            pathname === "/dashboard/customer"
+              ? pathname
+                  .split("/")[2]
+                  .toLowerCase()
+                  .replace(/\b\w/g, (char) => char.toUpperCase())
+              : ""
+          } ${dashOpen ? "▴" : "▾"} `}
         </Link>
 
         {level <= 1 && (
@@ -194,7 +205,18 @@ export default function Navbar({ isAuthenticated, loggedUser }) {
             }
             onClick={toggleDash}
           >
-            {`Dashboard  ${dashOpen ? "▴" : "▾"} `}
+             {`Dashboard ${
+            pathname === "/dashboard/engineer" ||
+            pathname === "/dashboard/branch" ||
+            pathname === "/dashboard/region" ||
+            pathname === "/dashboard/product" ||
+            pathname === "/dashboard/customer"
+              ? pathname
+                  .split("/")[2]
+                  .toLowerCase()
+                  .replace(/\b\w/g, (char) => char.toUpperCase())
+              : ""
+          } ${dashOpen ? "▴" : "▾"} `}
           </Link>
           {dashOpen && (
             <div className={styles.newResponsiveDash}>
