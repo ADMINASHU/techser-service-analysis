@@ -30,9 +30,9 @@
 }
 
 .progressBar {
-  height: 2px;
-  /* Reduced from 3px */
-  background-color: #22ee13;
+  height: 3px;
+  background-color: white !important;
+  box-shadow: 0 0 5px #ee1313, 0 0 10px #ee1313, 0 0 20px #ee1313;
   transition: width 0.3s ease;
 }
 
@@ -52,31 +52,18 @@
   padding: 4px 8px;
 }
 
-.navLinks a::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: linear-gradient(90deg, #ee1313, #ff4c4c);
-  transition: width 0.3s ease;
-}
 
-.navLinks a:hover::after,
-.activeLink::after {
-  width: 100%;
-}
 
 .navLinks a:hover {
-  color: white;
   transform: translateY(-1px);
+  color: white !important;
+  text-shadow: 0 0 10px #ee1313, 0 0 20px #ee1313, 0 0 40px #ee1313;
+  font-weight: 500;
 }
 
 .activeLink {
   color: white !important;
   text-shadow: 0 0 10px #ee1313, 0 0 20px #ee1313, 0 0 40px #ee1313;
-
   font-weight: 500;
 }
 
