@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useContext, useState, useMemo } from "react";
+import React, { useContext, useState, useEffect, useMemo } from "react";
 import ProductContext from "@/context/ProductContext";
 import styles from "../../Dashboard.module.css";
 import { utils, writeFile } from "xlsx";
-
+import { regionList } from "@/lib/regions";
 const ProductTable = () => {
   const { filters, setFilters, productData } = useContext(ProductContext);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
@@ -17,6 +17,15 @@ const ProductTable = () => {
     }));
   };
 
+  const getBranchesForRegion = (region) => {
+    const branches = new Set();
+    productData.forEach((row) => {
+      if ((region === "" || row.region === region) && row.branch !== "Branch") {
+        branches.add(row.branch);
+      }
+    });
+    return Array.from(branches);
+  };
   const handleResetFilters = () => {
     setFilters({
       region: "",
@@ -28,6 +37,20 @@ const ProductTable = () => {
       capacity: "",
     });
   };
+
+  useEffect(() => {
+    if (!filters.region || filters.region === "") {
+      setFilters((prevFilters) => ({
+        ...prevFilters,
+        branch: "",
+        name: "",
+        category: "",
+        series: "",
+        model: "",
+        capacity: "",
+      }));
+    }
+  }, [filters.region]);
 
   const handleExportToExcel = () => {
     const exportData = productData.map(({ serialNo, ...rest }) => rest);
@@ -89,16 +112,16 @@ const ProductTable = () => {
     <div className={styles.page}>
       <div className={styles.filterContainer}>
         <select name="region" value={filters.region} onChange={handleFilterChange}>
-          <option value="">All Regions</option>
-          {getUniqueValues("region").map((region, index) => (
-            <option key={index} value={region}>
+          <option value="">ALL Region</option>
+          {regionList.map((region) => (
+            <option key={region} value={region}>
               {region}
             </option>
           ))}
         </select>
         <select name="branch" value={filters.branch} onChange={handleFilterChange}>
-          <option value="">All Branches</option>
-          {getUniqueValues("branch").map((branch, index) => (
+          <option value="">ALL Branch</option>
+          {getBranchesForRegion(filters.region).map((branch, index) => (
             <option key={index} value={branch}>
               {branch}
             </option>
@@ -157,28 +180,40 @@ const ProductTable = () => {
             <tr>
               <th className={styles.tableHeader}>S No</th>
               <th className={styles.tableHeader} onClick={() => handleSort("prodId")}>
-                Product ID {sortConfig.key === "prodId" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+                Product ID{" "}
+                {sortConfig.key === "prodId" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
               </th>
               <th className={styles.tableHeader} onClick={() => handleSort("prodDescription")}>
-                Product Description {sortConfig.key === "prodDescription" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+                Product Description{" "}
+                {sortConfig.key === "prodDescription"
+                  ? sortConfig.direction === "asc"
+                    ? "▲"
+                    : "▼"
+                  : ""}
               </th>
               <th className={styles.tableHeader} onClick={() => handleSort("category")}>
-                Category {sortConfig.key === "category" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+                Category{" "}
+                {sortConfig.key === "category" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
               </th>
               <th className={styles.tableHeader} onClick={() => handleSort("series")}>
-                Series {sortConfig.key === "series" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+                Series{" "}
+                {sortConfig.key === "series" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
               </th>
               <th className={styles.tableHeader} onClick={() => handleSort("model")}>
-                Model {sortConfig.key === "model" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+                Model{" "}
+                {sortConfig.key === "model" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
               </th>
               <th className={styles.tableHeader} onClick={() => handleSort("name")}>
-                Product {sortConfig.key === "name" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+                Product{" "}
+                {sortConfig.key === "name" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
               </th>
               <th className={styles.tableHeader} onClick={() => handleSort("capacity")}>
-                Capacity {sortConfig.key === "capacity" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+                Capacity{" "}
+                {sortConfig.key === "capacity" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
               </th>
               <th className={styles.tableHeader} onClick={() => handleSort("breakdown")}>
-                Breakdown {sortConfig.key === "breakdown" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+                Breakdown{" "}
+                {sortConfig.key === "breakdown" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
               </th>
             </tr>
           </thead>
@@ -207,7 +242,9 @@ const ProductTable = () => {
                   <div className={styles.tableCellContent}>{item.name}</div>
                 </td>
                 <td className={styles.tableCell}>
-                  <div className={styles.tableCellContent}>{`${item.capacity} ${item.capacityUnit}`}</div>
+                  <div
+                    className={styles.tableCellContent}
+                  >{`${item.capacity} ${item.capacityUnit}`}</div>
                 </td>
                 <td className={styles.tableCell}>
                   <div className={styles.tableCellContent}>{item.breakdown}</div>

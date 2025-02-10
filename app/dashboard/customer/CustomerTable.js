@@ -4,6 +4,7 @@ import React, { useContext, useState, useMemo, useEffect } from "react";
 import ProductContext from "@/context/ProductContext";
 import styles from "../Dashboard.module.css";
 import { utils, writeFile } from "xlsx";
+import { regionList } from "@/lib/regions";
 
 const CustomerTable = () => {
   const { customerData, filters, setFilters } = useContext(ProductContext);
@@ -19,6 +20,16 @@ const CustomerTable = () => {
     }));
   };
 
+  const getBranchesForRegion = (region) => {
+    const branches = new Set();
+    customerData.forEach((row) => {
+      if ((region === "" || row.region === region) && row.branch !== "Branch") {
+        branches.add(row.branch);
+      }
+    });
+    return Array.from(branches);
+  };
+
   const handleResetFilters = () => {
     setFilters({
       region: "",
@@ -30,6 +41,20 @@ const CustomerTable = () => {
       capacity: "",
     });
   };
+
+  useEffect(() => {
+    if (!filters.region || filters.region === "") {
+      setFilters((prevFilters) => ({
+        ...prevFilters,
+        branch: "",
+        name: "",
+        category: "",
+        series: "",
+        model: "",
+        capacity: "",
+      }));
+    }
+  }, [filters.region]);
 
   const handleExportToExcel = () => {
     const exportData = customerData.map(({ serialNo, ...rest }) => rest);
@@ -162,16 +187,16 @@ const CustomerTable = () => {
     <div className={styles.page}>
       <div className={styles.filterContainer}>
         <select name="region" value={filters.region} onChange={handleFilterChange}>
-          <option value="">All Regions</option>
-          {getUniqueValues("region").map((region, index) => (
-            <option key={index} value={region}>
+          <option value="">ALL Region</option>
+          {regionList.map((region) => (
+            <option key={region} value={region}>
               {region}
             </option>
           ))}
         </select>
         <select name="branch" value={filters.branch} onChange={handleFilterChange}>
-          <option value="">All Branches</option>
-          {getUniqueValues("branch").map((branch, index) => (
+          <option value="">ALL Branch</option>
+          {getBranchesForRegion(filters.region).map((branch, index) => (
             <option key={index} value={branch}>
               {branch}
             </option>
@@ -230,31 +255,52 @@ const CustomerTable = () => {
             <tr>
               <th className={styles.tableHeader}>S No</th>
               <th className={styles.tableHeader} onClick={() => handleSort("custId")}>
-                Customer ID {sortConfig.key === "custId" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+                Customer ID{" "}
+                {sortConfig.key === "custId" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
               </th>
               <th className={styles.tableHeader} onClick={() => handleSort("customerName")}>
-                Customer Name {sortConfig.key === "customerName" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+                Customer Name{" "}
+                {sortConfig.key === "customerName"
+                  ? sortConfig.direction === "asc"
+                    ? "▲"
+                    : "▼"
+                  : ""}
               </th>
               <th className={styles.tableHeader} onClick={() => handleSort("customerAddress")}>
-                Customer Address {sortConfig.key === "customerAddress" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+                Customer Address{" "}
+                {sortConfig.key === "customerAddress"
+                  ? sortConfig.direction === "asc"
+                    ? "▲"
+                    : "▼"
+                  : ""}
               </th>
               <th className={styles.tableHeader} onClick={() => handleSort("state")}>
-                State {sortConfig.key === "state" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+                State{" "}
+                {sortConfig.key === "state" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
               </th>
               <th className={styles.tableHeader} onClick={() => handleSort("pincode")}>
-                Pincode {sortConfig.key === "pincode" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+                Pincode{" "}
+                {sortConfig.key === "pincode" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
               </th>
               <th className={styles.tableHeader} onClick={() => handleSort("region")}>
-                Region {sortConfig.key === "region" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+                Region{" "}
+                {sortConfig.key === "region" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
               </th>
               <th className={styles.tableHeader} onClick={() => handleSort("branch")}>
-                Branch {sortConfig.key === "branch" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+                Branch{" "}
+                {sortConfig.key === "branch" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
               </th>
               <th className={styles.tableHeader} onClick={() => handleSort("breakdown")}>
-                Breakdown {sortConfig.key === "breakdown" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+                Breakdown{" "}
+                {sortConfig.key === "breakdown" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
               </th>
               <th className={styles.tableHeader} onClick={() => handleSort("installation")}>
-                Installation {sortConfig.key === "installation" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+                Installation{" "}
+                {sortConfig.key === "installation"
+                  ? sortConfig.direction === "asc"
+                    ? "▲"
+                    : "▼"
+                  : ""}
               </th>
               <th className={styles.tableHeader} onClick={() => handleSort("pm")}>
                 PM {sortConfig.key === "pm" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
@@ -265,7 +311,9 @@ const CustomerTable = () => {
             {paginatedData.map((item, index) => (
               <tr key={index} className={styles.tableRow}>
                 <td className={styles.tableCell}>
-                  <div className={styles.tableCellContent}>{(currentPage - 1) * rowsPerPage + index + 1}</div>
+                  <div className={styles.tableCellContent}>
+                    {(currentPage - 1) * rowsPerPage + index + 1}
+                  </div>
                 </td>
                 <td className={styles.tableCell}>
                   <div className={styles.tableCellContent}>{item.custId}</div>
