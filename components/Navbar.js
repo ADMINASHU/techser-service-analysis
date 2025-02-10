@@ -85,13 +85,15 @@ export default function Navbar({ isAuthenticated, loggedUser }) {
             pathname === "/dashboard/engineer" ||
             pathname === "/dashboard/branch" ||
             pathname === "/dashboard/region" ||
-            pathname === "/dashboard/customer"
+            pathname === "/dashboard/product" ||
+            pathname === "/dashboard/customer" ||
+            pathname === "/dashboard/product"
               ? styles.activeLink
               : styles.nlink
           }
           onClick={toggleDash}
         >
-          Dashboard
+          {`Dashboard  ${dashOpen ? " ∧" : " ∨"} `}
         </Link>
 
         {level <= 1 && (
@@ -99,7 +101,7 @@ export default function Navbar({ isAuthenticated, loggedUser }) {
             Data
           </Link>
         )}
-    
+
         {level <= 3 && (
           <Link href="/users" className={pathname === "/users" ? styles.activeLink : styles.nlink}>
             Users
@@ -135,19 +137,19 @@ export default function Navbar({ isAuthenticated, loggedUser }) {
 
         <Logout />
       </div>
-   
-      <Link href="/"  className={styles.menuButton} >
-          <Image
-            src="/logo.png"
-            alt="Company image"
-            priority
-            width={100}
-            height={20}
-            className={styles.logo}
-            onClick={menuOpen ? toggleMenu : null}
-          />
-        </Link>
-        <button className={styles.menuButton} onClick={toggleMenu}>
+
+      <Link href="/" className={styles.menuButton}>
+        <Image
+          src="/logo.png"
+          alt="Company image"
+          priority
+          width={100}
+          height={20}
+          className={styles.logo}
+          onClick={menuOpen ? toggleMenu : null}
+        />
+      </Link>
+      <button className={styles.menuButton} onClick={toggleMenu}>
         ☰
       </button>
       {menuOpen && (
@@ -186,13 +188,14 @@ export default function Navbar({ isAuthenticated, loggedUser }) {
               pathname === "/dashboard/engineer" ||
               pathname === "/dashboard/branch" ||
               pathname === "/dashboard/region" ||
-              pathname === "/dashboard/customer"
+              pathname === "/dashboard/customer" ||
+              pathname === "/dashboard/product"
                 ? styles.activeLink
                 : styles.nlink
             }
             onClick={toggleDash}
           >
-            Dashboard  ▼
+            Dashboard ▼
           </Link>
           {dashOpen && (
             <div className={styles.newResponsiveDash}>
