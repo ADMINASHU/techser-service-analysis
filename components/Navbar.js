@@ -92,7 +92,7 @@ export default function Navbar({ isAuthenticated, loggedUser }) {
           }
           onClick={toggleDash}
         >
-          {`Dashboard  ${dashOpen ? " ∧" : " ∨"} `}
+          {`Dashboard  ${dashOpen ? "▴" : "▾"} `}
         </Link>
 
         {level <= 1 && (
@@ -194,7 +194,7 @@ export default function Navbar({ isAuthenticated, loggedUser }) {
             }
             onClick={toggleDash}
           >
-            Dashboard ▼
+            {`Dashboard  ${dashOpen ? "▴" : "▾"} `}
           </Link>
           {dashOpen && (
             <div className={styles.newResponsiveDash}>
