@@ -86,8 +86,7 @@ export default function Navbar({ isAuthenticated, loggedUser }) {
             pathname === "/dashboard/branch" ||
             pathname === "/dashboard/region" ||
             pathname === "/dashboard/product" ||
-            pathname === "/dashboard/customer" ||
-            pathname === "/dashboard/product"
+            pathname === "/dashboard/customer"
               ? styles.activeLink
               : styles.nlink
           }
