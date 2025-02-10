@@ -70,7 +70,7 @@
   padding: 4px 8px;
 }
 
-.link a:hover {
+.legalLinks a:hover {
   transform: translateY(-1px);
   color: white !important;
   text-shadow: 0 0 10px #ee1313, 0 0 20px #ee1313, 0 0 40px #ee1313;

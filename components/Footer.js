@@ -2,8 +2,7 @@
 import Link from "next/link";
 import styles from "./Footer.module.css";
 import { usePathname } from "next/navigation";
-const Footer = ({ isAuthenticated, loggedUser }) => {
-  const level = loggedUser?.level;
+const Footer = ({ isAuthenticated }) => {
   const pathname = usePathname();
 
   if (!isAuthenticated) {
