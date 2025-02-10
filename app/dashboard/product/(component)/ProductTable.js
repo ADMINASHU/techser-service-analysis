@@ -144,7 +144,7 @@ const ProductTable = () => {
             </option>
           ))}
         </select>
-        <button className={styles.button} onClick={handleResetFilters}>
+        <button className={styles.ResetButton} onClick={handleResetFilters}>
           Reset Filters
         </button>
         <button className={styles.button} onClick={handleExportToExcel}>

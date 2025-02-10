@@ -45,7 +45,7 @@
 
 .button {
   width: 100px;
-  padding: 8px 16px;
+  padding: 10px 16px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -60,6 +60,26 @@
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   background: linear-gradient(145deg, #0058c3, #0070f3);
+}
+
+.ResetButton {
+  width: 100px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 11px;
+  transition: all 0.3s ease;
+  background: #e63946;
+  color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.ResetButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background: #e96570;
+
 }
 
 .print {
@@ -469,6 +489,58 @@ tr:nth-child(2) .tableHeader {
 @keyframes fadeIn {
   from { opacity: 0; transform: translate(-50%, -48%); }
   to { opacity: 1; transform: translate(-50%, -50%); }
+}
+
+.paginationContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.countDisplay {
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.paginationButtons {
+  display: flex;
+  align-items: center;
+}
+
+.pageButton, .activePageButton {
+  background: #f1f1f1;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 5px 10px;
+  margin: 0 2px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pageButton:hover {
+  background-color: #e63946;
+  color: white;
+  border-color: #e63946;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(230, 57, 70, 0.2);
+}
+
+.activePageButton {
+  background-color: #e63946;
+  color: white;
+  border-color: #e63946;
+  box-shadow: 0 2px 4px rgba(230, 57, 70, 0.2);
+}
+
+.ellipsis {
+  padding: 5px 10px;
+  color: #999;
+}
+
+.icon {
+  width: 16px;
+  height: 16px;
 }
 
 /* End of file */
