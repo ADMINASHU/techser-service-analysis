@@ -178,7 +178,7 @@ const ProductTable = () => {
                 Capacity {sortConfig.key === "capacity" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
               </th>
               <th className={styles.tableHeader} onClick={() => handleSort("breakdown")}>
-                Total {sortConfig.key === "breakdown" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+                Breakdown {sortConfig.key === "breakdown" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
               </th>
             </tr>
           </thead>
