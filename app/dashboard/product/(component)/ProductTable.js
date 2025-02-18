@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useContext, useState, useEffect, useMemo } from "react";
-import ProductContext from "@/context/ProductContext";
+import ProductContext from "@/context/CustomerContext";
 import styles from "../../Dashboard.module.css";
 import { utils, writeFile } from "xlsx";
 import { regionList } from "@/lib/regions";

@@ -1,13 +1,13 @@
 "use client";
 
 import React, { useContext, useState, useMemo, useEffect } from "react";
-import ProductContext from "@/context/ProductContext";
+import CustomerProvider from "@/context/CustomerContext";
 import styles from "../Dashboard.module.css";
 import { utils, writeFile } from "xlsx";
 import { regionList } from "@/lib/regions";
 
 const CustomerTable = () => {
-  const { customerData, filters, setFilters } = useContext(ProductContext);
+  const { customerData, filters, setFilters } = useContext(CustomerProvider);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 50;

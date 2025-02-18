@@ -12,15 +12,27 @@ const Data2 = () => {
   const [itemsPerPage] = useState(100);
   const [region, setRegion] = useState("");
   const [branch, setBranch] = useState("");
+  const [name, setName] = useState("");
+  const [category, setCategory] = useState("");
+  const [series, setSeries] = useState("");
+  const [model, setModel] = useState("");
+  const [capacity, setCapacity] = useState("");
 
   useEffect(() => {
-    // Filter data based on region and branch
+    // Filter data based on selected filters
     const filtered = cpData.filter(
-      (item) => (region ? item.region === region : true) && (branch ? item.branch === branch : true)
+      (item) =>
+        (region ? item.region === region : true) &&
+        (branch ? item.branch === branch : true) &&
+        (name ? item.name === name : true) &&
+        (category ? item.category === category : true) &&
+        (series ? item.series === series : true) &&
+        (model ? item.model === model : true) &&
+        (capacity ? item.capacity === capacity : true)
     );
     setFilteredData(filtered);
     setCurrentPage(1); // Reset to first page after filtering
-  }, [region, branch, cpData]);
+  }, [region, branch, name, category, series, model, capacity, cpData]);
 
   useEffect(() => {
     // Calculate unique values for prodId
@@ -37,45 +49,17 @@ const Data2 = () => {
     setUniqueProdIdData(uniqueProdIds);
   }, [filteredData]);
 
-  // Get unique column names dynamically, excluding specified columns
-  const columns =
-    cpData.length > 0
-      ? Object.keys(cpData[0]).filter(
-          (col) =>
-            ![
-              "_id",
-              "__v",
-              "id",
-              "batMake",
-              "batType",
-              "batteryCapacity",
-              "batteryCode",
-              "batteryQty",
-              "serialNo",
-              //   "series",
-              "pincode",
-              //   "model",
-              "modelCode",
-              //   "capacityUnit",
-              //   "category",
-              "city",
-              "branch",
-              //   "capacity",
-              "custId",
-              "customerAddress",
-              "customerName",
-              "state",
-              "breakdown",
-              "installation",
-              "pm",
-              "callIds",
-            ].includes(col)
-        )
-      : [];
+  // Define the columns in the desired order
+  const columns = ["region", "branch", "prodId", "prodDescription", "name", "category", "series", "model", "capacity", "capacityUnit"];
 
-  // Get unique values for region and branch for select options
+  // Get unique values for filters
   const regions = [...new Set(cpData.map((item) => item.region))];
   const branches = [...new Set(cpData.map((item) => item.branch))];
+  const names = [...new Set(cpData.map((item) => item.name))];
+  const categories = [...new Set(cpData.map((item) => item.category))];
+  const seriesList = [...new Set(cpData.map((item) => item.series))];
+  const models = [...new Set(cpData.map((item) => item.model))];
+  const capacities = [...new Set(cpData.map((item) => item.capacity))];
 
   // Function to render the cell, handling callIds array length
   const renderCell = (col, value) => {
@@ -118,6 +102,81 @@ const Data2 = () => {
             {branches.map((br) => (
               <option key={br} value={br}>
                 {br}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label>
+          Name:
+          <select
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className={styles.select}
+          >
+            <option value="">All</option>
+            {names.map((n) => (
+              <option key={n} value={n}>
+                {n}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label>
+          Category:
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className={styles.select}
+          >
+            <option value="">All</option>
+            {categories.map((cat) => (
+              <option key={cat} value={cat}>
+                {cat}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label>
+          Series:
+          <select
+            value={series}
+            onChange={(e) => setSeries(e.target.value)}
+            className={styles.select}
+          >
+            <option value="">All</option>
+            {seriesList.map((ser) => (
+              <option key={ser} value={ser}>
+                {ser}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label>
+          Model:
+          <select
+            value={model}
+            onChange={(e) => setModel(e.target.value)}
+            className={styles.select}
+          >
+            <option value="">All</option>
+            {models.map((mod) => (
+              <option key={mod} value={mod}>
+                {mod}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label>
+          Capacity:
+          <select
+            value={capacity}
+            onChange={(e) => setCapacity(e.target.value)}
+            className={styles.select}
+          >
+            <option value="">All</option>
+            {capacities.map((cap) => (
+              <option key={cap} value={cap}>
+                {cap}
               </option>
             ))}
           </select>

@@ -1,7 +1,7 @@
 "use client";
 import { createContext, useState, useEffect } from "react";
 
-const ProductContext = createContext();
+const CustomerContext  = createContext();
 const CHUNK_SIZE = 400; // Number of rows to fetch per chunk
 
 const addComplaintCounts = (data) => {
@@ -48,7 +48,7 @@ const mergeCustomersByCustId = (data) => {
   return mergedData;
 };
 
-export const ProductProvider = ({ children }) => {
+export const CustomerProvider = ({ children }) => {
   const [cpData, setCpData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [startRow, setStartRow] = useState(0);
@@ -115,6 +115,27 @@ export const ProductProvider = ({ children }) => {
     }
   }, [startRow, totalRows]);
 
+  const customerData = cpData.map((item) => {
+    return {
+      custId: item.custId,
+      customerName: item.customerName,
+      customerAddress: item.customerAddress,
+      pincode: item.pincode,
+      state: item.state,
+      region: item.region,
+      branch: item.branch,
+      name: item.name,
+      category: item.category,
+      series: item.series,
+      model: item.model,
+      capacity: item.capacity,
+      capacityUnit: item.capacityUnit,
+      breakdown: item.breakdown,
+      installation: item.installation,
+      pm: item.pm,
+    };
+  });
+
   const productData = cpData.map((item) => {
     return {
       region: item.region,
@@ -143,14 +164,24 @@ export const ProductProvider = ({ children }) => {
     );
   });
 
+  const filteredCustomerData = mergeCustomersByCustId(customerData).filter((item) => {
+    return (
+      (filters.region === "" || item.region === filters.region) &&
+      (filters.branch === "" || item.branch === filters.branch) &&
+      (filters.name === "" || item.name === filters.name) &&
+      (filters.category === "" || item.category === filters.category) &&
+      (filters.series === "" || item.series === filters.series) &&
+      (filters.model === "" || item.model === filters.model) &&
+      (filters.capacity === "" || item.capacity === filters.capacity)
+    );
+  });
+
   // console.log(productData);
   return (
-    <ProductContext.Provider
-      value={{cpData, productData: filteredProductData, loading, filters, setFilters }}
-    >
+    <CustomerContext.Provider value={{ productData: filteredProductData, customerData: filteredCustomerData, loading, filters, setFilters }}>
       {children}
-    </ProductContext.Provider>
+    </CustomerContext.Provider>
   );
 };
 
-export default ProductContext;
+export default CustomerContext;
