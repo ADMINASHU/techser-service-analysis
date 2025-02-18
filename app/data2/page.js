@@ -49,8 +49,8 @@ const Data2 = () => {
     setUniqueProdIdData(uniqueProdIds);
   }, [filteredData]);
 
-  // Define the columns in the desired order
-  const columns = ["region", "branch", "prodId", "prodDescription", "name", "category", "series", "model", "capacity", "capacityUnit"];
+  // Define the columns in the desired order, without region and branch
+  const columns = ["prodId", "prodDescription", "name", "category", "series", "model", "capacity", "capacityUnit"];
 
   // Get unique values for filters
   const regions = [...new Set(cpData.map((item) => item.region))];
