@@ -11,7 +11,7 @@ const ProductTable = () => {
   const [filteredData, setFilteredData] = useState([]);
   const [uniqueProdIdData, setUniqueProdIdData] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(100);
+  const [itemsPerPage] = useState(50); // Changed to 50 to match CustomerTable
   const [region, setRegion] = useState("");
   const [branch, setBranch] = useState("");
   const [name, setName] = useState("");
@@ -182,6 +182,72 @@ const ProductTable = () => {
     return dataToSort;
   }, [uniqueProdIdArray, sortConfig]);
 
+  const totalPages = Math.ceil(sortedData.length / itemsPerPage);
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
+
+  const getPaginationButtons = () => {
+    const buttons = [];
+    const maxButtons = 5;
+    let startPage = Math.max(1, currentPage - Math.floor(maxButtons / 2));
+    let endPage = Math.min(totalPages, startPage + maxButtons - 1);
+
+    if (endPage - startPage + 1 < maxButtons) {
+      startPage = Math.max(1, endPage - maxButtons + 1);
+    }
+
+    if (startPage > 1) {
+      buttons.push(
+        <button
+          key={1}
+          onClick={() => handlePageChange(1)}
+          className={currentPage === 1 ? styles.activePageButton : styles.pageButton}
+        >
+          1
+        </button>
+      );
+      buttons.push(
+        <span key="start-ellipsis" className={styles.ellipsis}>
+          ...
+        </span>
+      );
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      if (i === 1) continue;
+      buttons.push(
+        <button
+          key={i}
+          onClick={() => handlePageChange(i)}
+          className={i === currentPage ? styles.activePageButton : styles.pageButton}
+        >
+          {i}
+        </button>
+      );
+    }
+
+    if (endPage < totalPages) {
+      buttons.push(
+        <span key="end-ellipsis" className={styles.ellipsis}>
+          ...
+        </span>
+      );
+      buttons.push(
+        <button
+          key={totalPages}
+          onClick={() => handlePageChange(totalPages)}
+          className={currentPage === totalPages ? styles.activePageButton : styles.pageButton}
+        >
+          {totalPages}
+        </button>
+      );
+    }
+
+    return buttons;
+  };
+
   return (
     <div className={styles.page}>
       {/* <h1 className={styles.header}>Customer Product Data</h1> */}
@@ -318,24 +384,50 @@ const ProductTable = () => {
         </table>
       </div>
       <div className={styles.paginationContainer}>
-        <button
-          className={styles.pageButton}
-          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-          disabled={currentPage === 1}
-        >
-          Previous
-        </button>
-        <button
-          className={styles.pageButton}
-          onClick={() =>
-            setCurrentPage((prev) =>
-              Math.min(prev + 1, Math.ceil(sortedData.length / itemsPerPage))
-            )
-          }
-          disabled={currentPage === Math.ceil(sortedData.length / itemsPerPage)}
-        >
-          Next
-        </button>
+        <div className={styles.countDisplay}>
+          Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
+          {Math.min(currentPage * itemsPerPage, sortedData.length)} {`of `}
+          <span style={{ color: "#e63946" }}>{sortedData.length}</span>
+          {` entries`}
+        </div>
+        <div className={styles.paginationButtons}>
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+            className={styles.pageButton}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              className={styles.icon}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+          </button>
+          {getPaginationButtons()}
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            className={styles.pageButton}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              className={styles.icon}
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
   );
