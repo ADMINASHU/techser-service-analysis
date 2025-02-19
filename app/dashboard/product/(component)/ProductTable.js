@@ -272,14 +272,7 @@ const ProductTable = () => {
             </option>
           ))}
         </select>
-        <select value={name} onChange={(e) => setName(e.target.value)} className={styles.select}>
-          <option value="">All Products</option>
-          {names.map((n) => (
-            <option key={n} value={n}>
-              {n}
-            </option>
-          ))}
-        </select>
+     
         <select
           value={category}
           onChange={(e) => setCategory(e.target.value)}
@@ -309,6 +302,14 @@ const ProductTable = () => {
           {models.map((mod) => (
             <option key={mod} value={mod}>
               {mod}
+            </option>
+          ))}
+        </select>
+        <select value={name} onChange={(e) => setName(e.target.value)} className={styles.select}>
+          <option value="">All Products</option>
+          {names.map((n) => (
+            <option key={n} value={n}>
+              {n}
             </option>
           ))}
         </select>
