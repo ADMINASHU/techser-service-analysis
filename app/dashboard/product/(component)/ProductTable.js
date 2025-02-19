@@ -6,7 +6,7 @@ import ProductContext from "@/context/ProductContext";
 import { utils, writeFile } from "xlsx";
 import { regionList } from "@/lib/regions";
 
-const Data2 = () => {
+const ProductTable = () => {
   const { cpData } = useContext(ProductContext);
   const [filteredData, setFilteredData] = useState([]);
   const [uniqueProdIdData, setUniqueProdIdData] = useState({});
@@ -341,4 +341,4 @@ const Data2 = () => {
   );
 };
 
-export default Data2;
+export default ProductTable;

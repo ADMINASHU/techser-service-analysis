@@ -111,11 +111,7 @@ export default function Navbar({ isAuthenticated, loggedUser }) {
             Data
           </Link>
         )}
-        {level <= 1 && (
-          <Link href="/data2" className={pathname === "/data2" ? styles.activeLink : styles.nlink}>
-            Data2
-          </Link>
-        )}
+   
 
         {level <= 3 && (
           <Link href="/users" className={pathname === "/users" ? styles.activeLink : styles.nlink}>
