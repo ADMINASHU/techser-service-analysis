@@ -2,10 +2,13 @@
 
 import React, { useContext, useState, useEffect } from "react";
 import ProductContext from "@/context/ProductContext";
-import styles from "./Data2.module.css";
+import styles from "../dashboard/Dashboard.module.css";
+import { utils, writeFile } from "xlsx"; // Add this import
+import { regionList } from "@/lib/regions";
+
 
 const Data2 = () => {
-  const { cpData } = useContext(ProductContext);
+  const {cpData } = useContext(ProductContext);
   const [filteredData, setFilteredData] = useState([]);
   const [uniqueProdIdData, setUniqueProdIdData] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
@@ -69,157 +72,208 @@ const Data2 = () => {
     return value;
   };
 
+  const getBranchesForRegion = (region) => {
+    const branches = new Set();
+    cpData.forEach((row) => {
+      if ((region === "" || row.region === region) && row.branch !== "Branch") {
+        branches.add(row.branch);
+      }
+    });
+    return Array.from(branches);
+  };
+
   // Convert uniqueProdIdData to an array for rendering
   const uniqueProdIdArray = Object.values(uniqueProdIdData);
 
+  const handleResetFilters = () => {
+    setRegion("");
+    setBranch("");
+    setName("");
+    setCategory("");
+    setSeries("");
+    setModel("");
+    setCapacity("");
+  };
+
+  const handleExportToExcel = () => {
+    const exportData = uniqueProdIdArray.map(({ 
+      region,
+      branch,
+      prodId, 
+      prodDescription, 
+      name, 
+      category, 
+      series, 
+      model, 
+      capacity, 
+      capacityUnit, 
+      breakdown 
+    }) => ({
+      region,
+      branch,
+      prodId,
+      prodDescription,
+      name,
+      category,
+      series,
+      model,
+      capacity,
+      capacityUnit,
+      breakdown: breakdown || 0
+    }));
+
+    const worksheet = utils.json_to_sheet(exportData);
+    const workbook = utils.book_new();
+    utils.book_append_sheet(workbook, worksheet, "Customer Product Data");
+    writeFile(workbook, "CustomerProductData.xlsx");
+  };
+
   return (
-    <div className={styles.container}>
+    <div className={styles.page}>
       <h1 className={styles.header}>Customer Product Data</h1>
       <div className={styles.filterContainer}>
-        <label>
-          Region:
-          <select
-            value={region}
-            onChange={(e) => setRegion(e.target.value)}
-            className={styles.select}
-          >
-            <option value="">All</option>
-            {regions.map((reg) => (
-              <option key={reg} value={reg}>
-                {reg}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label>
-          Branch:
-          <select
-            value={branch}
-            onChange={(e) => setBranch(e.target.value)}
-            className={styles.select}
-          >
-            <option value="">All</option>
-            {branches.map((br) => (
-              <option key={br} value={br}>
-                {br}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label>
-          Name:
-          <select
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className={styles.select}
-          >
-            <option value="">All</option>
-            {names.map((n) => (
-              <option key={n} value={n}>
-                {n}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label>
-          Category:
-          <select
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            className={styles.select}
-          >
-            <option value="">All</option>
-            {categories.map((cat) => (
-              <option key={cat} value={cat}>
-                {cat}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label>
-          Series:
-          <select
-            value={series}
-            onChange={(e) => setSeries(e.target.value)}
-            className={styles.select}
-          >
-            <option value="">All</option>
-            {seriesList.map((ser) => (
-              <option key={ser} value={ser}>
-                {ser}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label>
-          Model:
-          <select
-            value={model}
-            onChange={(e) => setModel(e.target.value)}
-            className={styles.select}
-          >
-            <option value="">All</option>
-            {models.map((mod) => (
-              <option key={mod} value={mod}>
-                {mod}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label>
-          Capacity:
-          <select
-            value={capacity}
-            onChange={(e) => setCapacity(e.target.value)}
-            className={styles.select}
-          >
-            <option value="">All</option>
-            {capacities.map((cap) => (
-              <option key={cap} value={cap}>
-                {cap}
-              </option>
-            ))}
-          </select>
-        </label>
+        <select
+          value={region}
+          onChange={(e) => setRegion(e.target.value)}
+          className={styles.select}
+        >
+          <option value="">ALL Region</option>
+          {regionList.map((reg) => (
+            <option key={reg} value={reg}>
+              {reg}
+            </option>
+          ))}
+        </select>
+        <select name="branch" value={branch}  onChange={(e) => setBranch(e.target.value)}>
+          <option value="">ALL Branch</option>
+          {getBranchesForRegion(region).map((br, index) => (
+            <option key={index} value={br}>
+              {br}
+            </option>
+          ))}
+        </select>
+        <select
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          className={styles.select}
+        >
+          <option value="">All Products</option>
+          {names.map((n) => (
+            <option key={n} value={n}>
+              {n}
+            </option>
+          ))}
+        </select>
+        <select
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          className={styles.select}
+        >
+          <option value="">All Categories</option>
+          {categories.map((cat) => (
+            <option key={cat} value={cat}>
+              {cat}
+            </option>
+          ))}
+        </select>
+        <select
+          value={series}
+          onChange={(e) => setSeries(e.target.value)}
+          className={styles.select}
+        >
+          <option value="">All Series</option>
+          {seriesList.map((ser) => (
+            <option key={ser} value={ser}>
+              {ser}
+            </option>
+          ))}
+        </select>
+        <select
+          value={model}
+          onChange={(e) => setModel(e.target.value)}
+          className={styles.select}
+        >
+          <option value="">All Models</option>
+          {models.map((mod) => (
+            <option key={mod} value={mod}>
+              {mod}
+            </option>
+          ))}
+        </select>
+        <select
+          value={capacity}
+          onChange={(e) => setCapacity(e.target.value)}
+          className={styles.select}
+        >
+          <option value="">All Capacities</option>
+          {capacities.map((cap) => (
+            <option key={cap} value={cap}>
+              {cap}
+            </option>
+          ))}
+        </select>
+        <button className={styles.ResetButton} onClick={handleResetFilters}>
+          Reset Filters
+        </button>
+        <button className={styles.button} onClick={handleExportToExcel}>
+          Export
+        </button>
       </div>
       <div className={styles.tableContainer}>
         <table className={styles.table}>
           <thead>
             <tr>
               {columns.map((col) => (
-                <th key={col}>{col}</th>
+                <th key={col} className={styles.tableHeader}>
+                  {col}
+                </th>
               ))}
-              <th>Total Breakdown</th>
+              <th className={styles.tableHeader}>Total Breakdown</th>
             </tr>
           </thead>
           <tbody>
             {uniqueProdIdArray
               .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
               .map((item, index) => (
-                <tr key={index}>
+                <tr key={index} className={styles.tableRow}>
                   {columns.map((col) => (
-                    <td key={`${index}-${col}`}>{renderCell(col, item[col])}</td>
+                    <td key={`${index}-${col}`} className={styles.tableCell}>
+                      <div className={styles.tableCellContent}>
+                        {renderCell(col, item[col])}
+                      </div>
+                    </td>
                   ))}
-                  <td>{item.breakdown || 0}</td>
+                  <td className={styles.tableCell}>
+                    <div className={styles.tableCellContent}>
+                      {item.breakdown || 0}
+                    </div>
+                  </td>
                 </tr>
               ))}
           </tbody>
         </table>
       </div>
-      <div className={styles.pagination}>
+      <div className={styles.paginationContainer}>
         <button
+          className={styles.pageButton}
           onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
           disabled={currentPage === 1}
         >
           Previous
         </button>
         <button
+          className={styles.pageButton}
           onClick={() =>
             setCurrentPage((prev) =>
-              Math.min(prev + 1, Math.ceil(uniqueProdIdArray.length / itemsPerPage))
+              Math.min(
+                prev + 1,
+                Math.ceil(uniqueProdIdArray.length / itemsPerPage)
+              )
             )
           }
-          disabled={currentPage === Math.ceil(uniqueProdIdArray.length / itemsPerPage)}
+          disabled={
+            currentPage === Math.ceil(uniqueProdIdArray.length / itemsPerPage)
+          }
         >
           Next
         </button>
