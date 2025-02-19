@@ -1,14 +1,13 @@
 "use client";
 
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useMemo } from "react"; // Add useMemo
 import ProductContext from "@/context/ProductContext";
 import styles from "../dashboard/Dashboard.module.css";
 import { utils, writeFile } from "xlsx"; // Add this import
 import { regionList } from "@/lib/regions";
 
-
 const Data2 = () => {
-  const {cpData } = useContext(ProductContext);
+  const { cpData } = useContext(ProductContext);
   const [filteredData, setFilteredData] = useState([]);
   const [uniqueProdIdData, setUniqueProdIdData] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
@@ -20,6 +19,7 @@ const Data2 = () => {
   const [series, setSeries] = useState("");
   const [model, setModel] = useState("");
   const [capacity, setCapacity] = useState("");
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
 
   useEffect(() => {
     // Filter data based on selected filters
@@ -52,8 +52,16 @@ const Data2 = () => {
     setUniqueProdIdData(uniqueProdIds);
   }, [filteredData]);
 
-  // Define the columns in the desired order, without region and branch
-  const columns = ["prodId", "prodDescription", "name", "category", "series", "model", "capacity", "capacityUnit"];
+  // Update the columns array with proper header texts
+  const columns = [
+    { id: "prodId", label: "Product ID" },
+    { id: "prodDescription", label: "Product Description" },
+    { id: "category", label: "Category" },
+    { id: "series", label: "Series" },
+    { id: "model", label: "Model" },
+    { id: "name", label: "Product" },
+    { id: "capacity", label: "Capacity" }
+  ];
 
   // Get unique values for filters
   const regions = [...new Set(cpData.map((item) => item.region))];
@@ -62,7 +70,24 @@ const Data2 = () => {
   const categories = [...new Set(cpData.map((item) => item.category))];
   const seriesList = [...new Set(cpData.map((item) => item.series))];
   const models = [...new Set(cpData.map((item) => item.model))];
-  const capacities = [...new Set(cpData.map((item) => item.capacity))];
+
+  const getUniqueCapacities = () => {
+    const capacities = cpData.map((item) => ({
+      capacity: item.capacity,
+      capacityUnit: item.capacityUnit,
+    }));
+    const uniqueCapacities = capacities.reduce((acc, current) => {
+      const x = acc.find(
+        (item) => item.capacity === current.capacity && item.capacityUnit === current.capacityUnit
+      );
+      if (!x) {
+        return acc.concat([current]);
+      } else {
+        return acc;
+      }
+    }, []);
+    return uniqueCapacities;
+  };
 
   // Function to render the cell, handling callIds array length
   const renderCell = (col, value) => {
@@ -127,6 +152,33 @@ const Data2 = () => {
     utils.book_append_sheet(workbook, worksheet, "Customer Product Data");
     writeFile(workbook, "CustomerProductData.xlsx");
   };
+
+  const handleSort = (key) => {
+    let direction = "asc";
+    if (sortConfig.key === key && sortConfig.direction === "asc") {
+      direction = "desc";
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const sortedData = useMemo(() => {
+    const dataToSort = [...uniqueProdIdArray];
+    if (sortConfig.key) {
+      return dataToSort.sort((a, b) => {
+        const aValue = isNaN(a[sortConfig.key]) ? a[sortConfig.key] : parseFloat(a[sortConfig.key]);
+        const bValue = isNaN(b[sortConfig.key]) ? b[sortConfig.key] : parseFloat(b[sortConfig.key]);
+
+        if (aValue < bValue) {
+          return sortConfig.direction === "asc" ? -1 : 1;
+        }
+        if (aValue > bValue) {
+          return sortConfig.direction === "asc" ? 1 : -1;
+        }
+        return 0;
+      });
+    }
+    return dataToSort;
+  }, [uniqueProdIdArray, sortConfig]);
 
   return (
     <div className={styles.page}>
@@ -206,9 +258,9 @@ const Data2 = () => {
           className={styles.select}
         >
           <option value="">All Capacities</option>
-          {capacities.map((cap) => (
-            <option key={cap} value={cap}>
-              {cap}
+          {getUniqueCapacities().map((item, index) => (
+            <option key={index} value={item.capacity}>
+              {`${item.capacity} ${item.capacityUnit}`}
             </option>
           ))}
         </select>
@@ -223,23 +275,50 @@ const Data2 = () => {
         <table className={styles.table}>
           <thead>
             <tr>
-              {columns.map((col) => (
-                <th key={col} className={styles.tableHeader}>
-                  {col}
+              <th className={styles.tableHeader}>S No</th>
+              {columns.map(({ id, label }) => (
+                <th 
+                  key={id} 
+                  className={styles.tableHeader}
+                  onClick={() => handleSort(id)}
+                >
+                  {label}{" "}
+                  {sortConfig.key === id && (
+                    <span className={styles.sortIndicator}>
+                      {sortConfig.direction === "asc" ? "▲" : "▼"}
+                    </span>
+                  )}
                 </th>
               ))}
-              <th className={styles.tableHeader}>Total Breakdown</th>
+              <th 
+                className={styles.tableHeader}
+                onClick={() => handleSort("breakdown")}
+              >
+                Breakdown{" "}
+                {sortConfig.key === "breakdown" && (
+                  <span className={styles.sortIndicator}>
+                    {sortConfig.direction === "asc" ? "▲" : "▼"}
+                  </span>
+                )}
+              </th>
             </tr>
           </thead>
           <tbody>
-            {uniqueProdIdArray
+            {sortedData
               .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
               .map((item, index) => (
                 <tr key={index} className={styles.tableRow}>
-                  {columns.map((col) => (
-                    <td key={`${index}-${col}`} className={styles.tableCell}>
+                  <td className={styles.tableCell}>
+                    <div className={styles.tableCellContent}>
+                      {(currentPage - 1) * itemsPerPage + index + 1}
+                    </div>
+                  </td>
+                  {columns.map(({ id }) => (
+                    <td key={`${index}-${id}`} className={styles.tableCell}>
                       <div className={styles.tableCellContent}>
-                        {renderCell(col, item[col])}
+                        {id === "capacity" 
+                          ? `${item[id]} ${item.capacityUnit}`
+                          : renderCell(id, item[id])}
                       </div>
                     </td>
                   ))}
@@ -267,12 +346,12 @@ const Data2 = () => {
             setCurrentPage((prev) =>
               Math.min(
                 prev + 1,
-                Math.ceil(uniqueProdIdArray.length / itemsPerPage)
+                Math.ceil(sortedData.length / itemsPerPage)
               )
             )
           }
           disabled={
-            currentPage === Math.ceil(uniqueProdIdArray.length / itemsPerPage)
+            currentPage === Math.ceil(sortedData.length / itemsPerPage)
           }
         >
           Next
