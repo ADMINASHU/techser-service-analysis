@@ -201,7 +201,7 @@ const DataCompile = () => {
   return (
     <DashboardTableView
       data={data.finalDataWithHeader}
-      averageTotalVisits={data.averageTotalVisits}
+      averageTotalVisits={data.averageTotalVisits/4}
       filterYear={data.filterYear}
     />
   );
